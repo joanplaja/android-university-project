@@ -67,5 +67,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:2.3.3"
     implementation "commons-io:commons-io:2.6"
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
 }
