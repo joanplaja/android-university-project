@@ -1,5 +1,6 @@
 package org.udg.pds.todoandroid.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -96,6 +97,8 @@ public class NavDrawerActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        }else if (id == R.id.maps) {
+            NavDrawerActivity.this.startActivity(new Intent(NavDrawerActivity.this, ActivityMaps.class));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
