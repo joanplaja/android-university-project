@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/action_home">
+    app:startDestination="@id/userProfileFragment">
 
     <fragment
         android:id="@+id/action_home"
@@ -43,4 +43,12 @@
         android:name="org.udg.pds.todoandroid.activity.NavDrawerActivity"
         android:label="content_nd"
         tools:layout="@layout/content_nd" />
+    <action
+            android:id="@+id/action_action_home_to_navDrawerActivity"
+            app:destination="@id/navDrawerActivity" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="org.udg.pds.todoandroid.fragment.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" />
 </navigation>
