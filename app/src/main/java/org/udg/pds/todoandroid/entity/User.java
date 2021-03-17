@@ -12,4 +12,5 @@ public class User {
     public Long id;
     public String username;
     public String email;
+    public int phoneNumber;
 }

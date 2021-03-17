@@ -39,5 +39,8 @@ public interface TodoApi {
     @Multipart
     Call<String> uploadImage(@Part MultipartBody.Part file);
 
+    @GET("/users/{id}")
+    Call<User> getUser(@Path("id") String id);
+
 }
 
