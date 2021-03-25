@@ -42,5 +42,8 @@ public interface TodoApi {
     @GET("/users/{id}")
     Call<User> getUser(@Path("id") String id);
 
+    @GET("/users/me")
+    Call<User> getUserMe();
+
 }
 

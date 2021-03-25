@@ -1,14 +1,28 @@
 package org.udg.pds.todoandroid.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.udg.pds.todoandroid.R;
+import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.entity.Task;
+import org.udg.pds.todoandroid.entity.User;
+import org.udg.pds.todoandroid.rest.TodoApi;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +39,7 @@ public class UserProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TodoApi mTodoService;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -62,5 +77,43 @@ public class UserProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_user_profile, container, false);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
+    }
+    public void updateProfile() {
+        //android todoApi (retrofit) -> Spring controller (retorna resposta http) -> onResponse i la processem.
+        //response.body() es tipo user
+        Call<User> call = mTodoService.getUserMe();
+
+        call.enqueue(new Callback<User>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    TextView userProfileName = UserProfileFragment.this.getView().findViewById(R.id.userProfileName);
+                    userProfileName.setText(response.body().username);
+                    TextView userProfileSubName = UserProfileFragment.this.getView().findViewById(R.id.userProfileSubName);
+                    userProfileSubName.setText(response.body().username);
+                    TextView userProfileEmail = UserProfileFragment.this.getView().findViewById(R.id.userProfileEmail);
+                    userProfileEmail.setText(response.body().email);
+                } else {
+                    Toast.makeText(UserProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.updateProfile();
     }
 }
