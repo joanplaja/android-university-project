@@ -90,7 +90,6 @@ public class UserProfileFragment extends Fragment {
         Call<User> call = mTodoService.getUserMe();
 
         call.enqueue(new Callback<User>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
@@ -100,6 +99,12 @@ public class UserProfileFragment extends Fragment {
                     userProfileSubName.setText(response.body().username);
                     TextView userProfileEmail = UserProfileFragment.this.getView().findViewById(R.id.userProfileEmail);
                     userProfileEmail.setText(response.body().email);
+                    TextView userProfilePhone = UserProfileFragment.this.getView().findViewById(R.id.userProfilePhone);
+                    userProfilePhone.setText(response.body().phoneNumber.toString());
+                    TextView userProfileId = UserProfileFragment.this.getView().findViewById(R.id.userProfileId);
+                    userProfileId.setText(response.body().id.toString());
+                    TextView userProfileDescription = UserProfileFragment.this.getView().findViewById(R.id.userProfileDescription);
+                    userProfileDescription.setText(response.body().description);
                 } else {
                     Toast.makeText(UserProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
                 }

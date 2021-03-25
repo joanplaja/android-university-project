@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="phone"
-            android:text="123123123"
+            android:text="123456789"
             app:layout_constraintStart_toStartOf="@+id/userProfileEmail"
             app:layout_constraintTop_toBottomOf="@+id/userProfileEmail" />
 
