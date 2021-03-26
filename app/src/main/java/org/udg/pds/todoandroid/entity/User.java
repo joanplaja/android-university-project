@@ -12,5 +12,8 @@ public class User {
     public Long id;
     public String username;
     public String email;
-    public int phoneNumber;
+    public Integer phoneNumber;
+    public Integer followerNumber;
+    public Integer followingNumber;
+    public String description;
 }

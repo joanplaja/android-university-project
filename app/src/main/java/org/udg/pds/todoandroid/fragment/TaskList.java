@@ -98,6 +98,7 @@ public class TaskList extends Fragment {
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 if (response.isSuccessful()) {
                     TaskList.this.showTaskList(response.body());
+                    //
                 } else {
                     Toast.makeText(TaskList.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
                 }
