@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="x"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyA-UPU-dU7GQHAwYk1JakzzRxW7PvCYB1A"/>
 
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
