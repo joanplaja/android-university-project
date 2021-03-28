@@ -50,5 +50,14 @@
         android:id="@+id/userProfileFragment"
         android:name="org.udg.pds.todoandroid.fragment.UserProfileFragment"
         android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile" />
+        tools:layout="@layout/fragment_user_profile" >
+        <action
+            android:id="@+id/action_userProfileFragment_to_signoutActivity"
+            app:destination="@id/signoutActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/signoutActivity"
+        android:name="org.udg.pds.todoandroid.activity.SignoutActivity"
+        android:label="signout"
+        tools:layout="@layout/signout" />
 </navigation>

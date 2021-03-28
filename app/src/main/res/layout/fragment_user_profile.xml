@@ -202,7 +202,7 @@
             app:layout_constraintGuide_begin="160dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buttonSignOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign Out"

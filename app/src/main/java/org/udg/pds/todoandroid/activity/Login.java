@@ -86,4 +86,8 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+    public void onBackPressed() {
+        // No fer res
+        // Fet per prohibir que després de fer logout i tornar al layout de login puguis tornar enrere
+    }
 }
