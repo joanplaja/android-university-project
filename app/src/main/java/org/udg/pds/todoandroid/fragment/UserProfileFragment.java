@@ -1,19 +1,24 @@
 package org.udg.pds.todoandroid.fragment;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.activity.SignoutActivity;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
@@ -75,8 +80,21 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        View root = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        Button signOutButton = root.findViewById(R.id.buttonSignOut);
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToSignoutActivity();
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+        return root;
     }
 
     @Override
@@ -121,4 +139,5 @@ public class UserProfileFragment extends Fragment {
         super.onResume();
         this.updateProfile();
     }
+
 }
