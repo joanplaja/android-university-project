@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.activity.SignoutActivity;
 import org.udg.pds.todoandroid.activity.EquipmentActivity;
 import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
 import org.udg.pds.todoandroid.entity.Task;
@@ -70,10 +73,17 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Button openEquipmentButton, updateProfileButton;
+        Button openEquipmentButton, updateProfileButton, signOutButton;
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
         //super.onCreate(savedInstanceState);
-
+        signOutButton = v.findViewById(R.id.buttonSignOut);
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToSignoutActivity();
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
         openEquipmentButton = v.findViewById(R.id.userProfileButtonEquipment);
         openEquipmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,14 +108,7 @@ public class UserProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
         startActivity(intent);
     }
-/*
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
-    }
-*/
+
     @Override
     public void onStart(){
         super.onStart();

@@ -46,7 +46,15 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 EditText u = Login.this.findViewById(R.id.login_username);
                 EditText p = Login.this.findViewById(R.id.login_password);
-                Login.this.checkCredentials(u.getText().toString(), p.getText().toString());
+                if(u.length() == 0){
+                    u.setError("Username can't be empty");
+                }
+                else if(p.length() == 0) {
+                    p.setError("Password can't be empty");
+                }
+                else {
+                    Login.this.checkCredentials(u.getText().toString(), p.getText().toString());
+                }
             }
         });
 
@@ -65,9 +73,9 @@ public class Login extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Login.this.startActivity(new Intent(Login.this, NavigationActivity.class));
                     Login.this.finish();
-                } else {
-                    Toast toast = Toast.makeText(Login.this, "Error logging in", Toast.LENGTH_SHORT);
-                    toast.show();
+                } else{
+                    EditText mEditText  = (EditText ) findViewById(R.id.login_password);
+                    mEditText.setError("Password and username didn't match");
                 }
             }
 
@@ -78,5 +86,8 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-
+    public void onBackPressed() {
+        // No fer res
+        // Fet per prohibir que després de fer logout i tornar al layout de login puguis tornar enrere
+    }
 }
