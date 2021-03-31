@@ -59,7 +59,7 @@ public class SignoutActivity extends AppCompatActivity implements NavigationView
             public void onResponse(Call<String> call, Response<String> response) {
 
                 if (response.isSuccessful()) {
-                    SignoutActivity.this.startActivity(new Intent(SignoutActivity.this, Login.class));
+                    SignoutActivity.this.startActivity(new Intent(SignoutActivity.this, ChooseRegisterLogin.class));
                     SignoutActivity.this.finish();
                 }
             }
