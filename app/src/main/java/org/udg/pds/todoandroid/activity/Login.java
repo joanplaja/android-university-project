@@ -86,4 +86,10 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+    public void onBackPressed() {
+        Intent intent = new Intent(this, ChooseRegisterLogin.class);
+        startActivity(intent);
+        Login.this.finish();
+    }
 }

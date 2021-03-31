@@ -28,6 +28,7 @@ public class ChooseRegisterLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ChooseRegisterLogin.this, Login.class));
+                ChooseRegisterLogin.this.finish();
             }
         });
 
@@ -36,13 +37,14 @@ public class ChooseRegisterLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ChooseRegisterLogin.this, Register.class));
+                ChooseRegisterLogin.this.finish();
             }
         });
     }
 
-    public void onBackPressed() {
-        // No fer res
-        // Fet per prohibir que després de fer logout puguis tornar enrere i tornar a entrar al compte
-        // sense fer login
+    public void onBackPressed(){
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 }

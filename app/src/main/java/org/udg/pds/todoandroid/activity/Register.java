@@ -86,6 +86,7 @@ public class Register extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Register.this.startActivity(new Intent(Register.this, NavigationActivity.class));
                     Register.this.finish();
+
                 }
                 else{
                     EditText mEditText  = (EditText ) findViewById(R.id.editTextUsername);
@@ -101,5 +102,10 @@ public class Register extends AppCompatActivity {
         });
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(this, ChooseRegisterLogin.class);
+        startActivity(intent);
+        Register.this.finish();
+    }
 
 }
