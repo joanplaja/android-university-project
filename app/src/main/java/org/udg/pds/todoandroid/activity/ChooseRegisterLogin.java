@@ -30,6 +30,14 @@ public class ChooseRegisterLogin extends AppCompatActivity {
                 startActivity(new Intent(ChooseRegisterLogin.this, Login.class));
             }
         });
+
+        Button b2 = findViewById(R.id.buttonChooseRegister);
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ChooseRegisterLogin.this, Register.class));
+            }
+        });
     }
 
     public void onBackPressed() {
