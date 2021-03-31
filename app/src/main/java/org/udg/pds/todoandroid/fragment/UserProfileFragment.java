@@ -19,6 +19,8 @@ import android.widget.Toast;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.activity.SignoutActivity;
+import org.udg.pds.todoandroid.activity.EquipmentActivity;
+import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
@@ -69,32 +71,45 @@ public class UserProfileFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_user_profile, container, false);
-
-        Button signOutButton = root.findViewById(R.id.buttonSignOut);
+        Button openEquipmentButton, updateProfileButton, signOutButton;
+        View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        //super.onCreate(savedInstanceState);
+        signOutButton = v.findViewById(R.id.buttonSignOut);
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToSignoutActivity();
-                Navigation.findNavController(view).navigate(action);
+                openSignOutActivity();
             }
         });
-
-
-        // Inflate the layout for this fragment
-        return root;
+        openEquipmentButton = v.findViewById(R.id.userProfileButtonEquipment);
+        openEquipmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openEquipmentActivity();
+            }
+        });
+        updateProfileButton = v.findViewById(R.id.userProfileButtonUpdate);
+        updateProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUpdateProfileActivity();
+            }
+        });
+        return v;
+    }
+    public void openEquipmentActivity(){
+        Intent intent = new Intent(getActivity(), EquipmentActivity.class);
+        startActivity(intent);
+    }
+    public void openUpdateProfileActivity(){
+        Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
+        startActivity(intent);
+    }
+    public void openSignOutActivity(){
+        Intent intent = new Intent(getActivity(), SignoutActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -102,7 +117,7 @@ public class UserProfileFragment extends Fragment {
         super.onStart();
         mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
     }
-    public void updateProfile() {
+    public void loadProfile() {
         //android todoApi (retrofit) -> Spring controller (retorna resposta http) -> onResponse i la processem.
         //response.body() es tipo user
         Call<User> call = mTodoService.getUserMe();
@@ -137,7 +152,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.updateProfile();
+        this.loadProfile();
     }
-
 }
