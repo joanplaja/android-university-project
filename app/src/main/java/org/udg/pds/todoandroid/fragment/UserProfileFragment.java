@@ -80,8 +80,7 @@ public class UserProfileFragment extends Fragment {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToSignoutActivity();
-                Navigation.findNavController(view).navigate(action);
+                openSignOutActivity();
             }
         });
         openEquipmentButton = v.findViewById(R.id.userProfileButtonEquipment);
@@ -106,6 +105,10 @@ public class UserProfileFragment extends Fragment {
     }
     public void openUpdateProfileActivity(){
         Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
+        startActivity(intent);
+    }
+    public void openSignOutActivity(){
+        Intent intent = new Intent(getActivity(), SignoutActivity.class);
         startActivity(intent);
     }
 
