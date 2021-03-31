@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,8 @@ import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
 import org.udg.pds.todoandroid.entity.UserRegister;
 import org.udg.pds.todoandroid.rest.TodoApi;
+
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,6 +49,9 @@ public class Register extends AppCompatActivity {
                 else if(email.length() == 0) {
                     email.setError("Email can't be empty");
                 }
+                else if(!isValidEmail(email)){
+                    email.setError("Enter a valid email!");
+                }
                 else if(password.length() == 0) {
                     email.setError("Password can't be empty");
                 }
@@ -56,6 +63,11 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public boolean isValidEmail(EditText text){
+        CharSequence email = text.getText().toString();
+        return(Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
 
 
@@ -74,9 +86,10 @@ public class Register extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Register.this.startActivity(new Intent(Register.this, NavigationActivity.class));
                     Register.this.finish();
-                } else{
-                    EditText mEditText  = (EditText ) findViewById(R.id.editTextEmailAddress);
-                    mEditText.setError("This email is already registered");
+                }
+                else{
+                    EditText mEditText  = (EditText ) findViewById(R.id.editTextUsername);
+                    mEditText.setError("Username or email already registered");
                 }
             }
 
