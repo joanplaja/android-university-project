@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.activity.EquipmentActivity;
+import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
@@ -69,9 +70,9 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Button openEquipmentButton;
+        Button openEquipmentButton, updateProfileButton;
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
-        super.onCreate(savedInstanceState);
+        //super.onCreate(savedInstanceState);
 
         openEquipmentButton = v.findViewById(R.id.userProfileButtonEquipment);
         openEquipmentButton.setOnClickListener(new View.OnClickListener() {
@@ -80,10 +81,21 @@ public class UserProfileFragment extends Fragment {
                 openEquipmentActivity();
             }
         });
+        updateProfileButton = v.findViewById(R.id.userProfileButtonUpdate);
+        updateProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUpdateProfileActivity();
+            }
+        });
         return v;
     }
     public void openEquipmentActivity(){
         Intent intent = new Intent(getActivity(), EquipmentActivity.class);
+        startActivity(intent);
+    }
+    public void openUpdateProfileActivity(){
+        Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
         startActivity(intent);
     }
 /*
@@ -99,7 +111,7 @@ public class UserProfileFragment extends Fragment {
         super.onStart();
         mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
     }
-    public void updateProfile() {
+    public void loadProfile() {
         //android todoApi (retrofit) -> Spring controller (retorna resposta http) -> onResponse i la processem.
         //response.body() es tipo user
         Call<User> call = mTodoService.getUserMe();
@@ -134,6 +146,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.updateProfile();
+        this.loadProfile();
     }
 }

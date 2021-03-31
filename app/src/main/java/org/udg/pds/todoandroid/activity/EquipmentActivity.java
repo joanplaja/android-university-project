@@ -22,9 +22,6 @@ public class EquipmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_equipment);
 
-        UserProfileFragment fragment = new UserProfileFragment();
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().add(R.id.userEquipmentId, fragment).commit();
-
+        
     }
 }
