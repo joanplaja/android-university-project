@@ -36,12 +36,13 @@ public class Register extends AppCompatActivity {
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
 
         Button b = findViewById(R.id.buttonRegister);
-        // This is teh listener that will be used when the user presses the "Login" button
+        // This is teh listener that will be used when the user presses the "Register" button
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText username = Register.this.findViewById(R.id.editTextUsername);
                 EditText email = Register.this.findViewById(R.id.editTextEmailAddress);
                 EditText password = Register.this.findViewById(R.id.editTextPassword);
+                EditText confirmPassword = Register.this.findViewById(R.id.editTextConfirmPassword);
                 EditText phone = Register.this.findViewById(R.id.editTextPhone2);
                 if(username.length() == 0){
                     username.setError("Username can't be empty");
@@ -54,6 +55,9 @@ public class Register extends AppCompatActivity {
                 }
                 else if(password.length() == 0) {
                     email.setError("Password can't be empty");
+                }
+                else if(!(password.getText().toString().equals(confirmPassword.getText().toString()))){
+                    confirmPassword.setError("Passwords are different");
                 }
                 else if(phone.length() == 0) {
                     phone.setError("Phone number can't be empty");
