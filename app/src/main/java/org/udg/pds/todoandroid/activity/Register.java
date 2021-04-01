@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.User;
@@ -39,31 +41,45 @@ public class Register extends AppCompatActivity {
         // This is teh listener that will be used when the user presses the "Register" button
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText username = Register.this.findViewById(R.id.editTextUsername);
-                EditText email = Register.this.findViewById(R.id.editTextEmailAddress);
-                EditText password = Register.this.findViewById(R.id.editTextPassword);
-                EditText confirmPassword = Register.this.findViewById(R.id.editTextConfirmPassword);
-                EditText phone = Register.this.findViewById(R.id.editTextPhone2);
-                if(username.length() == 0){
+                EditText usernameET = Register.this.findViewById(R.id.editTextUsername);
+                EditText emailET = Register.this.findViewById(R.id.editTextEmailAddress);
+                EditText passwordET = Register.this.findViewById(R.id.editTextPassword);
+                EditText confirmPasswordET = Register.this.findViewById(R.id.editTextConfirmPassword);
+                EditText phoneET = Register.this.findViewById(R.id.editTextPhone);
+
+                TextInputLayout username = Register.this.findViewById(R.id.Username);
+                TextInputLayout email = Register.this.findViewById(R.id.Email);
+                TextInputLayout password = Register.this.findViewById(R.id.Password);
+                TextInputLayout confirmPassword = Register.this.findViewById(R.id.confirmPassword);
+                TextInputLayout phone = Register.this.findViewById(R.id.phone);
+
+                username.setError(null);
+                email.setError(null);
+                password.setError(null);
+                confirmPassword.setError(null);
+                phone.setError(null);
+
+
+                if(usernameET.length() == 0){
                     username.setError("Username can't be empty");
                 }
-                else if(email.length() == 0) {
+                else if(emailET.length() == 0) {
                     email.setError("Email can't be empty");
                 }
-                else if(!isValidEmail(email)){
+                else if(!isValidEmail(emailET)){
                     email.setError("Enter a valid email!");
                 }
-                else if(password.length() == 0) {
+                else if(passwordET.length() == 0) {
                     email.setError("Password can't be empty");
                 }
-                else if(!(password.getText().toString().equals(confirmPassword.getText().toString()))){
+                else if(!(passwordET.getText().toString().equals(confirmPasswordET.getText().toString()))){
                     confirmPassword.setError("Passwords are different");
                 }
-                else if(phone.length() == 0) {
+                else if(phoneET.length() == 0) {
                     phone.setError("Phone number can't be empty");
                 }
                 else {
-                    Register.this.register(username.getText().toString(), email.getText().toString(), password.getText().toString(), phone.getText().toString());
+                    Register.this.register(usernameET.getText().toString(), emailET.getText().toString(), passwordET.getText().toString(), phoneET.getText().toString());
                 }
             }
         });
@@ -93,8 +109,8 @@ public class Register extends AppCompatActivity {
 
                 }
                 else{
-                    EditText mEditText  = (EditText ) findViewById(R.id.editTextUsername);
-                    mEditText.setError("Username or email already registered");
+                    TextInputLayout username = Register.this.findViewById(R.id.Username);
+                    username.setError("Username or email already registered");
                 }
             }
 
