@@ -2,6 +2,7 @@ package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,11 +10,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
 import org.udg.pds.todoandroid.rest.TodoApi;
+import org.w3c.dom.Text;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,13 +48,23 @@ public class Login extends AppCompatActivity {
         // This is teh listener that will be used when the user presses the "Login" button
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText u = Login.this.findViewById(R.id.login_username);
-                EditText p = Login.this.findViewById(R.id.login_password);
+//                EditText u = Login.this.findViewById(R.id.login_username);
+//                EditText p = Login.this.findViewById(R.id.login_password);
+
+                EditText u = Login.this.findViewById(R.id.editTextUsernameLogin);
+                EditText p = Login.this.findViewById(R.id.editTextPasswordLogin);
+
+                TextInputLayout username = Login.this.findViewById(R.id.UsernameLogin);
+                TextInputLayout password = Login.this.findViewById(R.id.PasswordLogin);
+
+                username.setError(null);
+                password.setError(null);
+
                 if(u.length() == 0){
-                    u.setError("Username can't be empty");
+                    username.setError("Username can't be empty");
                 }
                 else if(p.length() == 0) {
-                    p.setError("Password can't be empty");
+                    password.setError("Password can't be empty");
                 }
                 else {
                     Login.this.checkCredentials(u.getText().toString(), p.getText().toString());
@@ -74,8 +88,8 @@ public class Login extends AppCompatActivity {
                     Login.this.startActivity(new Intent(Login.this, NavigationActivity.class));
                     Login.this.finish();
                 } else{
-                    EditText mEditText  = (EditText ) findViewById(R.id.login_password);
-                    mEditText.setError("Password and username didn't match");
+                    TextInputLayout username = Login.this.findViewById(R.id.PasswordLogin);
+                    username.setError("Password and username didn't match");
                 }
             }
 
