@@ -5,6 +5,7 @@ import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
 import org.udg.pds.todoandroid.entity.UserRegister;
+import org.udg.pds.todoandroid.entity.Workout;
 
 import java.util.List;
 
@@ -51,6 +52,9 @@ public interface TodoApi {
 
     @GET("/users/me")
     Call<User> getUserMe();
+
+    @GET("/workouts")
+    Call<Workout> getWorkouts();
 
 }
 
