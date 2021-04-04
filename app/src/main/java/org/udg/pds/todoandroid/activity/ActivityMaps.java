@@ -81,7 +81,7 @@ public class ActivityMaps extends AppCompatActivity implements OnMapReadyCallbac
 
         //Inicalitzem fragment del mapa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-            .findFragmentById(R.id.map);
+            .findFragmentById(R.id.map1);
         mapFragment.getMapAsync(this);
 
         list = new ArrayList<LatLng>();
@@ -107,6 +107,7 @@ public class ActivityMaps extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap map) {
+        Log.d("tag:","on map ready");
         this.map = map;
         polyline1 = map.addPolyline(new PolylineOptions().clickable(true));
         // ..
