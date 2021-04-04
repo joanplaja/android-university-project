@@ -26,4 +26,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/text_profile"
             app:showAsAction="ifRoom" />
+    <item
+            android:id="@+id/searchActivity"
+            android:enabled="true"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="Search"
+            app:showAsAction="ifRoom"/>
 </menu>
