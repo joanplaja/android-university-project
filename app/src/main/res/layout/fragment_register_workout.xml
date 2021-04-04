@@ -179,7 +179,8 @@
                         android:layout_weight="6"
                         >
 
-                        <TextView
+                        <Chronometer
+                            android:id="@+id/chronometer"
                             android:paddingBottom="15dp"
                             android:text="00:00:00"
                             android:gravity="center"
@@ -236,55 +237,117 @@
                 android:layout_alignParentBottom="true"
                 android:weightSum="2"
                 >
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/lytStart"
+                    android:visibility="gone"
+                    >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
 
 
+
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="START"
+                        android:id="@+id/btnStart"
+                        >
+
+                    </androidx.appcompat.widget.AppCompatButton>
+
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+
+
+                    </RelativeLayout>
 
                 </LinearLayout>
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:backgroundTint="@color/red"
-                    android:elevation="12dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:scaleType="center"
-                    app:borderWidth="0dp"
-                    android:tint="@android:color/white"
-                    android:src="@drawable/ic_baseline_stop_24"
-                    android:layout_marginRight="25dp"
-                    />
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/lytControl"
+                    >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+                    </LinearLayout>
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:background="@color/red"
-                    android:elevation="12dp"
-                    android:tint="@android:color/white"
-                    android:src="@drawable/ic_baseline_play_arrow_24"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginLeft="25dp"
-                    />
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="@color/red"
+                        android:elevation="12dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:scaleType="center"
+                        app:borderWidth="0dp"
+                        android:tint="@android:color/white"
+                        android:src="@drawable/ic_baseline_stop_24"
+                        android:layout_marginRight="25dp"
+                        android:id="@+id/btnPause"
+                        android:visibility="gone"
+                        />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@color/red"
+                        android:elevation="12dp"
+                        android:tint="@android:color/white"
+                        android:src="@drawable/ic_baseline_play_arrow_24"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginRight="25dp"
+                        android:id="@+id/btnPlay"
+                        android:visibility="gone"
+                        />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@color/red"
+                        android:elevation="12dp"
+                        android:tint="@android:color/white"
+                        android:src="@drawable/ic_baseline_save_24"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginLeft="25dp"
+                        android:id="@+id/btnSave"
+                        android:visibility="gone"
+                        />
 
 
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent">
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
 
 
-                </RelativeLayout>
+                    </RelativeLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
+
+
 
 
         </RelativeLayout>

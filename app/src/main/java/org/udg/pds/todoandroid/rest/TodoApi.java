@@ -1,6 +1,7 @@
 package org.udg.pds.todoandroid.rest;
 
 import org.udg.pds.todoandroid.entity.IdObject;
+import org.udg.pds.todoandroid.entity.Route;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
@@ -55,6 +56,17 @@ public interface TodoApi {
 
     @GET("/workouts")
     Call<Workout> getWorkouts();
+
+    @POST("/workouts")
+    Call<IdObject> createWorkout(@Body Workout workout);
+
+    @POST("/workouts/{id}/routes")
+    Call<IdObject> createRoute(@Path("id") String workoutId,@Body Route route);
+
+    @POST("/routes/{id}/points")
+    Call<IdObject> addPoints(@Path("id") String workoutId,@Body Double[][] points);
+
+
 
 }
 
