@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
                 password.setError(null);
 
                 if(u.length() == 0){
-                    username.setError("Username can't be empty");
+                    username.setError("Username/email can't be empty");
                 }
                 else if(p.length() == 0) {
                     password.setError("Password can't be empty");
@@ -89,7 +89,7 @@ public class Login extends AppCompatActivity {
                     Login.this.finish();
                 } else{
                     TextInputLayout username = Login.this.findViewById(R.id.PasswordLogin);
-                    username.setError("Password and username didn't match");
+                    username.setError("Password and username/email didn't match");
                 }
             }
 
