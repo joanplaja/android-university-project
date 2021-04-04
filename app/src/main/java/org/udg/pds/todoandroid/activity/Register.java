@@ -79,6 +79,10 @@ public class Register extends AppCompatActivity {
                     phone.setError("Phone number can't be empty");
                 }
                 else {
+                    System.out.println(usernameET.getText());
+                    System.out.println(emailET.getText());
+                    System.out.println(passwordET.getText());
+                    System.out.println(phoneET.getText());
                     Register.this.register(usernameET.getText().toString(), emailET.getText().toString(), passwordET.getText().toString(), phoneET.getText().toString());
                 }
             }
@@ -98,6 +102,9 @@ public class Register extends AppCompatActivity {
         ur.email = email;
         ur.password = password;
         ur.phoneNumber = phone;
+        ur.firstName = " ";
+        ur.lastName = " ";
+        ur.age=0;
         Call<String> call = mTodoService.register(ur);
         call.enqueue(new Callback<String>() {
             @Override
