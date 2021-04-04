@@ -1,9 +1,12 @@
 package org.udg.pds.todoandroid.rest;
 
 import org.udg.pds.todoandroid.entity.IdObject;
+import org.udg.pds.todoandroid.entity.Route;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
+import org.udg.pds.todoandroid.entity.UserRegister;
+import org.udg.pds.todoandroid.entity.Workout;
 
 import java.util.List;
 
@@ -27,6 +30,9 @@ public interface TodoApi {
     @POST("users/logout")
     Call<String> logout();
 
+    @POST ("users/register")
+    Call<String> register(@Body UserRegister register);
+
     @GET("/users/check")
     Call<String> check();
 
@@ -49,7 +55,19 @@ public interface TodoApi {
     @GET("/users/me")
     Call<User> getUserMe();
 
-    @GET("/users")
+    @GET("/workouts")
+    Call<Workout> getWorkouts();
+
+    @POST("/workouts")
+    Call<IdObject> createWorkout(@Body Workout workout);
+
+    @POST("/workouts/{id}/routes")
+    Call<IdObject> createRoute(@Path("id") String workoutId,@Body Route route);
+
+    @POST("/routes/{id}/points")
+    Call<IdObject> addPoints(@Path("id") String workoutId,@Body Double[][] points);
+  
+   @GET("/users")
     Call<List<User>> searchUser(@Query("search") String name);
 
 

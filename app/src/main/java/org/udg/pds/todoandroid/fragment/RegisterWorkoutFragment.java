@@ -1,10 +1,13 @@
 package org.udg.pds.todoandroid.fragment;
 
+import android.Manifest;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +26,15 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.location.Location;
+import android.widget.Chronometer;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,11 +52,22 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.udg.pds.todoandroid.R;
+import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.entity.IdObject;
+import org.udg.pds.todoandroid.entity.Route;
+import org.udg.pds.todoandroid.entity.Workout;
+import org.udg.pds.todoandroid.rest.TodoApi;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +85,26 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
     private String mParam1;
     private String mParam2;
 
+    TodoApi mTodoService;
+
+    Context context;
+
+    private IdObject workoutId;
+    private IdObject routeId;
+    private boolean pause = true;
+
+    LinearLayout lytControl;
+    LinearLayout lytStart;
+
+
+    AppCompatButton btnStart;
+    FloatingActionButton btnPause;
+    FloatingActionButton btnPlay;
+    FloatingActionButton btnSave;
+
+    Chronometer chronometer;
+    long mLastStopTime = 0;
+
     private static final String TAG = "FRAGMENT WORKOUT";
 
     private GoogleMap map;
@@ -72,7 +112,8 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
     private static final int DEFAULT_ZOOM = 15;                             //Zoom per defecte
 
     Polyline polyline1;                                                     //polygon per dibuixar
-    List <LatLng> list;                                                     //llista de latLong
+    List<LatLng> list;                                                     //llista de latLong
+    int lastPointSaved = 0;
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;  //Constant per comprovar si s'ha acceptat permisos ubicacio
     private boolean locationPermissionGranted;                              //Variable per controlar si s'ha acceptat permisos ubicacio
@@ -90,7 +131,6 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
 
     LocationCallback locationCallback;                                  //variable per definir la funcio callback de la ubicacio
     LocationRequest locationRequest;                                    //variable per definir parametres de crides de localitzacio
-
 
 
     public RegisterWorkoutFragment() {
@@ -131,8 +171,21 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
 
         View rootView = inflater.inflate(R.layout.fragment_register_workout, container, false);
 
+        context = this.getContext();
 
-        Log.d(TAG,"on create view");
+        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
+
+        lytControl = (LinearLayout) rootView.findViewById(R.id.lytControl);
+        lytStart = (LinearLayout) rootView.findViewById(R.id.lytStart);
+
+        btnStart = (AppCompatButton) rootView.findViewById(R.id.btnStart);
+        btnPause = (FloatingActionButton) rootView.findViewById(R.id.btnPause);
+        btnPlay = (FloatingActionButton) rootView.findViewById(R.id.btnPlay);
+        btnSave = (FloatingActionButton) rootView.findViewById(R.id.btnSave);
+
+        chronometer = (Chronometer) rootView.findViewById(R.id.chronometer);
+
+        Log.d(TAG, "on create view");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         //Definir cada cuan es crida la ubicacio i la acuracitat
@@ -164,16 +217,181 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                 for (Location location : locationResult.getLocations()) {
                     // Update UI with location data
                     // ...
-                    Log.d("loaction enabled:",location.getLatitude()+","+location.getLongitude());
-                    LatLng ubi = new LatLng(location.getLatitude(),location.getLongitude());
-                    list.add(ubi);
-                    polyline1.setPoints(list);
+                    Log.d("loaction enabled:", location.getLatitude() + "," + location.getLongitude());
+                    LatLng ubi = new LatLng(location.getLatitude(), location.getLongitude());
+                    if(!pause){
+                        list.add(ubi);
+                        polyline1.setPoints(list);
+                    }
                 }
+                saveLastPoints(false);
             }
         };
 
+
+        if (workoutId != null) {
+            lytControl.setVisibility(View.VISIBLE);
+            if (pause) {
+                btnPlay.setVisibility(View.VISIBLE);
+                btnSave.setVisibility(View.VISIBLE);
+            } else {
+                btnPause.setVisibility(View.VISIBLE);
+                chronoStart();
+            }
+        } else lytStart.setVisibility(View.VISIBLE);
+
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Workout workout = new Workout();
+                    workout.dateCreated = new Date();
+                    workout.type = "test type";
+                    Call<IdObject> call = mTodoService.createWorkout(workout);
+                    call.enqueue(new Callback<IdObject>() {
+                        @Override
+                        public void onResponse(Call<IdObject> call, Response<IdObject> response) {
+                            if (response.isSuccessful()) {
+
+                                workoutId = response.body();
+
+                                Route route = new Route();
+                                route.initialLatitude = lastKnownLocation.getLatitude();
+                                route.initialLongitude = lastKnownLocation.getLongitude();
+
+                                Call<IdObject> callRoute = mTodoService.createRoute(workoutId.id.toString(),route);
+                                callRoute.enqueue(new Callback<IdObject>() {
+                                    @Override
+                                    public void onResponse(Call<IdObject> call, Response<IdObject> response) {
+
+                                        routeId = response.body();
+                                        System.out.println("route id:"+routeId.id.toString());
+
+                                        pause = false;
+                                        chronoStart();
+
+                                        lytStart.setVisibility(View.GONE);
+                                        lytControl.setVisibility(View.VISIBLE);
+                                        btnPause.setVisibility(View.VISIBLE);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<IdObject> call, Throwable t) {
+                                        Toast.makeText(context, "Error al crear la route(On response)", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            }
+                            else Toast.makeText(context, "Error al crear workout(On response)", Toast.LENGTH_LONG).show();
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<IdObject> call, Throwable t) {
+                            //IMPLEMENT ERROR
+                            Toast.makeText(context, "Error al crear workout(On Failure)", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                catch (Exception ex) {
+                    //IMPLEMENT ERROR
+                    Toast.makeText(context, "Error al crear workout(catch)", Toast.LENGTH_LONG).show();
+                    throw ex;
+                }
+            }
+        });
+
+        btnPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chronoPause();
+                pause = true;
+                btnPause.setVisibility(View.GONE);
+                btnPlay.setVisibility(View.VISIBLE);
+                btnSave.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chronoStart();
+                pause = false;
+                btnPause.setVisibility(View.GONE);
+                btnPlay.setVisibility(View.GONE);
+                btnSave.setVisibility(View.GONE);
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveLastPoints(true);
+                mLastStopTime = 0;
+                pause = true;
+                list = new ArrayList<>();
+                polyline1.remove();
+                lytStart.setVisibility(View.VISIBLE);
+                lytControl.setVisibility(View.GONE);
+                btnPause.setVisibility(View.GONE);
+                btnPlay.setVisibility(View.GONE);
+                btnSave.setVisibility(View.GONE);
+            }
+        });
+
         return rootView;
 
+    }
+
+    private void saveLastPoints(boolean saveWorkout){
+        if(saveWorkout | !pause)//si guardem workout no hem de mirar variable pause, pero si no guardem si hem de mirar
+            if(workoutId != null && workoutId != null)
+                if(lastPointSaved < list.size()){ // al principi last = 0, size per exemple 1
+                    System.out.println("lasPointSaved:"+lastPointSaved+"  list size:"+list.size());
+                    int totalPoints = list.size()-lastPointSaved;
+                     Double [][] arrayPoints = new Double[totalPoints][2];
+                     for (int i=0;i<totalPoints;i++){
+                         LatLng pos = list.get(lastPointSaved+i);
+                         arrayPoints[i][0] = pos.latitude;
+                         arrayPoints[i][1] = pos.longitude;
+                     }
+
+                     Call<IdObject> call = mTodoService.addPoints(workoutId.id.toString(),arrayPoints);
+                     call.enqueue(new Callback<IdObject>() {
+                         @Override
+                         public void onResponse(Call<IdObject> call, Response<IdObject> response) {
+                             System.out.println("punts guardats correctament a la ruta:"+response.body());
+                             lastPointSaved = totalPoints+lastPointSaved;
+                         }
+
+                         @Override
+                         public void onFailure(Call<IdObject> call, Throwable t) {
+                             System.out.println("Error al guardar els punts");
+                         }
+                     });
+                }
+    }
+
+    private void chronoStart()
+    {
+        // on first start
+        if ( mLastStopTime == 0 )
+            chronometer.setBase( SystemClock.elapsedRealtime() );
+            // on resume after pause
+        else
+        {
+            long intervalOnPause = (SystemClock.elapsedRealtime() - mLastStopTime);
+            chronometer.setBase( chronometer.getBase() + intervalOnPause );
+        }
+
+        chronometer.start();
+    }
+
+    private void chronoPause()
+    {
+        chronometer.stop();
+
+        mLastStopTime = SystemClock.elapsedRealtime();
     }
 
     @Override
