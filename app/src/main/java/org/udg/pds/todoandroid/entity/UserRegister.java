@@ -5,4 +5,7 @@ public class UserRegister {
     public String email;
     public String password;
     public String phoneNumber;
+    public String firstName;
+    public String lastName;
+    public Integer age;
 }
