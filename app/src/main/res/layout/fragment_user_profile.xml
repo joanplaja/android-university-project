@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/userProfile"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -207,11 +208,10 @@
             android:layout_height="wrap_content"
             android:text="Sign Out"
             app:layout_constraintBottom_toTopOf="@+id/guideline9"
-            app:layout_constraintEnd_toStartOf="@+id/guideline7"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline6"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileCardFollowing"
-            app:layout_constraintVertical_bias="0.503" />
+            app:layout_constraintEnd_toEndOf="@+id/buttonWorkouts"
+            app:layout_constraintHorizontal_bias="0.671"
+            app:layout_constraintTop_toBottomOf="@+id/buttonWorkouts"
+            app:layout_constraintStart_toStartOf="@+id/buttonWorkouts" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline9"
@@ -219,6 +219,18 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="465dp" />
+
+        <Button
+            android:id="@+id/buttonWorkouts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Workouts"
+            app:layout_constraintBottom_toTopOf="@+id/buttonSignOut"
+            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            app:layout_constraintHorizontal_bias="0.671"
+            app:layout_constraintStart_toStartOf="@+id/guideline6"
+            app:layout_constraintTop_toBottomOf="@+id/userProfileDescription"
+            app:layout_constraintVertical_bias="0.566" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
