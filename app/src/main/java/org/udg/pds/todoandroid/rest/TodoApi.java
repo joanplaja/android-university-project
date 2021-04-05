@@ -18,6 +18,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by imartin on 13/02/17.
@@ -65,6 +66,9 @@ public interface TodoApi {
 
     @POST("/routes/{id}/points")
     Call<IdObject> addPoints(@Path("id") String workoutId,@Body Double[][] points);
+  
+   @GET("/users")
+    Call<List<User>> searchUser(@Query("search") String name);
 
 
 

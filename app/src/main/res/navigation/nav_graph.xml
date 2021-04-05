@@ -60,4 +60,9 @@
         android:name="org.udg.pds.todoandroid.activity.SignoutActivity"
         android:label="signout"
         tools:layout="@layout/signout" />
+    <activity
+        android:id="@+id/searchActivity"
+        android:name="org.udg.pds.todoandroid.activity.SearchActivity"
+        android:label="search"
+        tools:layout="@layout/search_user" />
 </navigation>
