@@ -54,6 +54,9 @@
         <action
             android:id="@+id/action_userProfileFragment_to_signoutActivity"
             app:destination="@id/signoutActivity" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_workoutList"
+            app:destination="@id/actionWorkoutList" />
     </fragment>
     <activity
         android:id="@+id/signoutActivity"
@@ -65,4 +68,9 @@
         android:name="org.udg.pds.todoandroid.activity.SearchActivity"
         android:label="search"
         tools:layout="@layout/search_user" />
+    <fragment
+        android:id="@+id/actionWorkoutList"
+        android:name="org.udg.pds.todoandroid.fragment.WorkoutFragment"
+        android:label="fragment_workout_list"
+        tools:layout="@layout/fragment_workout_list" />
 </navigation>

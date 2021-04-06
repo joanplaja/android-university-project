@@ -1,5 +1,7 @@
 package org.udg.pds.todoandroid.fragment;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -74,7 +76,7 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Button openEquipmentButton, updateProfileButton, signOutButton;
+        Button openEquipmentButton, updateProfileButton, signOutButton, workoutButton;
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
         //super.onCreate(savedInstanceState);
         signOutButton = v.findViewById(R.id.buttonSignOut);
@@ -98,6 +100,17 @@ public class UserProfileFragment extends Fragment {
                 openUpdateProfileActivity();
             }
         });
+        workoutButton = v.findViewById(R.id.buttonWorkouts);
+        workoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavDirections action =
+                    UserProfileFragmentDirections
+                        .actionUserProfileFragmentToWorkoutList();
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
+
         return v;
     }
     public void openEquipmentActivity(){
@@ -149,26 +162,6 @@ public class UserProfileFragment extends Fragment {
 
             }
         });
-
-
-        Call<Workout> callWorkouts = mTodoService.getWorkouts();
-
-        callWorkouts.enqueue(new Callback<Workout>() {
-            @Override
-            public void onResponse(Call<Workout> callWorkouts, Response<Workout> response) {
-                if (response.isSuccessful()) {
-                    //funciona correctament, la resposta esta a response.body()
-                } else {
-                    Toast.makeText(UserProfileFragment.this.getContext(), "Error getting workouts", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Workout> callWorkouts, Throwable t) {
-                //In case of failure...
-            }
-        });
-
 
     }
     @Override
