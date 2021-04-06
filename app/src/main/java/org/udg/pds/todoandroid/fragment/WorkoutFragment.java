@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.udg.pds.todoandroid.R;
-import org.udg.pds.todoandroid.fragment.dummy.DummyContent;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.util.List;
