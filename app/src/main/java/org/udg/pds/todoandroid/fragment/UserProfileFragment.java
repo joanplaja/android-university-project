@@ -163,26 +163,6 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
-
-        Call<Workout> callWorkouts = mTodoService.getWorkouts();
-
-        callWorkouts.enqueue(new Callback<Workout>() {
-            @Override
-            public void onResponse(Call<Workout> callWorkouts, Response<Workout> response) {
-                if (response.isSuccessful()) {
-                    //funciona correctament, la resposta esta a response.body()
-                } else {
-                    Toast.makeText(UserProfileFragment.this.getContext(), "Error getting workouts", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Workout> callWorkouts, Throwable t) {
-                //In case of failure...
-            }
-        });
-
-
     }
     @Override
     public void onResume() {

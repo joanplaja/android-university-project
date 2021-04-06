@@ -8,34 +8,36 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.udg.pds.todoandroid.R;
-import org.udg.pds.todoandroid.fragment.dummy.DummyContent.DummyItem;
+import org.udg.pds.todoandroid.entity.Workout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
+ * {@link RecyclerView.Adapter} that can display a {@link Workout}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecyclerViewAdapter.ViewHolder> {
+public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecyclerViewAdapter.WorkoutViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private List<Workout> mValues = new ArrayList<>();
 
-    public WorkoutRecyclerViewAdapter(List<DummyItem> items) {
-        mValues = items;
+    public WorkoutRecyclerViewAdapter() {
+
     }
 
+
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public WorkoutViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.fragment_workout, parent, false);
-        return new ViewHolder(view);
+        return new WorkoutViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final WorkoutViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mId.setText(mValues.get(position).id.toString());
+        holder.mType.setText(mValues.get(position).type);
     }
 
     @Override
@@ -43,22 +45,27 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+    public void setWorkouts(List<Workout> workouts) {
+        mValues = workouts;
+        notifyDataSetChanged();
+    }
 
-        public ViewHolder(View view) {
+    public class WorkoutViewHolder extends RecyclerView.ViewHolder {
+        public final View mView;
+        public final TextView mId;
+        public final TextView mType;
+        public Workout mItem;
+
+        public WorkoutViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mId = (TextView) view.findViewById(R.id.id);
+            mType = (TextView) view.findViewById(R.id.type);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mType.getText() + "'";
         }
     }
 }

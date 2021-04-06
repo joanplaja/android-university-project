@@ -56,7 +56,7 @@ public interface TodoApi {
     Call<User> getUserMe();
 
     @GET("/workouts")
-    Call<Workout> getWorkouts();
+    Call<List<Workout>> getWorkouts();
 
     @POST("/workouts")
     Call<IdObject> createWorkout(@Body Workout workout);
@@ -66,7 +66,7 @@ public interface TodoApi {
 
     @POST("/routes/{id}/points")
     Call<IdObject> addPoints(@Path("id") String workoutId,@Body Double[][] points);
-  
+
    @GET("/users")
     Call<List<User>> searchUser(@Query("search") String name);
 
