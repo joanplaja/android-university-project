@@ -36,7 +36,6 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     @Override
     public void onBindViewHolder(final WorkoutViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mId.setText(mValues.get(position).id.toString());
         holder.mType.setText(mValues.get(position).type);
     }
 
@@ -52,14 +51,12 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
 
     public class WorkoutViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mId;
         public final TextView mType;
         public Workout mItem;
 
         public WorkoutViewHolder(View view) {
             super(view);
             mView = view;
-            mId = (TextView) view.findViewById(R.id.id);
             mType = (TextView) view.findViewById(R.id.type);
         }
 
