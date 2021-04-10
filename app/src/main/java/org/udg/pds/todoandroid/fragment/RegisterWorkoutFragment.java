@@ -245,8 +245,12 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
             public void onClick(View v) {
                 try {
                     Workout workout = new Workout();
-                    workout.dateCreated = new Date();
-                    workout.type = "test type";
+                    workout.type = "cycling";
+                    Route route = new Route();
+                    route.initialLatitude = lastKnownLocation.getLatitude();
+                    route.initialLongitude = lastKnownLocation.getLongitude();
+                    workout.route = route;
+
                     Call<IdObject> call = mTodoService.createWorkout(workout);
                     call.enqueue(new Callback<IdObject>() {
                         @Override
@@ -254,7 +258,14 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                             if (response.isSuccessful()) {
 
                                 workoutId = response.body();
+                                pause = false;
+                                chronoStart();
 
+                                lytStart.setVisibility(View.GONE);
+                                lytControl.setVisibility(View.VISIBLE);
+                                btnPause.setVisibility(View.VISIBLE);
+
+                                /*
                                 Route route = new Route();
                                 route.initialLatitude = lastKnownLocation.getLatitude();
                                 route.initialLongitude = lastKnownLocation.getLongitude();
@@ -267,12 +278,7 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                                         routeId = response.body();
                                         System.out.println("route id:"+routeId.id.toString());
 
-                                        pause = false;
-                                        chronoStart();
 
-                                        lytStart.setVisibility(View.GONE);
-                                        lytControl.setVisibility(View.VISIBLE);
-                                        btnPause.setVisibility(View.VISIBLE);
                                     }
 
                                     @Override
@@ -280,9 +286,10 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                                         Toast.makeText(context, "Error al crear la route(On response)", Toast.LENGTH_LONG).show();
                                     }
                                 });
-
+                                */
                             }
                             else Toast.makeText(context, "Error al crear workout(On response)", Toast.LENGTH_LONG).show();
+
 
                         }
 

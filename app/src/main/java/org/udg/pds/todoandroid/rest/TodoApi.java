@@ -61,8 +61,8 @@ public interface TodoApi {
     @POST("/workouts")
     Call<IdObject> createWorkout(@Body Workout workout);
 
-    @POST("/workouts/{id}/routes")
-    Call<IdObject> createRoute(@Path("id") String workoutId,@Body Route route);
+    //@POST("/workouts/{id}/routes")
+    //Call<IdObject> createRoute(@Path("id") String workoutId,@Body Route route);
 
     @POST("/routes/{id}/points")
     Call<IdObject> addPoints(@Path("id") String workoutId,@Body Double[][] points);
