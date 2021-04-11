@@ -14,6 +14,8 @@ import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.Workout;
 import org.udg.pds.todoandroid.fragment.WorkoutRecyclerViewAdapter;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +25,19 @@ import android.widget.Toast;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * A fragment representing a list of Items.
  */
-public class WorkoutFragment extends Fragment {
+public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdapter.OnWorkoutListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -41,6 +46,7 @@ public class WorkoutFragment extends Fragment {
 
     private WorkoutRecyclerViewAdapter adapter;
     TodoApi mTodoService;
+    private List<Workout> mValues = new ArrayList<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -91,7 +97,7 @@ public class WorkoutFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            adapter = new WorkoutRecyclerViewAdapter();
+            adapter = new WorkoutRecyclerViewAdapter(this);
             recyclerView.setAdapter(adapter);
         }
         return view;
@@ -104,7 +110,8 @@ public class WorkoutFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Workout>> call, Response<List<Workout>> response) {
                 if (response.isSuccessful()) {
-                    WorkoutFragment.this.showWorkoutList(response.body());
+                    mValues = response.body();
+                    WorkoutFragment.this.showWorkoutList(mValues);
                     //
                 } else {
                     Toast.makeText(WorkoutFragment.this.getContext(), "Error reading Workouts", Toast.LENGTH_LONG).show();
@@ -120,5 +127,36 @@ public class WorkoutFragment extends Fragment {
 
     private void showWorkoutList(List<Workout> workouts) {
         adapter.setWorkouts(workouts);
+    }
+
+    @Override
+    public void onWorkoutClick(int position) {
+        //Ara es recupera el workout clicat correctament. Puc clicar un element de la llista i detecto correctament que és aquell element.
+        //Ara que tinc la id, el que puc fer és un GET /workout/{wid}
+        String workoutId = mValues.get(position).id.toString();
+        Log.i(TAG, "onWorkoutClick: " + workoutId);
+
+        //Ara ja faig la crida correctament, el que passa es que se'm retorna un workout complet, que te una ruta i Punts. I les entitats ruta
+        //i workout que tenim definides aqui no se si son capaces de guardar bé aquesta info, ho haig de mirar. Segurament farà falta crear una classe
+        //punt i incloure una llista de punts a la ruta. Per altra banda, mirar si afecta a les altres crides que faig. Sobretot al POST d'en Joan.
+        Call<Workout> call = mTodoService.getWorkout(workoutId);
+
+        call.enqueue(new Callback<Workout>() {
+            @Override
+            public void onResponse(Call<Workout> call, Response<Workout> response) {
+                if (response.isSuccessful()) {
+                    Workout receivedWorkout = response.body();
+                    Log.i(TAG, receivedWorkout.toString());
+                } else {
+                    Toast.makeText(WorkoutFragment.this.getContext(), "Error reading specific Workout", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Workout> call, Throwable t) {
+                Toast.makeText(WorkoutFragment.this.getContext(), "Error making call", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }

@@ -25,9 +25,11 @@ import static android.content.ContentValues.TAG;
 public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecyclerViewAdapter.WorkoutViewHolder> {
 
     private List<Workout> mValues = new ArrayList<>();
-    Context context;
-    public WorkoutRecyclerViewAdapter() {
+    private OnWorkoutListener mOnWorkoutListener;
 
+
+    public WorkoutRecyclerViewAdapter(OnWorkoutListener onWorkoutListener) {
+        this.mOnWorkoutListener = onWorkoutListener;
     }
 
 
@@ -35,7 +37,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     public WorkoutViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.fragment_workout, parent, false);
-        return new WorkoutViewHolder(view);
+        return new WorkoutViewHolder(view, mOnWorkoutListener);
     }
 
     @Override
@@ -43,10 +45,6 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
         holder.mItem = mValues.get(position);
         holder.mId.setText(mValues.get(position).id.toString());
         holder.mType.setText(mValues.get(position).type);
-
-        holder.mView.setOnClickListener(view -> {
-            Log.i(TAG, "Hello!");
-        });
     }
 
     @Override
@@ -59,17 +57,20 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
         notifyDataSetChanged();
     }
 
-    public class WorkoutViewHolder extends RecyclerView.ViewHolder {
+    public class WorkoutViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final TextView mId;
         public final TextView mType;
         public Workout mItem;
-
-        public WorkoutViewHolder(View view) {
+        OnWorkoutListener onWorkoutListener;
+        public WorkoutViewHolder(View view, OnWorkoutListener onWorkoutListener) {
             super(view);
             mView = view;
             mId = (TextView) view.findViewById(R.id.id);
             mType = (TextView) view.findViewById(R.id.type);
+            this.onWorkoutListener = onWorkoutListener;
+
+            view.setOnClickListener(this);
         }
 
 
@@ -77,5 +78,14 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
         public String toString() {
             return super.toString() + " '" + mType.getText() + "'";
         }
+
+        @Override
+        public void onClick(View v) {
+            onWorkoutListener.onWorkoutClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnWorkoutListener {
+        void onWorkoutClick(int position);
     }
 }
