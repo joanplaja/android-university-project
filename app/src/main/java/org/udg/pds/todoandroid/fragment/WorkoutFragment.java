@@ -136,9 +136,7 @@ public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdap
         String workoutId = mValues.get(position).id.toString();
         Log.i(TAG, "onWorkoutClick: " + workoutId);
 
-        //Ara ja faig la crida correctament, el que passa es que se'm retorna un workout complet, que te una ruta i Punts. I les entitats ruta
-        //i workout que tenim definides aqui no se si son capaces de guardar bé aquesta info, ho haig de mirar. Segurament farà falta crear una classe
-        //punt i incloure una llista de punts a la ruta. Per altra banda, mirar si afecta a les altres crides que faig. Sobretot al POST d'en Joan.
+        //Ara faig la crida per recuperar tota la informacio d'un workout
         Call<Workout> call = mTodoService.getWorkout(workoutId);
 
         call.enqueue(new Callback<Workout>() {
@@ -146,6 +144,9 @@ public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdap
             public void onResponse(Call<Workout> call, Response<Workout> response) {
                 if (response.isSuccessful()) {
                     Workout receivedWorkout = response.body();
+                    //Mostro un camp concret d'un punt de la ruta del workout per veure que totes les classes es creen i implenen correctament, és a dir, cada camp
+                    //amb la informacio que li arriba al body de la resposta que rebem.
+                    //Aqui és on més endevant s'haura d'obrir un fragment nou amb els detalls del workout, etc.
                     Log.i(TAG, receivedWorkout.route.points.get(1).latitude.toString());
                 } else {
                     Toast.makeText(WorkoutFragment.this.getContext(), "Error reading specific Workout", Toast.LENGTH_LONG).show();
