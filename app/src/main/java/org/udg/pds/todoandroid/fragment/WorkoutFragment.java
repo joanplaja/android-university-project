@@ -146,7 +146,7 @@ public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdap
             public void onResponse(Call<Workout> call, Response<Workout> response) {
                 if (response.isSuccessful()) {
                     Workout receivedWorkout = response.body();
-                    Log.i(TAG, receivedWorkout.toString());
+                    Log.i(TAG, receivedWorkout.route.points.get(1).latitude.toString());
                 } else {
                     Toast.makeText(WorkoutFragment.this.getContext(), "Error reading specific Workout", Toast.LENGTH_LONG).show();
                 }
