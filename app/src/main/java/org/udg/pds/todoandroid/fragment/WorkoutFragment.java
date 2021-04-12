@@ -131,6 +131,8 @@ public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdap
 
     @Override
     public void onWorkoutClick(int position) {
+
+        //NavDirections action = WorkoutFragmentDirections
         //Ara es recupera el workout clicat correctament. Puc clicar un element de la llista i detecto correctament que és aquell element.
         //Ara que tinc la id, el que puc fer és un GET /workout/{wid}
         String workoutId = mValues.get(position).id.toString();
