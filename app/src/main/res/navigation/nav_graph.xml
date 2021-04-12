@@ -72,5 +72,14 @@
         android:id="@+id/actionWorkoutList"
         android:name="org.udg.pds.todoandroid.fragment.WorkoutFragment"
         android:label="fragment_workout_list"
-        tools:layout="@layout/fragment_workout_list" />
+        tools:layout="@layout/fragment_workout_list" >
+        <action
+            android:id="@+id/action_actionWorkoutList_to_workoutDetailsFragment"
+            app:destination="@id/workoutDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/workoutDetailsFragment"
+        android:name="org.udg.pds.todoandroid.fragment.WorkoutDetailsFragment"
+        android:label="fragment_workout_details"
+        tools:layout="@layout/fragment_workout_details" />
 </navigation>

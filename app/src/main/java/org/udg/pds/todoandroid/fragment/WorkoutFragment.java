@@ -147,7 +147,7 @@ public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdap
                     //Mostro un camp concret d'un punt de la ruta del workout per veure que totes les classes es creen i implenen correctament, és a dir, cada camp
                     //amb la informacio que li arriba al body de la resposta que rebem.
                     //Aqui és on més endevant s'haura d'obrir un fragment nou amb els detalls del workout, etc.
-                    Log.i(TAG, receivedWorkout.route.points.get(1).latitude.toString());
+                    Log.i(TAG, receivedWorkout.id.toString());
                 } else {
                     Toast.makeText(WorkoutFragment.this.getContext(), "Error reading specific Workout", Toast.LENGTH_LONG).show();
                 }

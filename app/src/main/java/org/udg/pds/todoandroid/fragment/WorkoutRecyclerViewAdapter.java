@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,22 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     public void onBindViewHolder(final WorkoutViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mId.setText(mValues.get(position).id.toString());
-        holder.mType.setText(mValues.get(position).type);
+        holder.mType.setText(mValues.get(position).type.toUpperCase());
+        String type = mValues.get(position).type;
+        switch (type) {
+            case "running":
+                holder.mIcon.setImageResource(R.drawable.running);
+                break;
+            case "cycling":
+                holder.mIcon.setImageResource(R.drawable.cycling);
+                break;
+            case "hiking":
+                holder.mIcon.setImageResource(R.drawable.hiking);
+                break;
+            case "walking":
+                holder.mIcon.setImageResource(R.drawable.walking);
+                break;
+        }
     }
 
     @Override
@@ -61,6 +77,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
         public final View mView;
         public final TextView mId;
         public final TextView mType;
+        public final ImageView mIcon;
         public Workout mItem;
         OnWorkoutListener onWorkoutListener;
         public WorkoutViewHolder(View view, OnWorkoutListener onWorkoutListener) {
@@ -68,6 +85,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
             mView = view;
             mId = (TextView) view.findViewById(R.id.id);
             mType = (TextView) view.findViewById(R.id.type);
+            mIcon = (ImageView) view.findViewById(R.id.icon);
             this.onWorkoutListener = onWorkoutListener;
 
             view.setOnClickListener(this);
