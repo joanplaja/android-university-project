@@ -47,6 +47,7 @@ public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdap
     private WorkoutRecyclerViewAdapter adapter;
     TodoApi mTodoService;
     private List<Workout> mValues = new ArrayList<>();
+    public View view;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -86,7 +87,7 @@ public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdap
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_workout_list, container, false);
+        view = inflater.inflate(R.layout.fragment_workout_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -131,25 +132,19 @@ public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdap
 
     @Override
     public void onWorkoutClick(int position) {
+        Long id = mValues.get(position).id;
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", id);
+        Navigation.findNavController(view).navigate(R.id.action_actionWorkoutList_to_workoutDetailsFragment, bundle);
 
-        //NavDirections action = WorkoutFragmentDirections
-        //Ara es recupera el workout clicat correctament. Puc clicar un element de la llista i detecto correctament que és aquell element.
-        //Ara que tinc la id, el que puc fer és un GET /workout/{wid}
-        String workoutId = mValues.get(position).id.toString();
-        Log.i(TAG, "onWorkoutClick: " + workoutId);
-
-        //Ara faig la crida per recuperar tota la informacio d'un workout
-        Call<Workout> call = mTodoService.getWorkout(workoutId);
+        //La crida que ve a continuació s'ha de fer en el nout fragment.
+        Call<Workout> call = mTodoService.getWorkout(id.toString());
 
         call.enqueue(new Callback<Workout>() {
             @Override
             public void onResponse(Call<Workout> call, Response<Workout> response) {
                 if (response.isSuccessful()) {
                     Workout receivedWorkout = response.body();
-                    //Mostro un camp concret d'un punt de la ruta del workout per veure que totes les classes es creen i implenen correctament, és a dir, cada camp
-                    //amb la informacio que li arriba al body de la resposta que rebem.
-                    //Aqui és on més endevant s'haura d'obrir un fragment nou amb els detalls del workout, etc.
-                    Log.i(TAG, receivedWorkout.id.toString());
                 } else {
                     Toast.makeText(WorkoutFragment.this.getContext(), "Error reading specific Workout", Toast.LENGTH_LONG).show();
                 }
