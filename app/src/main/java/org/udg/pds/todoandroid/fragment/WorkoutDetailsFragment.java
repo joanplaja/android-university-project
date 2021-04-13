@@ -8,8 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.udg.pds.todoandroid.R;
+import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.entity.Workout;
+import org.udg.pds.todoandroid.rest.TodoApi;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,9 +36,9 @@ public class WorkoutDetailsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private TodoApi mTodoService;
     private Long id;
-
+    private Workout workout;
     public WorkoutDetailsFragment() {
         // Required empty public constructor
     }
@@ -67,6 +76,45 @@ public class WorkoutDetailsFragment extends Fragment {
 
         id = getArguments().getLong("id");
         Log.i(TAG, id.toString());
-        return inflater.inflate(R.layout.fragment_workout_details, container, false);
+        View v = inflater.inflate(R.layout.fragment_workout_details, container, false);
+
+        return v;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
+    }
+
+    public void loadDetails() {
+        Call<Workout> call = mTodoService.getWorkout(id.toString());
+
+        call.enqueue(new Callback<Workout>() {
+            @Override
+            public void onResponse(Call<Workout> call, Response<Workout> response) {
+                if (response.isSuccessful()) {
+                    workout = response.body();
+                    Log.i(TAG, "onResponse: " + workout.route.initialLatitude.toString());
+
+                    //aqui es on emplenem les views.
+                    TextView type = WorkoutDetailsFragment.this.getView().findViewById(R.id.type);
+                    type.setText(workout.type);
+                } else {
+                    Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error reading specific Workout", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Workout> call, Throwable t) {
+                Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error making call", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.loadDetails();
     }
 }

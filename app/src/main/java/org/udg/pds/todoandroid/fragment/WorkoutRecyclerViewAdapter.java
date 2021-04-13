@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.udg.pds.todoandroid.R;
+import org.udg.pds.todoandroid.entity.DictionaryImages;
 import org.udg.pds.todoandroid.entity.Workout;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
 
     private List<Workout> mValues = new ArrayList<>();
     private OnWorkoutListener mOnWorkoutListener;
-
+    private DictionaryImages dictionaryImages = new DictionaryImages();
 
     public WorkoutRecyclerViewAdapter(OnWorkoutListener onWorkoutListener) {
         this.mOnWorkoutListener = onWorkoutListener;
@@ -47,20 +48,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
         holder.mId.setText(mValues.get(position).id.toString());
         holder.mType.setText(mValues.get(position).type.toUpperCase());
         String type = mValues.get(position).type;
-        switch (type) {
-            case "running":
-                holder.mIcon.setImageResource(R.drawable.running);
-                break;
-            case "cycling":
-                holder.mIcon.setImageResource(R.drawable.cycling);
-                break;
-            case "hiking":
-                holder.mIcon.setImageResource(R.drawable.hiking);
-                break;
-            case "walking":
-                holder.mIcon.setImageResource(R.drawable.walking);
-                break;
-        }
+        holder.mIcon.setImageResource(dictionaryImages.images.get(type));
     }
 
     @Override

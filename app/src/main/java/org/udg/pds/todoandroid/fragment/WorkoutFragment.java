@@ -136,25 +136,5 @@ public class WorkoutFragment extends Fragment implements WorkoutRecyclerViewAdap
         Bundle bundle = new Bundle();
         bundle.putLong("id", id);
         Navigation.findNavController(view).navigate(R.id.action_actionWorkoutList_to_workoutDetailsFragment, bundle);
-
-        //La crida que ve a continuació s'ha de fer en el nout fragment.
-        Call<Workout> call = mTodoService.getWorkout(id.toString());
-
-        call.enqueue(new Callback<Workout>() {
-            @Override
-            public void onResponse(Call<Workout> call, Response<Workout> response) {
-                if (response.isSuccessful()) {
-                    Workout receivedWorkout = response.body();
-                } else {
-                    Toast.makeText(WorkoutFragment.this.getContext(), "Error reading specific Workout", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Workout> call, Throwable t) {
-                Toast.makeText(WorkoutFragment.this.getContext(), "Error making call", Toast.LENGTH_LONG).show();
-            }
-        });
-
     }
 }
