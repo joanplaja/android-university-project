@@ -12,5 +12,7 @@ public class DictionaryImages {
         images.put("cycling", R.drawable.cycling);
         images.put("hiking", R.drawable.hiking);
         images.put("walking", R.drawable.walking);
+        images.put("latitude", R.drawable.latitude);
+        images.put("longitude", R.drawable.longitude);
     }
 }

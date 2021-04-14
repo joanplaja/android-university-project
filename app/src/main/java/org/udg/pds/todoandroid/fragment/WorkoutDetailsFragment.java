@@ -8,13 +8,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.entity.DictionaryImages;
 import org.udg.pds.todoandroid.entity.Workout;
 import org.udg.pds.todoandroid.rest.TodoApi;
+import org.w3c.dom.Text;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +35,8 @@ public class WorkoutDetailsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "Workout Details: ";
+
+    DictionaryImages dictionaryImages = new DictionaryImages();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -94,12 +99,55 @@ public class WorkoutDetailsFragment extends Fragment {
             @Override
             public void onResponse(Call<Workout> call, Response<Workout> response) {
                 if (response.isSuccessful()) {
+                    //Emplenem el workout amb el que rebem de la crida.
                     workout = response.body();
-                    Log.i(TAG, "onResponse: " + workout.route.initialLatitude.toString());
+                    //Recuperem els camps que els interessen i els guardem a variables.
+                    String type = workout.type;
+                    Integer icon = dictionaryImages.images.get(type);
+                    Double initialLatitude = workout.route.initialLatitude;
+                    Double initialLongitude = workout.route.initialLongitude;
+                    Double lastLatitude = workout.route.points.get(workout.route.points.size()-1).latitude;
+                    Double lastLongitude = workout.route.points.get(workout.route.points.size()-1).longitude;
+                    Double latitudeDiff = lastLatitude - initialLatitude;
+                    Double longitudeDiff = lastLongitude - initialLongitude;
 
-                    //aqui es on emplenem les views.
-                    TextView type = WorkoutDetailsFragment.this.getView().findViewById(R.id.type);
-                    type.setText(workout.type);
+                    //Emplenem els valors de les Views
+                    TextView typeView = WorkoutDetailsFragment.this.getView().findViewById(R.id.type);
+                    typeView.setText(type.toUpperCase());
+
+                    ImageView iconView = WorkoutDetailsFragment.this.getView().findViewById(R.id.icon);
+                    iconView.setImageResource(icon);
+
+                    TextView initialLatitudeView = WorkoutDetailsFragment.this.getView().findViewById(R.id.initialLatitude);
+                    initialLatitudeView.setText("Initial Latitude: " + initialLatitude);
+
+                    TextView initialLongitudeView = WorkoutDetailsFragment.this.getView().findViewById(R.id.initialLongitude);
+                    initialLongitudeView.setText("Initial Longitude: " + initialLongitude);
+
+                    TextView lastLatitudeView = WorkoutDetailsFragment.this.getView().findViewById(R.id.lastLatitude);
+                    lastLatitudeView.setText("Last Point Latitude: " + lastLatitude);
+
+                    TextView lastLongitudeView = WorkoutDetailsFragment.this.getView().findViewById(R.id.lastLongitude);
+                    lastLongitudeView.setText("Last Point Longitude: " + lastLongitude);
+
+                    TextView latitudeDiffView = WorkoutDetailsFragment.this.getView().findViewById(R.id.latitudeDiff);
+                    if(latitudeDiff > 0) {
+                        //hem anat cap a l'est
+                        latitudeDiffView.setText("You have gone " + latitudeDiff + " points to the East.");
+                    } else {
+                        //hem anat cap a l'oest
+                        latitudeDiffView.setText("You have gone " + latitudeDiff + " points to the West.");
+                    }
+
+                    TextView longitudeDiffView = WorkoutDetailsFragment.this.getView().findViewById(R.id.longitudeDiff);
+                    if(longitudeDiff > 0) {
+                        //hem anat cap al nord
+                        longitudeDiffView.setText("You have gone " + longitudeDiff + " points to the North.");
+                    } else {
+                        //hem anat cap al sud
+                        longitudeDiffView.setText("You have gone " + longitudeDiff + " points to the South.");
+                    }
+
                 } else {
                     Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error reading specific Workout", Toast.LENGTH_LONG).show();
                 }
