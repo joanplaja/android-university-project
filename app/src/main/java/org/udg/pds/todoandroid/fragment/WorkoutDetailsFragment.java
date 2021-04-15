@@ -3,11 +3,14 @@ package org.udg.pds.todoandroid.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,8 +85,39 @@ public class WorkoutDetailsFragment extends Fragment {
         id = getArguments().getLong("id");
         Log.i(TAG, id.toString());
         View v = inflater.inflate(R.layout.fragment_workout_details, container, false);
-
+        Button deleteButton;
+        deleteButton = v.findViewById(R.id.deleteButton);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleDelete();
+            }
+        });
         return v;
+    }
+
+    private void handleDelete() {
+        Call<String> call = mTodoService.deleteWorkout(id.toString());
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    Log.i(TAG, "onResponse: " + response.body());
+
+                } else {
+                    Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error deleting the Workout", Toast.LENGTH_LONG).show();
+                }
+                NavDirections action =
+                    WorkoutDetailsFragmentDirections.actionWorkoutDetailsFragmentToActionWorkoutList();
+                Navigation.findNavController(getView()).navigate(action);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error making call to delete the Workout", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -156,6 +190,7 @@ public class WorkoutDetailsFragment extends Fragment {
                         longitudeDiff = -longitudeDiff;
                         longitudeDiffView.setText(longitudeDiff.toString() + " South");
                     }
+
 
                 } else {
                     Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error reading specific Workout", Toast.LENGTH_LONG).show();

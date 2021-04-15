@@ -12,6 +12,7 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -69,10 +70,11 @@ public interface TodoApi {
     @POST("/routes/{id}/points")
     Call<IdObject> addPoints(@Path("id") String workoutId,@Body Double[][] points);
 
-   @GET("/users")
+    @GET("/users")
     Call<List<User>> searchUser(@Query("search") String name);
 
-
+    @DELETE("/workouts/{wid}")
+    Call<String> deleteWorkout(@Path("wid") String workoutId);
 
 }
 
