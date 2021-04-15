@@ -119,33 +119,35 @@ public class WorkoutDetailsFragment extends Fragment {
                     iconView.setImageResource(icon);
 
                     TextView initialLatitudeView = WorkoutDetailsFragment.this.getView().findViewById(R.id.initialLatitude);
-                    initialLatitudeView.setText("Initial Latitude: " + initialLatitude);
+                    initialLatitudeView.setText(initialLatitude.toString());
 
                     TextView initialLongitudeView = WorkoutDetailsFragment.this.getView().findViewById(R.id.initialLongitude);
-                    initialLongitudeView.setText("Initial Longitude: " + initialLongitude);
+                    initialLongitudeView.setText(initialLongitude.toString());
 
                     TextView lastLatitudeView = WorkoutDetailsFragment.this.getView().findViewById(R.id.lastLatitude);
-                    lastLatitudeView.setText("Last Point Latitude: " + lastLatitude);
+                    lastLatitudeView.setText(lastLatitude.toString());
 
                     TextView lastLongitudeView = WorkoutDetailsFragment.this.getView().findViewById(R.id.lastLongitude);
-                    lastLongitudeView.setText("Last Point Longitude: " + lastLongitude);
+                    lastLongitudeView.setText(lastLongitude.toString());
 
                     TextView latitudeDiffView = WorkoutDetailsFragment.this.getView().findViewById(R.id.latitudeDiff);
                     if(latitudeDiff > 0) {
                         //hem anat cap a l'est
-                        latitudeDiffView.setText("You have gone " + latitudeDiff + " points to the East.");
+                        latitudeDiffView.setText(latitudeDiff.toString() + " East");
                     } else {
                         //hem anat cap a l'oest
-                        latitudeDiffView.setText("You have gone " + latitudeDiff + " points to the West.");
+                        latitudeDiff = -latitudeDiff;
+                        latitudeDiffView.setText(latitudeDiff.toString() + " West");
                     }
 
                     TextView longitudeDiffView = WorkoutDetailsFragment.this.getView().findViewById(R.id.longitudeDiff);
                     if(longitudeDiff > 0) {
                         //hem anat cap al nord
-                        longitudeDiffView.setText("You have gone " + longitudeDiff + " points to the North.");
+                        longitudeDiffView.setText(longitudeDiff.toString() + " North");
                     } else {
                         //hem anat cap al sud
-                        longitudeDiffView.setText("You have gone " + longitudeDiff + " points to the South.");
+                        longitudeDiff = -longitudeDiff;
+                        longitudeDiffView.setText(longitudeDiff.toString() + " South");
                     }
 
                 } else {
