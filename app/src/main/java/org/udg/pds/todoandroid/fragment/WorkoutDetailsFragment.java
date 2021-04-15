@@ -106,8 +106,15 @@ public class WorkoutDetailsFragment extends Fragment {
                     Integer icon = dictionaryImages.images.get(type);
                     Double initialLatitude = workout.route.initialLatitude;
                     Double initialLongitude = workout.route.initialLongitude;
-                    Double lastLatitude = workout.route.points.get(workout.route.points.size()-1).latitude;
-                    Double lastLongitude = workout.route.points.get(workout.route.points.size()-1).longitude;
+                    Double lastLatitude;
+                    Double lastLongitude;
+                    if(workout.route.points.size() != 0) {
+                        lastLatitude = workout.route.points.get(workout.route.points.size()-1).latitude;
+                        lastLongitude = workout.route.points.get(workout.route.points.size()-1).longitude;
+                    } else {
+                        lastLatitude = 0.0;
+                        lastLongitude = 0.0;
+                    }
                     Double latitudeDiff = lastLatitude - initialLatitude;
                     Double longitudeDiff = lastLongitude - initialLongitude;
 
