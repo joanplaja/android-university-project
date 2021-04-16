@@ -49,7 +49,7 @@ public interface TodoApi {
     Call<String> uploadImage(@Part MultipartBody.Part file);
 
     @GET("/users/{id}")
-    Call<User> getUser(@Path("id") String id);
+    Call<User> getUser(@Path("id") Long id);
 
     @GET("/users/me")
     Call<User> getUserMe();
@@ -71,6 +71,9 @@ public interface TodoApi {
 
    @GET("/users")
     Call<List<User>> searchUser(@Query("search") String name);
+
+    @GET("/users/id/{uname}")
+    Call<Long> getIdByUsername(@Path("uname") String uname);
 
 
 
