@@ -324,7 +324,7 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
             public void onClick(View v) {
                 chronoStart();
                 pause = false;
-                btnPause.setVisibility(View.GONE);
+                btnPause.setVisibility(View.VISIBLE);
                 btnPlay.setVisibility(View.GONE);
                 btnSave.setVisibility(View.GONE);
             }
