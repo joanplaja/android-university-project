@@ -68,6 +68,22 @@
         android:name="org.udg.pds.todoandroid.activity.SearchActivity"
         android:label="search"
         tools:layout="@layout/search_user" />
+    <action
+        android:id="@+id/action_SearchActivity_to_viewProfileFragment"
+        app:destination="@id/ViewProfileFragment" />
+        <argument
+             android:name="username"
+            app:argType="string" />
+
+    <fragment
+    android:id="@+id/ViewProfileFragment"
+    android:name="org.udg.pds.todoandroid.fragment.ViewProfileFragment"
+    android:label="fragment_view_profile"
+    tools:layout="@layout/view_profile" >
+    <argument
+        android:name="username"
+        app:argType="string"  />
+    </fragment>
     <fragment
         android:id="@+id/actionWorkoutList"
         android:name="org.udg.pds.todoandroid.fragment.WorkoutFragment"
