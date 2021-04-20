@@ -11,20 +11,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.solver.state.State;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
-import org.udg.pds.todoandroid.entity.IdObject;
-import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
-import org.udg.pds.todoandroid.entity.UserLogin;
-import org.udg.pds.todoandroid.fragment.TaskList;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.util.ArrayList;
@@ -106,7 +100,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    static class SUAdapter extends RecyclerView.Adapter<SearchActivity.UserViewHolder> {
+    class SUAdapter extends RecyclerView.Adapter<SearchActivity.UserViewHolder> {
 
         List<User> list = new ArrayList<>();
         Context context;
@@ -130,10 +124,29 @@ public class SearchActivity extends AppCompatActivity {
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int duration = Toast.LENGTH_LONG;
 
+                    Intent i = new Intent(SearchActivity.this, ViewProfileActivity.class);
+                    i.putExtra("username",list.get(position).username);
+                    SearchActivity.this.startActivity(i);
+                    SearchActivity.this.finish();
+                    /*   Bundle bundle = new Bundle();
+                    bundle.putString("username", list.get(position).username);
+                    Navigation.findNavController(this.getView()).navigate(R.id.action_SearchActivity_to_viewProfileFragment, bundle);
+*/
+                    /*  NavDirections action =
+                        TaskListDirections
+                            .actionActionTasksToAddTaskFragment();
+                    Navigation.findNavController(view).navigate(action);*/
+
+                    /*Fragment fragment = new ViewProfileFragment().newInstance(list.get(position).username);
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, ViewProfileFragment); // give your fragment container id in first parameter
+                    transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                    transaction.commit();*/
+
+                    /*int duration = Toast.LENGTH_LONG;
                     Toast toast = Toast.makeText(context, String.format("Hey, I'm item %1d", position), duration);
-                    toast.show();
+                    toast.show();*/
                 }
             });
 
