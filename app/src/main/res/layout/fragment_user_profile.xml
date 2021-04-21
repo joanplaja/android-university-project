@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/userProfile"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/userProfile"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintGuide_percent="0.40"
-        tools:context=".fragment.UserProfileFragment">
+        tools:layout_editor_absoluteY="1dp">
 
 
         <ImageView
             android:id="@+id/userProfileImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="12dp"
             android:src="@drawable/profile_photo"
             app:layout_constraintBottom_toTopOf="@+id/guideline8"
-            app:layout_constraintDimensionRatio="1"
-            app:layout_constraintEnd_toStartOf="@+id/guideline6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/guideline36"
+            app:layout_constraintStart_toStartOf="@+id/guideline35"
+            app:layout_constraintTop_toTopOf="@+id/guideline28" />
 
         <TextView
             android:id="@+id/userProfileName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Name"
+            android:textSize="30sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="@+id/guideline6"
             app:layout_constraintTop_toTopOf="@+id/userProfileImage" />
@@ -39,76 +42,81 @@
             android:id="@+id/userProfileEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:inputType="textEmailAddress"
             android:text="abc@dg.edu"
-            app:layout_constraintStart_toStartOf="@+id/userProfileSubName"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/userProfileSubName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline35"
             app:layout_constraintTop_toBottomOf="@+id/userProfileSubName" />
 
         <TextView
             android:id="@+id/userProfilePhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:inputType="phone"
             android:text="123456789"
-            app:layout_constraintStart_toStartOf="@+id/userProfileEmail"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/userProfileEmail"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline35"
             app:layout_constraintTop_toBottomOf="@+id/userProfileEmail" />
 
         <TextView
             android:id="@+id/userProfileSubName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:ems="10"
             android:inputType="textPersonName"
             android:text="Name"
-            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/userProfileDescription"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/userProfileDescription"
+            app:layout_constraintStart_toStartOf="@+id/guideline35"
             app:layout_constraintTop_toBottomOf="@+id/userProfileDescription" />
 
         <TextView
             android:id="@+id/userProfileId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:inputType="number"
             android:text="User identifier"
-            app:layout_constraintStart_toStartOf="@+id/userProfilePhone"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/userProfilePhone"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline35"
             app:layout_constraintTop_toBottomOf="@+id/userProfilePhone" />
 
         <Button
             android:id="@+id/userProfileButtonEquipment"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="19dp"
             android:text="Equipment"
-            app:layout_constraintEnd_toStartOf="@+id/guideline7"
-            app:layout_constraintStart_toStartOf="@+id/guideline6"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileName" />
+            app:layout_constraintEnd_toStartOf="@+id/guideline40"
+            app:layout_constraintStart_toStartOf="@+id/guideline35"
+            app:layout_constraintTop_toTopOf="@+id/guideline39" />
 
         <Button
             android:id="@+id/userProfileButtonUpdate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Update"
+            app:layout_constraintBottom_toTopOf="@+id/guideline41"
             app:layout_constraintEnd_toEndOf="@+id/userProfileButtonEquipment"
             app:layout_constraintStart_toStartOf="@+id/userProfileButtonEquipment"
             app:layout_constraintTop_toBottomOf="@+id/userProfileButtonEquipment" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/userProfileCardFollowers"
-            android:layout_width="150dp"
-            android:layout_height="82dp"
-            android:layout_marginTop="44dp"
-            app:layout_constraintEnd_toEndOf="@+id/userProfileImage"
-            app:layout_constraintHorizontal_bias="0.11"
-            app:layout_constraintStart_toStartOf="@+id/userProfileImage"
-            app:layout_constraintTop_toTopOf="@+id/guideline8">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline37"
+            app:layout_constraintStart_toStartOf="@+id/guideline6"
+            app:layout_constraintTop_toBottomOf="@+id/userProfileName">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
                 <TextView
@@ -116,6 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3000"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -125,8 +134,10 @@
                     android:id="@+id/userProfileTextFollowers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:text="Followers"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -136,22 +147,25 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/userProfileCardFollowing"
-            android:layout_width="150dp"
-            android:layout_height="82dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toEndOf="@+id/userProfileCardFollowers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            app:layout_constraintStart_toStartOf="@+id/guideline37"
             app:layout_constraintTop_toTopOf="@+id/userProfileCardFollowers">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/userProfileTextFollowing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:text="Following"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -161,6 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2400"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -171,54 +186,56 @@
 
         <TextView
             android:id="@+id/userProfileDescription"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:text="Description"
-            app:layout_constraintEnd_toStartOf="@+id/guideline7"
-            app:layout_constraintHorizontal_bias="0.329"
-            app:layout_constraintStart_toStartOf="@+id/userProfileCardFollowers"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileCardFollowers" />
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline37"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline35"
+            app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.43" />
+            app:layout_constraintGuide_percent="0.42" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="346dp"
-            app:layout_constraintGuide_percent="0.8" />
+            app:layout_constraintGuide_percent="0.95" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="160dp" />
+            app:layout_constraintGuide_percent="0.2" />
 
         <Button
             android:id="@+id/buttonSignOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="Sign Out"
-            app:layout_constraintBottom_toTopOf="@+id/guideline9"
+            app:layout_constraintBottom_toTopOf="@+id/guideline41"
             app:layout_constraintEnd_toEndOf="@+id/buttonWorkouts"
-            app:layout_constraintHorizontal_bias="0.671"
-            app:layout_constraintTop_toBottomOf="@+id/buttonWorkouts"
-            app:layout_constraintStart_toStartOf="@+id/buttonWorkouts" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/buttonWorkouts"
+            app:layout_constraintTop_toBottomOf="@+id/buttonWorkouts" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="465dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintGuide_percent="1.0" />
 
         <Button
             android:id="@+id/buttonWorkouts"
@@ -227,11 +244,88 @@
             android:text="Workouts"
             app:layout_constraintBottom_toTopOf="@+id/buttonSignOut"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
-            app:layout_constraintHorizontal_bias="0.671"
-            app:layout_constraintStart_toStartOf="@+id/guideline6"
-            app:layout_constraintTop_toBottomOf="@+id/userProfileDescription"
-            app:layout_constraintVertical_bias="0.566" />
+            app:layout_constraintHorizontal_bias="0.434"
+            app:layout_constraintStart_toStartOf="@+id/guideline40"
+            app:layout_constraintTop_toTopOf="@+id/guideline39"
+            app:layout_constraintVertical_bias="0.0" />
 
+
+<!--        <Button-->
+<!--            android:id="@+id/graficButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="grafic"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/buttonSignOut"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/guideline7"-->
+<!--            app:layout_constraintHorizontal_bias="0.434"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/guideline40"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/guideline41"-->
+<!--            app:layout_constraintVertical_bias="0.0" />-->
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.035" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline35"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline36"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.35" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline37"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.70" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline39"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline41"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.55" />
+
+        <LinearLayout
+            android:id="@+id/graphicLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline7"
+            app:layout_constraintStart_toStartOf="@+id/guideline35"
+            app:layout_constraintTop_toTopOf="@+id/guideline41">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barchart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
