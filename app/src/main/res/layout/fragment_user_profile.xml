@@ -250,17 +250,17 @@
             app:layout_constraintVertical_bias="0.0" />
 
 
-<!--        <Button-->
-<!--            android:id="@+id/graficButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="grafic"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/buttonSignOut"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/guideline7"-->
-<!--            app:layout_constraintHorizontal_bias="0.434"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/guideline40"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/guideline41"-->
-<!--            app:layout_constraintVertical_bias="0.0" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/graficButton"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="grafic"-->
+        <!--            app:layout_constraintBottom_toTopOf="@+id/buttonSignOut"-->
+        <!--            app:layout_constraintEnd_toStartOf="@+id/guideline7"-->
+        <!--            app:layout_constraintHorizontal_bias="0.434"-->
+        <!--            app:layout_constraintStart_toStartOf="@+id/guideline40"-->
+        <!--            app:layout_constraintTop_toTopOf="@+id/guideline41"-->
+        <!--            app:layout_constraintVertical_bias="0.0" />-->
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline28"
@@ -316,16 +316,47 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline42"
             app:layout_constraintEnd_toEndOf="@id/guideline7"
             app:layout_constraintStart_toStartOf="@+id/guideline35"
-            app:layout_constraintTop_toTopOf="@+id/guideline41">
+            app:layout_constraintTop_toTopOf="@+id/guideline38">
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barchart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline27"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.97" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline38"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline42"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.92" />
+
+        <Button
+            android:id="@+id/buttonMoreStatistics"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="More statistics"
+            app:layout_constraintBottom_toTopOf="@+id/guideline27"
+            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            app:layout_constraintStart_toStartOf="@+id/guideline35"
+            app:layout_constraintTop_toTopOf="@+id/guideline42" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
