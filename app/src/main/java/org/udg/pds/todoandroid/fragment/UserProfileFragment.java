@@ -1,8 +1,12 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteOutOfMemoryException;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -11,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,15 +99,28 @@ public class UserProfileFragment extends Fragment {
         openEquipmentButton = v.findViewById(R.id.userProfileButtonEquipment);
         openEquipmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 openEquipmentActivity();
             }
         });
         updateProfileButton = v.findViewById(R.id.userProfileButtonUpdate);
         updateProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                openUpdateProfileActivity();
+            public void onClick(View view) {
+                //Pass data to updateProfileActivity
+                Bundle extras = new Bundle();
+                TextView userNameUPF = v.findViewById(R.id.userProfileName);
+                TextView userDescriptionUPF = v.findViewById(R.id.userProfileDescription);
+                TextView userPhoneUPF = v.findViewById(R.id.userProfilePhone);
+
+                Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
+
+                extras.putString("dataUserNameUPF", userNameUPF.getText().toString());
+                extras.putString("dataUserDescriptionUPF", userDescriptionUPF.getText().toString());
+                extras.putString("dataUserPhoneUPF", userPhoneUPF.getText().toString());
+                intent.putExtras(extras);
+
+                startActivity(intent);
             }
         });
         workoutButton = v.findViewById(R.id.buttonWorkouts);
@@ -211,7 +229,7 @@ public class UserProfileFragment extends Fragment {
                     TextView userProfileDescription = UserProfileFragment.this.getView().findViewById(R.id.userProfileDescription);
                     userProfileDescription.setText(response.body().description);
                 } else {
-                    Toast.makeText(UserProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserProfileFragment.this.getContext(), "Error loading profile", Toast.LENGTH_LONG).show();
                 }
             }
 
