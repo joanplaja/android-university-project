@@ -91,5 +91,14 @@
             app:layout_constraintTop_toBottomOf="@+id/updateProfileNameIL" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <Button
+        android:id="@+id/updateProfileImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change image"
+        app:layout_constraintBottom_toTopOf="@+id/guideline27"
+        app:layout_constraintStart_toEndOf="@+id/updateProfileImage"
+        app:layout_constraintTop_toTopOf="@+id/updateProfileImage" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

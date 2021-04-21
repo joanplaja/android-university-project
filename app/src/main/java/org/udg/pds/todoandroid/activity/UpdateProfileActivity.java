@@ -104,7 +104,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(UpdateProfileActivity.this);
-                    builder.setMessage("Look at this dialog!")
+                    builder.setMessage("Profile Updated!")
                         .setCancelable(false)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
