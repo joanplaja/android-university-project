@@ -1,6 +1,8 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -28,6 +30,7 @@ import android.util.Log;
 import android.location.Location;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
@@ -96,6 +99,9 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
     LinearLayout lytControl;
     LinearLayout lytStart;
 
+    TextView tvDistance;
+    TextView tvVelocity;
+
 
     AppCompatButton btnStart;
     FloatingActionButton btnPause;
@@ -114,6 +120,10 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
     Polyline polyline1;                                                     //polygon per dibuixar
     List<LatLng> list;                                                     //llista de latLong
     int lastPointSaved = 0;
+    Double lastLat = -1.0;
+    Double lastLng = -1.0;
+    Long lastTimeStamp;
+    Double distance = 0.0;
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;  //Constant per comprovar si s'ha acceptat permisos ubicacio
     private boolean locationPermissionGranted;                              //Variable per controlar si s'ha acceptat permisos ubicacio
@@ -178,6 +188,9 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
         lytControl = (LinearLayout) rootView.findViewById(R.id.lytControl);
         lytStart = (LinearLayout) rootView.findViewById(R.id.lytStart);
 
+        tvDistance = (TextView) rootView.findViewById(R.id.tvDistance);
+        tvVelocity = (TextView) rootView.findViewById(R.id.tvVelocity);
+
         btnStart = (AppCompatButton) rootView.findViewById(R.id.btnStart);
         btnPause = (FloatingActionButton) rootView.findViewById(R.id.btnPause);
         btnPlay = (FloatingActionButton) rootView.findViewById(R.id.btnPlay);
@@ -190,8 +203,8 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
 
         //Definir cada cuan es crida la ubicacio i la acuracitat
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(200);
-        locationRequest.setFastestInterval(100);
+        locationRequest.setInterval(1000);
+        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
@@ -199,6 +212,8 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
 
         mMapView.onResume(); // needed to get the map to display immediately
 
+
+;
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
@@ -214,6 +229,7 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                 if (locationResult == null) {
                     return;
                 }
+                Log.d("size:",locationResult.getLocations().size()+"");
                 for (Location location : locationResult.getLocations()) {
                     // Update UI with location data
                     // ...
@@ -223,6 +239,39 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                         list.add(ubi);
                         polyline1.setPoints(list);
                     }
+                    if(lastLat == -1 && lastLng == -1){
+                        lastLat = location.getLatitude();
+                        lastLng = location.getLongitude();
+                        lastTimeStamp = location.getTime();
+                        return;
+                    }
+                    Location l = new Location("");
+                    l.setLatitude(lastLat);
+                    l.setLongitude(lastLng);
+
+                    double distanceInMeters = location.distanceTo(l);//getDistance(lastLat, lastLng, location.getLatitude(), location.getLongitude());
+                    long timeDelta = (location.getTime() - lastTimeStamp)/1000;
+                    double speed = 0;
+                    if(timeDelta > 0){
+                        speed = (distanceInMeters/timeDelta);
+                    }
+                    Log.d("Calculations","Distance: "+distanceInMeters+", TimeDelta: "+timeDelta+" seconds"+",speed: "+speed+" Accuracy: "+location.getAccuracy());
+
+                    if(speed <= 0.40){
+                        speed = 0.0;
+                        distanceInMeters = 0.0;
+                    }
+                    if(!pause){
+                        distance += distanceInMeters;
+                        tvDistance.setText(String.format("%.2f m", distance));
+                    }
+                    //Log.d("distancebetween:",String.format("%.2f", location.distanceTo(l)));
+                    tvVelocity.setText(String.format("%.2f m/s", speed));
+
+
+                    lastLat = location.getLatitude();
+                    lastLng = location.getLongitude();
+                    lastTimeStamp = location.getTime();
                 }
                 saveLastPoints(false);
             }
@@ -241,29 +290,38 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
         } else lytStart.setVisibility(View.VISIBLE);
 
         btnStart.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                try {
-                    Workout workout = new Workout();
-                    workout.type = "cycling";
-                    Route route = new Route();
-                    route.initialLatitude = lastKnownLocation.getLatitude();
-                    route.initialLongitude = lastKnownLocation.getLongitude();
-                    workout.route = route;
 
-                    Call<IdObject> call = mTodoService.createWorkout(workout);
-                    call.enqueue(new Callback<IdObject>() {
-                        @Override
-                        public void onResponse(Call<IdObject> call, Response<IdObject> response) {
-                            if (response.isSuccessful()) {
+                AlertDialog.Builder adb = new AlertDialog.Builder(context);
+                CharSequence items[] = new CharSequence[] {"hiking", "cycling", "running","walking"};
+                adb.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
 
-                                workoutId = response.body();
-                                pause = false;
-                                chronoStart();
+                    @Override
+                    public void onClick(DialogInterface d, int n) {
 
-                                lytStart.setVisibility(View.GONE);
-                                lytControl.setVisibility(View.VISIBLE);
-                                btnPause.setVisibility(View.VISIBLE);
+                        try {
+                            Workout workout = new Workout();
+                            workout.type = items[n].toString();;
+                            Route route = new Route();
+                            route.initialLatitude = lastKnownLocation.getLatitude();
+                            route.initialLongitude = lastKnownLocation.getLongitude();
+                            workout.route = route;
+
+                            Call<IdObject> call = mTodoService.createWorkout(workout);
+                            call.enqueue(new Callback<IdObject>() {
+                                @Override
+                                public void onResponse(Call<IdObject> call, Response<IdObject> response) {
+                                    if (response.isSuccessful()) {
+
+                                        workoutId = response.body();
+                                        pause = false;
+                                        chronoStart();
+
+                                        lytStart.setVisibility(View.GONE);
+                                        lytControl.setVisibility(View.VISIBLE);
+                                        btnPause.setVisibility(View.VISIBLE);
 
                                 /*
                                 Route route = new Route();
@@ -287,24 +345,31 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                                     }
                                 });
                                 */
-                            }
-                            else Toast.makeText(context, "Error al crear workout(On response)", Toast.LENGTH_LONG).show();
+                                    }
+                                    else Toast.makeText(context, "Error al crear workout(On response)", Toast.LENGTH_LONG).show();
 
 
+                                }
+
+                                @Override
+                                public void onFailure(Call<IdObject> call, Throwable t) {
+                                    //IMPLEMENT ERROR
+                                    Toast.makeText(context, "Error al crear workout(On Failure)", Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
-
-                        @Override
-                        public void onFailure(Call<IdObject> call, Throwable t) {
+                        catch (Exception ex) {
                             //IMPLEMENT ERROR
-                            Toast.makeText(context, "Error al crear workout(On Failure)", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Error al crear workout(catch)", Toast.LENGTH_LONG).show();
+                            throw ex;
                         }
-                    });
-                }
-                catch (Exception ex) {
-                    //IMPLEMENT ERROR
-                    Toast.makeText(context, "Error al crear workout(catch)", Toast.LENGTH_LONG).show();
-                    throw ex;
-                }
+                    }
+
+                });
+                adb.setPositiveButton("Select",null);
+                adb.setNegativeButton("Cancel", null);
+                adb.setTitle("Choose an workout type");
+                adb.show();
             }
         });
 
@@ -510,6 +575,19 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage(), e);
         }
+    }
+
+    private static double getDistance(double lat1, double lon1, double lat2, double lon2) {
+        double R = 6371000; // for haversine use R = 6372.8 km instead of 6371 km
+        double dLat = lat2 - lat1;
+        double dLon = lon2 - lon1;
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1) * Math.cos(lat2) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        //double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        // simplify haversine:
+        //return 2 * R * 1000 * Math.asin(Math.sqrt(a));
     }
 
 }
