@@ -6,8 +6,7 @@
     android:name="org.udg.pds.todoandroid.fragment.WorkoutFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".fragment.WorkoutFragment"
-    tools:listitem="@layout/fragment_workout" />
+    tools:listitem="@layout/fragment_workout"
+    android:background="#b8ccc9"/>
