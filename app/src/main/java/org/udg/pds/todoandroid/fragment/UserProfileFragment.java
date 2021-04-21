@@ -1,12 +1,8 @@
 package org.udg.pds.todoandroid.fragment;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -18,17 +14,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.activity.SignoutActivity;
 import org.udg.pds.todoandroid.activity.EquipmentActivity;
 import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
-import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
-import org.udg.pds.todoandroid.entity.Workout;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,8 +77,13 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Button openEquipmentButton, updateProfileButton, signOutButton, workoutButton;
+        Button graficButton;
+
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
         //super.onCreate(savedInstanceState);
+
+        createGraphic(v);
+
         signOutButton = v.findViewById(R.id.buttonSignOut);
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,8 +116,55 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
+//        graficButton = v.findViewById(R.id.graficButton);
+//        graficButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent I = new Intent(getActivity(), GraphicActivity.class);
+//                startActivity(I);
+//            }
+//        });
+
         return v;
     }
+
+    public void createGraphic(View v){
+        //View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        BarChart chart = v.findViewById(R.id.barchart);
+
+        ArrayList NoOfEmp = new ArrayList();
+
+        NoOfEmp.add(new BarEntry(945f, 0));
+        NoOfEmp.add(new BarEntry(1040f, 1));
+        NoOfEmp.add(new BarEntry(1133f, 2));
+        NoOfEmp.add(new BarEntry(1240f, 3));
+        NoOfEmp.add(new BarEntry(1369f, 4));
+        NoOfEmp.add(new BarEntry(1487f, 5));
+        NoOfEmp.add(new BarEntry(1501f, 6));
+        NoOfEmp.add(new BarEntry(1645f, 7));
+        NoOfEmp.add(new BarEntry(1578f, 8));
+        NoOfEmp.add(new BarEntry(1695f, 9));
+
+        ArrayList year = new ArrayList();
+
+        year.add("2008");
+        year.add("2009");
+        year.add("2010");
+        year.add("2011");
+        year.add("2012");
+        year.add("2013");
+        year.add("2014");
+        year.add("2015");
+        year.add("2016");
+        year.add("2017");
+
+        BarDataSet bardataset = new BarDataSet(NoOfEmp, "No Of Employee");
+        chart.animateY(5000);
+        BarData data = new BarData(bardataset);
+        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        chart.setData(data);
+    }
+
     public void openEquipmentActivity(){
         Intent intent = new Intent(getActivity(), EquipmentActivity.class);
         startActivity(intent);
