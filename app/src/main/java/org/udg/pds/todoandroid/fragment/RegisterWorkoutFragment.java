@@ -1,30 +1,19 @@
 package org.udg.pds.todoandroid.fragment;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-
+//android x libraries
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
-
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+//andriod libraries
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.SupportMapFragment;
-
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.location.Location;
@@ -32,18 +21,12 @@ import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Executor;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+//google libraries
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -52,115 +35,76 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
+//java libraries
+import java.util.ArrayList;
+import java.util.List;
+//udg.pds libraries
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.Route;
 import org.udg.pds.todoandroid.entity.Workout;
 import org.udg.pds.todoandroid.rest.TodoApi;
-
+//retrofit libraries
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegisterWorkoutFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment implements OnMapReadyCallback {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallback {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    TodoApi mTodoService;
-
-    Context context;
-
-    private IdObject workoutId;
-    private IdObject routeId;
-    private boolean pause = true;
-
-    LinearLayout lytControl;
-    LinearLayout lytStart;
-
-    TextView tvDistance;
-    TextView tvVelocity;
-
-
-    AppCompatButton btnStart;
-    FloatingActionButton btnPause;
-    FloatingActionButton btnPlay;
-    FloatingActionButton btnSave;
-
-    Chronometer chronometer;
-    long mLastStopTime = 0;
-
-    private static final String TAG = "FRAGMENT WORKOUT";
-
-    private GoogleMap map;
-    MapView mMapView;//Instancia del mapa de google
-    private static final int DEFAULT_ZOOM = 15;                             //Zoom per defecte
-
-    Polyline polyline1;                                                     //polygon per dibuixar
-    List<LatLng> list;                                                     //llista de latLong
-    int lastPointSaved = 0;
-    Double lastLat = -1.0;
-    Double lastLng = -1.0;
-    Long lastTimeStamp;
-    Double distance = 0.0;
-
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;  //Constant per comprovar si s'ha acceptat permisos ubicacio
+    TodoApi mTodoService;                                                   //Api singelton reference
+    Context context;                                                        //context reference
+    private IdObject workoutId;                                             //actual workout id reference
+    private boolean pause = true;                                           //indicates if the register is paused or not
+    LinearLayout lytControl;                                                //reference to LinerLayout of controlButtons ( Pause, Resume, Save)
+    LinearLayout lytStart;                                                  //reference to LinerarLayout of start button
+    TextView tvDistance;                                                    //reference to TextView which display distance registered
+    TextView tvVelocity;                                                    //reference to TextView
+    AppCompatButton btnStart;                                               //reference to start btn
+    FloatingActionButton btnPause;                                          //reference to pause button
+    FloatingActionButton btnPlay;                                           //reference to play button
+    FloatingActionButton btnSave;                                           //reference to save button
+    Chronometer chronometer;                                                //Chronometer object used for tracking the workout register
+    long mLastStopTime = 0;                                                 //variable for saving the last stopTime
+    private static final String TAG = "FRAGMENT WORKOUT";                   //TAG used on debug
+    private GoogleMap map;                                                  //google map object
+    MapView mMapView;                                                       //reference to mapView on registerworkout layout
+    private static final int DEFAULT_ZOOM = 15;                             //default zoom
+    Polyline polyline1;                                                     //polygon used for save lat,long points and paint the polygon on the map
+    List<LatLng> list;                                                      //list for points (Latitude and Longitude)
+    int lastPointSaved = 0;                                                 //variable for tracking the last point saved on the database from the list
+    Double lastLat = -1.0;                                                  //variable for saving last latitude, default -1 for checkings
+    Double lastLng = -1.0;                                                  //variable for saving last latitude, default -1 for checkings
+    Long lastTimeStamp;                                                     //time for velocity calculations
+    Double distance = 0.0;                                                  //variable for acumlate distance on a workout
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;  //constant for check if user has accepted location permissions
     private boolean locationPermissionGranted;                              //Variable per controlar si s'ha acceptat permisos ubicacio
-
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
     private Location lastKnownLocation;
-
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
-
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient fusedLocationProviderClient;
-
-    LocationCallback locationCallback;                                  //variable per definir la funcio callback de la ubicacio
-    LocationRequest locationRequest;                                    //variable per definir parametres de crides de localitzacio
+    LocationCallback locationCallback;                                      //variable per definir la funcio callback de la ubicacio
+    LocationRequest locationRequest;                                        //variable per definir parametres de crides de localitzacio
 
 
     public RegisterWorkoutFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegisterWorkoutFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static RegisterWorkoutFragment newInstance(String param1, String param2) {
         RegisterWorkoutFragment fragment = new RegisterWorkoutFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -169,115 +113,119 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //We save the view beofre returning it, so we can manage it before
         View rootView = inflater.inflate(R.layout.fragment_register_workout, container, false);
-
+        //We save the context in a variable, so we dont call getContenxt always
         context = this.getContext();
-
+        //Get api service
         mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
 
+        //Get view components layouts,buttons,textviews...
         lytControl = (LinearLayout) rootView.findViewById(R.id.lytControl);
         lytStart = (LinearLayout) rootView.findViewById(R.id.lytStart);
-
         tvDistance = (TextView) rootView.findViewById(R.id.tvDistance);
         tvVelocity = (TextView) rootView.findViewById(R.id.tvVelocity);
-
         btnStart = (AppCompatButton) rootView.findViewById(R.id.btnStart);
         btnPause = (FloatingActionButton) rootView.findViewById(R.id.btnPause);
         btnPlay = (FloatingActionButton) rootView.findViewById(R.id.btnPlay);
         btnSave = (FloatingActionButton) rootView.findViewById(R.id.btnSave);
-
         chronometer = (Chronometer) rootView.findViewById(R.id.chronometer);
 
-        Log.d(TAG, "on create view");
+        //get the provider client for locations
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-
-        //Definir cada cuan es crida la ubicacio i la acuracitat
+        //Difine the interval when we requests the locations to the client and with which accuaracy
         locationRequest = LocationRequest.create();
         locationRequest.setInterval(1000);
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        //get the map view
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
-
         mMapView.onResume(); // needed to get the map to display immediately
 
-
-;
+;       //intitlize the map
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //get the map async (this => we have defined the method on this class using implements..)
         mMapView.getMapAsync(this);
 
         list = new ArrayList<LatLng>();
-
+        //We define the location callback implementation
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
+                if (locationResult == null) { //if there's not result we return
                     return;
                 }
-                Log.d("size:",locationResult.getLocations().size()+"");
+                //foreach location returned
                 for (Location location : locationResult.getLocations()) {
-                    // Update UI with location data
-                    // ...
-                    Log.d("loaction enabled:", location.getLatitude() + "," + location.getLongitude());
+
                     LatLng ubi = new LatLng(location.getLatitude(), location.getLongitude());
-                    if(!pause){
+
+                    if(!pause){ //if its not paused we save the latlng on the list and we add it on the route polygon
                         list.add(ubi);
                         polyline1.setPoints(list);
                     }
+                    //calculations for velocity now
+                    //if there's not previous location saved we created equals the actual
                     if(lastLat == -1 && lastLng == -1){
                         lastLat = location.getLatitude();
                         lastLng = location.getLongitude();
                         lastTimeStamp = location.getTime();
                         return;
                     }
+
+                    //calculation of the distance between the last location saved and the actual
                     Location l = new Location("");
                     l.setLatitude(lastLat);
                     l.setLongitude(lastLng);
-
-                    double distanceInMeters = location.distanceTo(l);//getDistance(lastLat, lastLng, location.getLatitude(), location.getLongitude());
+                    double distanceInMeters = location.distanceTo(l);
+                    //get the actual time
                     long timeDelta = (location.getTime() - lastTimeStamp)/1000;
                     double speed = 0;
                     if(timeDelta > 0){
                         speed = (distanceInMeters/timeDelta);
                     }
                     Log.d("Calculations","Distance: "+distanceInMeters+", TimeDelta: "+timeDelta+" seconds"+",speed: "+speed+" Accuracy: "+location.getAccuracy());
-
+                    //if speed is less than 0.4 m/s we supose thats probably and error of preccision so we ignore it,
+                    //if not that could supose some one is moving and probably its not
                     if(speed <= 0.40){
                         speed = 0.0;
                         distanceInMeters = 0.0;
                     }
+                    //if not pause we add the distance to totalDistance and we show it on the layout
                     if(!pause){
                         distance += distanceInMeters;
                         tvDistance.setText(String.format("%.2f m", distance));
                     }
-                    //Log.d("distancebetween:",String.format("%.2f", location.distanceTo(l)));
+                    //we dont care about if its paused or not to show the velocity
                     tvVelocity.setText(String.format("%.2f m/s", speed));
 
-
+                    //save the actual to the last for next interation
                     lastLat = location.getLatitude();
                     lastLng = location.getLongitude();
                     lastTimeStamp = location.getTime();
                 }
+                //that probably will change but for now we save each point on each time this funciton is called
                 saveLastPoints(false);
             }
         };
 
-
+        //if there's a workout we show the control buttons corresponding to stop,pause,resume
+        //otherwise we show the start button for starting one
         if (workoutId != null) {
             lytControl.setVisibility(View.VISIBLE);
             if (pause) {
@@ -289,11 +237,13 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
             }
         } else lytStart.setVisibility(View.VISIBLE);
 
+        //start button logic
         btnStart.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
+                //show workout selection
                 AlertDialog.Builder adb = new AlertDialog.Builder(context);
                 CharSequence items[] = new CharSequence[] {"hiking", "cycling", "running","walking"};
                 adb.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
@@ -302,6 +252,7 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                     public void onClick(DialogInterface d, int n) {
 
                         try {
+                            //new workout instance
                             Workout workout = new Workout();
                             workout.type = items[n].toString();;
                             Route route = new Route();
@@ -309,6 +260,8 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                             route.initialLongitude = lastKnownLocation.getLongitude();
                             workout.route = route;
 
+                            //we try to create the workout if its done we start the cronometer and show the pause button
+                            //otherwise we notifiy about the error
                             Call<IdObject> call = mTodoService.createWorkout(workout);
                             call.enqueue(new Callback<IdObject>() {
                                 @Override
@@ -322,29 +275,6 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                                         lytStart.setVisibility(View.GONE);
                                         lytControl.setVisibility(View.VISIBLE);
                                         btnPause.setVisibility(View.VISIBLE);
-
-                                /*
-                                Route route = new Route();
-                                route.initialLatitude = lastKnownLocation.getLatitude();
-                                route.initialLongitude = lastKnownLocation.getLongitude();
-
-                                Call<IdObject> callRoute = mTodoService.createRoute(workoutId.id.toString(),route);
-                                callRoute.enqueue(new Callback<IdObject>() {
-                                    @Override
-                                    public void onResponse(Call<IdObject> call, Response<IdObject> response) {
-
-                                        routeId = response.body();
-                                        System.out.println("route id:"+routeId.id.toString());
-
-
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<IdObject> call, Throwable t) {
-                                        Toast.makeText(context, "Error al crear la route(On response)", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                                */
                                     }
                                     else Toast.makeText(context, "Error al crear workout(On response)", Toast.LENGTH_LONG).show();
 
@@ -373,6 +303,7 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
             }
         });
 
+        //pause button logic
         btnPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -384,6 +315,7 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
             }
         });
 
+        //play button logic
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -395,14 +327,21 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
             }
         });
 
+        //save button logic
+        //we restart all the variables to default values like there's non a workout
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveLastPoints(true);
                 mLastStopTime = 0;
+                lastPointSaved = 0;
+                lastLat = -1.0;
+                lastLng = -1.0;
+                distance = 0.0;
                 pause = true;
                 list = new ArrayList<>();
                 polyline1.remove();
+                tvDistance.setText(String.format("%.2f m", distance));
                 lytStart.setVisibility(View.VISIBLE);
                 lytControl.setVisibility(View.GONE);
                 btnPause.setVisibility(View.GONE);
@@ -415,6 +354,7 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
 
     }
 
+    //function for sending all last latlng points not saved on the workout
     private void saveLastPoints(boolean saveWorkout){
         if(saveWorkout | !pause)//si guardem workout no hem de mirar variable pause, pero si no guardem si hem de mirar
             if(workoutId != null && workoutId != null)
@@ -444,6 +384,7 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
                 }
     }
 
+    //function for starting the chromoeter
     private void chronoStart()
     {
         // on first start
@@ -458,7 +399,7 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
 
         chronometer.start();
     }
-
+    //function for pause the chronometer
     private void chronoPause()
     {
         chronometer.stop();
@@ -469,20 +410,10 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        Log.d(TAG,"onActivityCreated");
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        /*if(getActivity()!=null) {
-            SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-            if (mapFragment != null) {
-                mapFragment.getMapAsync(this);
-            }
-        }*/
     }
 
 
-
+    //function which depending on the user permision starts the client provider and then update map atributes
     private void updateLocationUI() {
         Log.d("tag:","updateLocationUI");
         if (map == null) {
@@ -507,12 +438,12 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
         }
     }
 
+    //On map ready, we start all the location logic
     @Override
     public void onMapReady(GoogleMap map) {
         Log.d("tag:","onMapReady");
         this.map = map;
         polyline1 = map.addPolyline(new PolylineOptions().clickable(true));
-        // ..
 
         getLocationPermission();
 
@@ -524,13 +455,9 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
 
     }
 
+    //Request location permission, so that we can get the location of the device. The result of the permission request is handled by a callback, onRequestPermissionsResult.
     private void getLocationPermission() {
         Log.d("tag:","getLocationPermission");
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
             android.Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
@@ -542,12 +469,9 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
         }
     }
 
+
+    //Get the best and most recent location of the device, which may be null in rare cases when a location is not available
     private void getDeviceLocation() {
-        Log.d("tag:","getDeviceLocation");
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
@@ -575,19 +499,6 @@ public class RegisterWorkoutFragment extends /*SupportMapFragment*/ Fragment imp
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage(), e);
         }
-    }
-
-    private static double getDistance(double lat1, double lon1, double lat2, double lon2) {
-        double R = 6371000; // for haversine use R = 6372.8 km instead of 6371 km
-        double dLat = lat2 - lat1;
-        double dLon = lon2 - lon1;
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1) * Math.cos(lat2) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        //double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        // simplify haversine:
-        //return 2 * R * 1000 * Math.asin(Math.sqrt(a));
     }
 
 }
