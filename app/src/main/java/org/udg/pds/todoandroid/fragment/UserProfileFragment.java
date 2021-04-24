@@ -177,10 +177,16 @@ public class UserProfileFragment extends Fragment {
         year.add("2017");
 
         BarDataSet bardataset = new BarDataSet(NoOfEmp, "No Of Employee");
-        chart.animateY(5000);
+        chart.animateY(2000);
         BarData data = new BarData(bardataset);
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         chart.setData(data);
+
+        chart.setDrawGridBackground(true);
+        chart.setDrawBorders(true);
+        chart.setTouchEnabled(true);
+        //chart.setPinchZoom(true);
+        chart.setScaleYEnabled(false);
     }
 
     public void openEquipmentActivity(){
