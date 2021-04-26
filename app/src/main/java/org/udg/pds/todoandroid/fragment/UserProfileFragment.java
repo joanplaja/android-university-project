@@ -28,6 +28,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.activity.GraphicActivity;
+import org.udg.pds.todoandroid.activity.GraphicActivityTabbed;
 import org.udg.pds.todoandroid.activity.SignoutActivity;
 import org.udg.pds.todoandroid.activity.EquipmentActivity;
 import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
@@ -139,7 +140,7 @@ public class UserProfileFragment extends Fragment {
         graficButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent I = new Intent(getActivity(), GraphicActivity.class);
+                Intent I = new Intent(getActivity(), GraphicActivityTabbed.class);
                 startActivity(I);
             }
         });

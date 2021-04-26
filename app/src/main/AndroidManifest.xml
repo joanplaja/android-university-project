@@ -14,7 +14,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.GraphicActivity"></activity>
+        <activity
+            android:name=".activity.GraphicActivityTabbed"
+            android:label="@string/title_activity_graphic_tabbed"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activity.GraphicActivity" />
         <!--
          <uses-library
             android:name="com.google.android.wearable"
