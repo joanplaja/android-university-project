@@ -117,7 +117,29 @@ public class WorkoutDetailsFragment extends Fragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: Aqui eliminariem el workout");
+                Call<String> call = mTodoService.deleteWorkout(id.toString());
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if (response.isSuccessful()) {
+                            Log.i(TAG, "onResponse: " + response.body());
+                            NavDirections action =
+                                WorkoutDetailsFragmentDirections.actionWorkoutDetailsFragmentToActionWorkoutList();
+                            Navigation.findNavController(getView()).navigate(action);
+                            dialog.dismiss();
+
+                        } else {
+                            Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error deleting the Workout", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error making call to delete the Workout", Toast.LENGTH_LONG).show();
+                    }
+                });
+
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
