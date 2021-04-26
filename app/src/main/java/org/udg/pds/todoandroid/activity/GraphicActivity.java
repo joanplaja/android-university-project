@@ -23,7 +23,7 @@ public class GraphicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphic);
-        BarChart chart = findViewById(R.id.barchart2);
+        /*BarChart chart = findViewById(R.id.barchart2);
 
         ArrayList NoOfEmp = new ArrayList();
 
@@ -55,6 +55,6 @@ public class GraphicActivity extends AppCompatActivity {
         chart.animateY(5000);
         BarData data = new BarData(bardataset);
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
-        chart.setData(data);
+        chart.setData(data);*/
     }
 }
