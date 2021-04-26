@@ -7,6 +7,14 @@
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/text_home"
             app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/exploreRoutes"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_explore_24"
+        android:title="Explore"
+        app:showAsAction="ifRoom" />
+
     <item
             android:id="@+id/registerFragment"
             android:checked="true"

@@ -30,6 +30,11 @@
         android:label="fragment_schedules"
         tools:layout="@layout/fragment_register_workout" />
     <fragment
+        android:id="@+id/exploreRoutes"
+        android:name="org.udg.pds.todoandroid.fragment.ExploreRoutesFragment"
+        android:label="explore"
+        tools:layout="@layout/fragment_explore_routes" />
+    <fragment
         android:id="@+id/addTaskFragment"
         android:name="org.udg.pds.todoandroid.fragment.AddTaskFragment"
         android:label="add_task"
