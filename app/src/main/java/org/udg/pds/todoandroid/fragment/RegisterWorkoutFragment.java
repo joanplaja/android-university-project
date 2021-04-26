@@ -96,6 +96,7 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
     private FusedLocationProviderClient fusedLocationProviderClient;
     LocationCallback locationCallback;                                      //variable per definir la funcio callback de la ubicacio
     LocationRequest locationRequest;                                        //variable per definir parametres de crides de localitzacio
+    int selected = 0;
 
 
     public RegisterWorkoutFragment() {
@@ -246,7 +247,15 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
                 //show workout selection
                 AlertDialog.Builder adb = new AlertDialog.Builder(context);
                 CharSequence items[] = new CharSequence[] {"hiking", "cycling", "running","walking"};
-                adb.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                adb.setSingleChoiceItems(items, 0,new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface d, int n) {
+                        selected = n;
+                    }
+                });
+
+                adb.setPositiveButton("Select",new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface d, int n) {
@@ -254,7 +263,7 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
                         try {
                             //new workout instance
                             Workout workout = new Workout();
-                            workout.type = items[n].toString();;
+                            workout.type = items[selected].toString();;
                             Route route = new Route();
                             route.initialLatitude = lastKnownLocation.getLatitude();
                             route.initialLongitude = lastKnownLocation.getLongitude();
@@ -293,10 +302,10 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
                             Toast.makeText(context, "Error al crear workout(catch)", Toast.LENGTH_LONG).show();
                             throw ex;
                         }
+                        selected = 0;
                     }
 
                 });
-                adb.setPositiveButton("Select",null);
                 adb.setNegativeButton("Cancel", null);
                 adb.setTitle("Choose an workout type");
                 adb.show();
@@ -359,28 +368,40 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
         if(saveWorkout | !pause)//si guardem workout no hem de mirar variable pause, pero si no guardem si hem de mirar
             if(workoutId != null && workoutId != null)
                 if(lastPointSaved < list.size()){ // al principi last = 0, size per exemple 1
-                    System.out.println("lasPointSaved:"+lastPointSaved+"  list size:"+list.size());
-                    int totalPoints = list.size()-lastPointSaved;
-                     Double [][] arrayPoints = new Double[totalPoints][2];
-                     for (int i=0;i<totalPoints;i++){
-                         LatLng pos = list.get(lastPointSaved+i);
-                         arrayPoints[i][0] = pos.latitude;
-                         arrayPoints[i][1] = pos.longitude;
-                     }
 
-                     Call<IdObject> call = mTodoService.addPoints(workoutId.id.toString(),arrayPoints);
-                     call.enqueue(new Callback<IdObject>() {
-                         @Override
-                         public void onResponse(Call<IdObject> call, Response<IdObject> response) {
-                             System.out.println("punts guardats correctament a la ruta:"+response.body());
-                             lastPointSaved = totalPoints+lastPointSaved;
-                         }
+                    try {
+                        System.out.println("lasPointSaved:" + lastPointSaved + "  list size:" + list.size());
+                        int totalPoints = list.size() - lastPointSaved;
+                        Double[][] arrayPoints = new Double[totalPoints][2];
+                        int index = 0;
+                        for (int i = lastPointSaved; i < list.size(); i++) {
+                            LatLng pos = list.get(i);
+                            arrayPoints[index][0] = pos.latitude;
+                            arrayPoints[index][1] = pos.longitude;
+                            index++;
+                        }
 
-                         @Override
-                         public void onFailure(Call<IdObject> call, Throwable t) {
-                             System.out.println("Error al guardar els punts");
-                         }
-                     });
+                        Call<String> call = mTodoService.addPoints(workoutId.id.toString(), arrayPoints);
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                System.out.println("punts guardats correctament a la ruta:" + response.body());
+                                lastPointSaved = totalPoints + lastPointSaved;
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                try {
+                                    throw t;
+                                } catch (Throwable throwable) {
+                                    throwable.printStackTrace();
+                                }
+                                System.out.println("Error al guardar els punts");
+                            }
+                        });
+                    }
+
+                     catch (Exception e){throw e;}
                 }
     }
 
