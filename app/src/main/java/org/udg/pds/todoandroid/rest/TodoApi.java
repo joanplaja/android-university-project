@@ -92,6 +92,12 @@ public interface TodoApi {
     @POST("/routes/near")
     Call<List<Route>> getNearRoutes(@Body NearRoutes nearRoutes);
 
+    @POST("/users/follow/{id}")
+    Call <String>  followUser(@Path("id" )Long  id);
+
+    @POST("/users/unfollow/{id}")
+    Call <String>  unfollowUser(@Path("id" )Long  id);
+
 
 }
 
