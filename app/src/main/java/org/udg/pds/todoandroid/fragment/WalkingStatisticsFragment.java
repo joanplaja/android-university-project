@@ -34,8 +34,13 @@ public class WalkingStatisticsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_graphic, container, false);
-        final TextView textView = root.findViewById(R.id.textView12);
-        textView.setText("45");
+        TextView workoutsSetmana = root.findViewById(R.id.textView12);
+        workoutsSetmana.setText("25");
+        TextView durationSetmana = root.findViewById(R.id.textView14);
+        durationSetmana.setText("12" + "h");
+        TextView distanceSetmana = root.findViewById(R.id.textView16);
+        distanceSetmana.setText("2000" + "m");
+
         /*
      pageViewModel.getText().observe(this, new Observer<String>() {
      @Override

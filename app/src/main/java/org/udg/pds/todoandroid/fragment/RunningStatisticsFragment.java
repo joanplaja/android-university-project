@@ -33,7 +33,27 @@ public class RunningStatisticsFragment extends Fragment {
 
      @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-     View root = inflater.inflate(R.layout.activity_graphic, container, false);
+        View root = inflater.inflate(R.layout.activity_graphic, container, false);
+         TextView workoutsSetmana = root.findViewById(R.id.textView12);
+         workoutsSetmana.setText("5");
+         TextView durationSetmana = root.findViewById(R.id.textView14);
+         durationSetmana.setText("6" + "h");
+         TextView distanceSetmana = root.findViewById(R.id.textView16);
+         distanceSetmana.setText("2500" + "m");
+
+         TextView workoutsAny = root.findViewById(R.id.textView18);
+         workoutsAny.setText("15");
+         TextView durationAny = root.findViewById(R.id.textView20);
+         durationAny.setText("36" + "h");
+         TextView distanceAny = root.findViewById(R.id.textView22);
+         distanceAny.setText("45000" + "m");
+
+         TextView workoutsTotal = root.findViewById(R.id.textView24);
+         workoutsTotal.setText("15");
+         TextView durationTotal = root.findViewById(R.id.textView26);
+         durationTotal.setText("36" + "h");
+         TextView distanceTotal = root.findViewById(R.id.textView28);
+         distanceTotal.setText("45000" + "m");
 //         final TextView textView = root.findViewById(R.id.section_label);
 //         textView.setText("Pantalla running");
      /*final TextView textView = root.findViewById(R.id.section_label);
