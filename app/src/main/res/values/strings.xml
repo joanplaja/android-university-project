@@ -119,5 +119,10 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_popup">PopupActivity</string>
+    <string name="title_activity_graphic_tabbed">GraphicActivityTabbed</string>
+    <string name="tab_text_1">Running</string>
+    <string name="tab_text_2">Walking</string>
+    <string name="tab_text_3">Cycling</string>
+    <string name="tab_text_4">Hiking</string>
 
 </resources>
