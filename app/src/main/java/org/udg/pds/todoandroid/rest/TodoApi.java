@@ -98,6 +98,17 @@ public interface TodoApi {
     @POST("/users/unfollow/{id}")
     Call <String>  unfollowUser(@Path("id" )Long  id);
 
+    @GET ("/users/following")
+    Call <List<User>> getOwnFollowing();
+
+    @GET ("/users/followers")
+    Call <List<User>> getOwnFollowers();
+
+    @GET ("/users/following/{id}")
+    Call <List<User>> getFollowing(@Path("id")Long id);
+
+    @GET ("/users/followers/{id}")
+    Call <List<User>> getFollowers(@Path("id")Long id);
 
 }
 
