@@ -36,6 +36,7 @@ import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -237,6 +238,34 @@ public class UserProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+
+        Call<List<User>> callFollowing = mTodoService.getOwnFollowing();
+        callFollowing.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> callFollowing, Response<List<User>> responseFollowing) {
+                TextView userProfileFollowing = UserProfileFragment.this.getView().findViewById(R.id.userProfileFollowingNumber);
+                  userProfileFollowing.setText(String.valueOf(responseFollowing.body().size()));
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+
+            }
+        });
+
+        Call<List<User>> callFollowers = mTodoService.getOwnFollowers();
+        callFollowers.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> callFollowers, Response<List<User>> responseFollowers) {
+                TextView userProfileFollowers = UserProfileFragment.this.getView().findViewById(R.id.userProfileFollowersNumber);
+                userProfileFollowers.setText(String.valueOf(responseFollowers.body().size()));
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
 
             }
         });

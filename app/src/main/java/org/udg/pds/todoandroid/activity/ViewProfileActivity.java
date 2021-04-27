@@ -12,7 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.User;
+import org.udg.pds.todoandroid.fragment.UserProfileFragment;
 import org.udg.pds.todoandroid.rest.TodoApi;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -120,6 +123,36 @@ public class ViewProfileActivity extends AppCompatActivity {
 
                         }
                     });
+
+                    Call<List<User>> callFollowing = mTodoService.getFollowing(response.body());
+                    callFollowing.enqueue(new Callback<List<User>>() {
+                        @Override
+                        public void onResponse(Call<List<User>> callFollowing, Response<List<User>> responseFollowing) {
+                            TextView viewProfileFollowing = findViewById(R.id.viewProfileFollowingNumber);
+                            viewProfileFollowing.setText(String.valueOf(responseFollowing.body().size()));
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<User>> call, Throwable t) {
+
+                        }
+                    });
+
+                    Call<List<User>> callFollowers = mTodoService.getFollowers(response.body());
+                    callFollowers.enqueue(new Callback<List<User>>() {
+                        @Override
+                        public void onResponse(Call<List<User>> callFollowers, Response<List<User>> responseFollowers) {
+                            TextView viewProfileFollowers = findViewById(R.id.viewProfileFollowersNumber);
+                            viewProfileFollowers.setText(String.valueOf(responseFollowers.body().size()));
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<User>> call, Throwable t) {
+
+                        }
+                    });
+
+
                 } else {
                     //Toast.makeText(ViewProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
                 }
