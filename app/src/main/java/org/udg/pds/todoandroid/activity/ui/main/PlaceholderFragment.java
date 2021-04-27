@@ -13,6 +13,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.udg.pds.todoandroid.R;
+import org.udg.pds.todoandroid.fragment.CyclingStatisticsFragment;
+import org.udg.pds.todoandroid.fragment.HikingStatisticsFragment;
+import org.udg.pds.todoandroid.fragment.RunningStatisticsFragment;
+import org.udg.pds.todoandroid.fragment.WalkingStatisticsFragment;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -23,11 +27,20 @@ public class PlaceholderFragment extends Fragment {
 
     private PageViewModel pageViewModel;
 
-    public static PlaceholderFragment newInstance(int index) {
-        PlaceholderFragment fragment = new PlaceholderFragment();
+    public static Fragment newInstance(int index) {
+        /*PlaceholderFragment fragment = new PlaceholderFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
-        fragment.setArguments(bundle);
+        fragment.setArguments(bundle);*/
+        Fragment fragment = null;
+        if(index == 1)
+            fragment = new RunningStatisticsFragment();
+        else if (index == 2)
+            fragment = new WalkingStatisticsFragment();
+        else if (index == 3)
+            fragment = new CyclingStatisticsFragment();
+        else
+            fragment = new HikingStatisticsFragment();
         return fragment;
     }
 
@@ -35,7 +48,8 @@ public class PlaceholderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pageViewModel = new ViewModelProvider(this).get(PageViewModel.class);
-        int index = 1;
+
+        int index = 2;
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
