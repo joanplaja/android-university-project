@@ -4,4 +4,5 @@ public class UserUpdate {
     public String username;
     public String description;
     public Integer phoneNumber;
+    public String imageUrl;
 }

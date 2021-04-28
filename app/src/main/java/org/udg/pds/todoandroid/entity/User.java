@@ -14,4 +14,5 @@ public class User {
     public String email;
     public Integer phoneNumber;
     public String description;
+    public String imageUrl;
 }
