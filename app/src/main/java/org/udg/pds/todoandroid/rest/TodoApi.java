@@ -95,7 +95,7 @@ public interface TodoApi {
     @POST("/users/follow/{id}")
     Call <String>  followUser(@Path("id" )Long  id);
 
-    @POST("/users/unfollow/{id}")
+    @DELETE("/users/unfollow/{id}")
     Call <String>  unfollowUser(@Path("id" )Long  id);
 
     @GET ("/users/following")

@@ -63,7 +63,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-    // This method is called when the "Login" button is pressed in the Login fragment
     public void executeSearch(String username) {
         Call<List<User>> call = mTodoService.searchUser(username);
         call.enqueue(new Callback<List<User>>() {
@@ -129,24 +128,6 @@ public class SearchActivity extends AppCompatActivity {
                     i.putExtra("username",list.get(position).username);
                     SearchActivity.this.startActivity(i);
                     SearchActivity.this.finish();
-                    /*   Bundle bundle = new Bundle();
-                    bundle.putString("username", list.get(position).username);
-                    Navigation.findNavController(this.getView()).navigate(R.id.action_SearchActivity_to_viewProfileFragment, bundle);
-*/
-                    /*  NavDirections action =
-                        TaskListDirections
-                            .actionActionTasksToAddTaskFragment();
-                    Navigation.findNavController(view).navigate(action);*/
-
-                    /*Fragment fragment = new ViewProfileFragment().newInstance(list.get(position).username);
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_container, ViewProfileFragment); // give your fragment container id in first parameter
-                    transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
-                    transaction.commit();*/
-
-                    /*int duration = Toast.LENGTH_LONG;
-                    Toast toast = Toast.makeText(context, String.format("Hey, I'm item %1d", position), duration);
-                    toast.show();*/
                 }
             });
 
