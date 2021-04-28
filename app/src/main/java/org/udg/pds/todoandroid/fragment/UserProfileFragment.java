@@ -2,6 +2,7 @@ package org.udg.pds.todoandroid.fragment;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteOutOfMemoryException;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -191,6 +192,8 @@ public class UserProfileFragment extends Fragment {
         chart.animateY(2000);
         BarData data = new BarData(set);
         data.setBarWidth(0.9f); // set custom bar width
+        set.setColor(Color.rgb(133,182,104));
+        set.setDrawValues(false);
         chart.setData(data);
         chart.setFitBars(true); // make the x-axis fit exactly all bars
         chart.invalidate(); // refresh
@@ -200,7 +203,6 @@ public class UserProfileFragment extends Fragment {
         chart.setTouchEnabled(true);
         //chart.setPinchZoom(true);
         chart.setScaleYEnabled(false);
-        chart.setDrawValueAboveBar(false);
         //chart.setDrawValuesForWholeStack(true);
     }
 
