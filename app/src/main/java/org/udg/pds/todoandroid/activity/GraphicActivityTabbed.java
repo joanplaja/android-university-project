@@ -15,6 +15,10 @@ import android.view.View;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.activity.ui.main.SectionsPagerAdapter;
+import org.udg.pds.todoandroid.fragment.CyclingStatisticsFragment;
+import org.udg.pds.todoandroid.fragment.HikingStatisticsFragment;
+import org.udg.pds.todoandroid.fragment.RunningStatisticsFragment;
+import org.udg.pds.todoandroid.fragment.WalkingStatisticsFragment;
 
 public class GraphicActivityTabbed extends AppCompatActivity {
 
@@ -22,10 +26,23 @@ public class GraphicActivityTabbed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphic_tabbed);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        setUpTabs();
+    }
+
+    private void setUpTabs(){
+        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new RunningStatisticsFragment(), "Running");
+        adapter.addFragment(new WalkingStatisticsFragment(), "Walking");
+        adapter.addFragment(new CyclingStatisticsFragment(), "Cycling");
+        adapter.addFragment(new HikingStatisticsFragment(), "Hiking");
         ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setAdapter(adapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        tabs.getTabAt(0).setIcon(R.drawable.running);
+        tabs.getTabAt(1).setIcon(R.drawable.walking);
+        tabs.getTabAt(2).setIcon(R.drawable.cycling);
+        tabs.getTabAt(3).setIcon(R.drawable.hiking);
+
     }
 }
