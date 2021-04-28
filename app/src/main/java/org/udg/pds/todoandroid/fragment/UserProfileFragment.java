@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.squareup.picasso.Picasso;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -33,6 +35,7 @@ import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -107,20 +110,38 @@ public class UserProfileFragment extends Fragment {
         updateProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Pass data to updateProfileActivity
-                Bundle extras = new Bundle();
-                TextView userNameUPF = v.findViewById(R.id.userProfileName);
-                TextView userDescriptionUPF = v.findViewById(R.id.userProfileDescription);
-                TextView userPhoneUPF = v.findViewById(R.id.userProfilePhone);
+                Call<User> call = mTodoService.getUserMe();
 
-                Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
+                call.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            String userImageUrlUPF = response.body().imageUrl;
 
-                extras.putString("dataUserNameUPF", userNameUPF.getText().toString());
-                extras.putString("dataUserDescriptionUPF", userDescriptionUPF.getText().toString());
-                extras.putString("dataUserPhoneUPF", userPhoneUPF.getText().toString());
-                intent.putExtras(extras);
+                            //Pass data to updateProfileActivity
+                            Bundle extras = new Bundle();
+                            TextView userNameUPF = v.findViewById(R.id.userProfileName);
+                            TextView userDescriptionUPF = v.findViewById(R.id.userProfileDescription);
+                            TextView userPhoneUPF = v.findViewById(R.id.userProfilePhone);
 
-                startActivity(intent);
+                            Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
+
+                            extras.putString("dataUserNameUPF", userNameUPF.getText().toString());
+                            extras.putString("dataUserDescriptionUPF", userDescriptionUPF.getText().toString());
+                            extras.putString("dataUserPhoneUPF", userPhoneUPF.getText().toString());
+                            extras.putString("dataUserImageUrlUPF", userImageUrlUPF);
+                            intent.putExtras(extras);
+
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+
+                    }
+                });
+
             }
         });
         workoutButton = v.findViewById(R.id.buttonWorkouts);
@@ -203,7 +224,6 @@ public class UserProfileFragment extends Fragment {
     }
     public void loadProfile() {
         //android todoApi (retrofit) -> Spring controller (retorna resposta http) -> onResponse i la processem.
-        //response.body() es tipo user
         Call<User> call = mTodoService.getUserMe();
 
         call.enqueue(new Callback<User>() {
@@ -222,6 +242,13 @@ public class UserProfileFragment extends Fragment {
                     userProfileId.setText(response.body().id.toString());
                     TextView userProfileDescription = UserProfileFragment.this.getView().findViewById(R.id.userProfileDescription);
                     userProfileDescription.setText(response.body().description);
+                    ImageView userProfileImage = UserProfileFragment.this.getView().findViewById(R.id.userProfileImage);
+                    if(response.body().imageUrl!=null) {
+                        //File f = new File(response.body().imageUrl);
+                        Picasso.get().load(response.body().imageUrl).fit().centerCrop().into(userProfileImage);
+                    }
+                    else
+                        userProfileImage.setImageResource(R.drawable.profile_photo);
                 } else {
                     Toast.makeText(UserProfileFragment.this.getContext(), "Error loading profile", Toast.LENGTH_LONG).show();
                 }

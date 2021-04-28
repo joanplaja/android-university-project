@@ -16,4 +16,5 @@ public class User {
     public Integer followerNumber;
     public Integer followingNumber;
     public String description;
+    public String imageUrl;
 }

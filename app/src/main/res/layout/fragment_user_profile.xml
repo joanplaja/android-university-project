@@ -18,7 +18,7 @@
         tools:layout_editor_absoluteY="1dp">
 
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userProfileImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -72,6 +72,7 @@
             android:id="@+id/userProfileSubName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:inputType="textPersonName"
             android:text="Name"
             android:textSize="16sp"
