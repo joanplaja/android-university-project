@@ -1,5 +1,6 @@
 package org.udg.pds.todoandroid.fragment;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +49,12 @@ public class WorkoutDetailsFragment extends Fragment {
     private TodoApi mTodoService;
     private Long id;
     private Workout workout;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private TextView popupWarning, popupQuestion;
+    private Button cancel, delete;
+
     public WorkoutDetailsFragment() {
         // Required empty public constructor
     }
@@ -95,8 +103,59 @@ public class WorkoutDetailsFragment extends Fragment {
         });
         return v;
     }
+    public void createNewDeleteDialog() {
+        dialogBuilder = new AlertDialog.Builder(getActivity());
+        final View view = getLayoutInflater().inflate(R.layout.delete_popup, null);
+        popupWarning = (TextView)view.findViewById(R.id.warningText);
+        popupQuestion = (TextView)view.findViewById(R.id.questionText);
+        cancel = (Button)view.findViewById(R.id.cancelButton);
+        delete = (Button)view.findViewById(R.id.deleteButton);
+
+        dialogBuilder.setView(view);
+        dialog = dialogBuilder.create();
+        dialog.show();
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<String> call = mTodoService.deleteWorkout(id.toString());
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if (response.isSuccessful()) {
+                            Log.i(TAG, "onResponse: " + response.body());
+                            NavDirections action =
+                                WorkoutDetailsFragmentDirections.actionWorkoutDetailsFragmentToActionWorkoutList();
+                            Navigation.findNavController(getView()).navigate(action);
+                            dialog.dismiss();
+
+                        } else {
+                            Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error deleting the Workout", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error making call to delete the Workout", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: Aqui fariem el cancel");
+                dialog.dismiss();
+            }
+        });
+    }
 
     private void handleDelete() {
+
+        createNewDeleteDialog();
+        /*
+        //Questa crida s'haura de fer en el popup (quan es confirmi el delete)
         Call<String> call = mTodoService.deleteWorkout(id.toString());
 
         call.enqueue(new Callback<String>() {
@@ -118,6 +177,7 @@ public class WorkoutDetailsFragment extends Fragment {
                 Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error making call to delete the Workout", Toast.LENGTH_LONG).show();
             }
         });
+        */
     }
 
     @Override

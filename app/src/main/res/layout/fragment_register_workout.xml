@@ -67,7 +67,7 @@
                             <TextView
                                 android:id="@+id/tvDistance"
                                 android:paddingBottom="12dp"
-                                android:text="0 km"
+                                android:text="0 m"
                                 android:gravity="center"
                                 android:autoSizeTextType="uniform"
                                 android:layout_width="match_parent"

@@ -29,6 +29,8 @@ import com.squareup.picasso.Picasso;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.activity.GraphicActivity;
+import org.udg.pds.todoandroid.activity.GraphicActivityTabbed;
 import org.udg.pds.todoandroid.activity.SignoutActivity;
 import org.udg.pds.todoandroid.activity.EquipmentActivity;
 import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
@@ -37,6 +39,7 @@ import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -155,14 +158,14 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
-//        graficButton = v.findViewById(R.id.graficButton);
-//        graficButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent I = new Intent(getActivity(), GraphicActivity.class);
-//                startActivity(I);
-//            }
-//        });
+        graficButton = v.findViewById(R.id.buttonMoreStatistics);
+        graficButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent I = new Intent(getActivity(), GraphicActivityTabbed.class);
+                startActivity(I);
+            }
+        });
 
         return v;
     }
@@ -171,37 +174,34 @@ public class UserProfileFragment extends Fragment {
         //View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
         BarChart chart = v.findViewById(R.id.barchart);
 
-        ArrayList NoOfEmp = new ArrayList();
+        //Per crear el gràfic segons les dades de la bdd, haurem de buscar l'usuari, mirar tots els seus workouts, i fer un doble bucle?
+        //per tal de que miri setmana per setmana quants workouts ha fet i que vagi sumant la distancia recorreguda i després aquest valor posar-lo al gràfic.
+        // Per tant també serà necessari guardar la data de cada workout.
 
-        NoOfEmp.add(new BarEntry(945f, 0));
-        NoOfEmp.add(new BarEntry(1040f, 1));
-        NoOfEmp.add(new BarEntry(1133f, 2));
-        NoOfEmp.add(new BarEntry(1240f, 3));
-        NoOfEmp.add(new BarEntry(1369f, 4));
-        NoOfEmp.add(new BarEntry(1487f, 5));
-        NoOfEmp.add(new BarEntry(1501f, 6));
-        NoOfEmp.add(new BarEntry(1645f, 7));
-        NoOfEmp.add(new BarEntry(1578f, 8));
-        NoOfEmp.add(new BarEntry(1695f, 9));
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0f, 30f));
+        entries.add(new BarEntry(1f, 80f));
+        entries.add(new BarEntry(2f, 60f));
+        entries.add(new BarEntry(3f, 50f));
+        // gap of 2f
+        entries.add(new BarEntry(5f, 70f));
+        entries.add(new BarEntry(6f, 60f));
 
-        ArrayList year = new ArrayList();
-
-        year.add("2008");
-        year.add("2009");
-        year.add("2010");
-        year.add("2011");
-        year.add("2012");
-        year.add("2013");
-        year.add("2014");
-        year.add("2015");
-        year.add("2016");
-        year.add("2017");
-
-        BarDataSet bardataset = new BarDataSet(NoOfEmp, "No Of Employee");
-        chart.animateY(5000);
-        BarData data = new BarData(bardataset);
-        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        BarDataSet set = new BarDataSet(entries, "Total distance");
+        chart.animateY(2000);
+        BarData data = new BarData(set);
+        data.setBarWidth(0.9f); // set custom bar width
         chart.setData(data);
+        chart.setFitBars(true); // make the x-axis fit exactly all bars
+        chart.invalidate(); // refresh
+
+        chart.setDrawGridBackground(true);
+        chart.setDrawBorders(false);
+        chart.setTouchEnabled(true);
+        //chart.setPinchZoom(true);
+        chart.setScaleYEnabled(false);
+        chart.setDrawValueAboveBar(false);
+        //chart.setDrawValuesForWholeStack(true);
     }
 
     public void openEquipmentActivity(){
@@ -256,6 +256,34 @@ public class UserProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+
+        Call<List<User>> callFollowing = mTodoService.getOwnFollowing();
+        callFollowing.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> callFollowing, Response<List<User>> responseFollowing) {
+                TextView userProfileFollowing = UserProfileFragment.this.getView().findViewById(R.id.userProfileFollowingNumber);
+                  userProfileFollowing.setText(String.valueOf(responseFollowing.body().size()));
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+
+            }
+        });
+
+        Call<List<User>> callFollowers = mTodoService.getOwnFollowers();
+        callFollowers.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> callFollowers, Response<List<User>> responseFollowers) {
+                TextView userProfileFollowers = UserProfileFragment.this.getView().findViewById(R.id.userProfileFollowersNumber);
+                userProfileFollowers.setText(String.valueOf(responseFollowers.body().size()));
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
 
             }
         });

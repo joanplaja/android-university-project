@@ -13,8 +13,6 @@ public class User {
     public String username;
     public String email;
     public Integer phoneNumber;
-    public Integer followerNumber;
-    public Integer followingNumber;
     public String description;
     public String imageUrl;
 }
