@@ -367,7 +367,8 @@
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toStartOf="@+id/guideline49"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline48" />
+            app:layout_constraintStart_toStartOf="@+id/guideline48"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/titolStatisticsYear"
@@ -378,7 +379,8 @@
             app:layout_constraintBottom_toTopOf="@+id/guideline44"
             app:layout_constraintEnd_toStartOf="@+id/guideline49"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline48" />
+            app:layout_constraintStart_toStartOf="@+id/guideline48"
+            app:layout_constraintTop_toTopOf="@+id/guideline43" />
 
         <TextView
             android:id="@+id/titolTotalActivity"
@@ -389,7 +391,8 @@
             app:layout_constraintBottom_toTopOf="@+id/linearLyoutStatist3"
             app:layout_constraintEnd_toStartOf="@+id/guideline49"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline48" />
+            app:layout_constraintStart_toStartOf="@+id/guideline48"
+            app:layout_constraintTop_toTopOf="@+id/guideline1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
