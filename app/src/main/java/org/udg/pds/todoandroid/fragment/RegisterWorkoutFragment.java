@@ -207,13 +207,16 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
                         speed = 0.0;
                         distanceInMeters = 0.0;
                     }
+
                     //if not pause we add the distance to totalDistance and we show it on the layout
                     if(!pause){
                         distance += distanceInMeters;
-                        tvDistance.setText(String.format("%.2f m", distance));
+                        if(distance >= 1000) tvDistance.setText(String.format("%.2f km", distance/1000));
+                        else tvDistance.setText(String.format("%.2f m", distance));
                     }
                     //we dont care about if its paused or not to show the velocity
-                    tvVelocity.setText(String.format("%.2f m/s", speed));
+                    if(speed > 0.277778)tvVelocity.setText(String.format("%.2f km/h", speed*(3600/1000)));
+                    else tvVelocity.setText(String.format("%.2f m/s", speed));
 
                     //save the actual to the last for next interation
                     lastLat = location.getLatitude();
