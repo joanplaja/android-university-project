@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_userProfileFragment_to_workoutList"
             app:destination="@id/actionWorkoutList" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_equipmentList"
+            app:destination="@id/actionEquipmentList" />
     </fragment>
     <activity
         android:id="@+id/signoutActivity"
@@ -120,4 +123,9 @@
             android:id="@+id/action_workoutDetailsFragment_to_actionWorkoutList"
             app:destination="@id/actionWorkoutList" />
     </fragment>
+    <fragment
+        android:id="@+id/actionEquipmentList"
+        android:name="org.udg.pds.todoandroid.fragment.EquipmentFragment"
+        android:label="fragment_equipment_list"
+        tools:layout="@layout/fragment_equipment_list" />
 </navigation>

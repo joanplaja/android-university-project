@@ -1,5 +1,6 @@
 package org.udg.pds.todoandroid.rest;
 
+import org.udg.pds.todoandroid.entity.Equipment;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.NearRoutes;
 import org.udg.pds.todoandroid.entity.Route;
@@ -109,6 +110,9 @@ public interface TodoApi {
 
     @GET ("/users/followers/{id}")
     Call <List<User>> getFollowers(@Path("id")Long id);
+
+    @GET("/equipment")
+    Call<List<Equipment>> getEquipments();
 
 }
 

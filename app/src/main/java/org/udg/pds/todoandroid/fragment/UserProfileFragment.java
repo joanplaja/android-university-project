@@ -32,6 +32,7 @@ import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.activity.GraphicActivity;
 import org.udg.pds.todoandroid.activity.GraphicActivityTabbed;
+import org.udg.pds.todoandroid.activity.NavigationActivity;
 import org.udg.pds.todoandroid.activity.SignoutActivity;
 import org.udg.pds.todoandroid.activity.EquipmentActivity;
 import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
@@ -103,13 +104,6 @@ public class UserProfileFragment extends Fragment {
                 openSignOutActivity();
             }
         });
-        openEquipmentButton = v.findViewById(R.id.userProfileButtonEquipment);
-        openEquipmentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEquipmentActivity();
-            }
-        });
         updateProfileButton = v.findViewById(R.id.userProfileButtonUpdate);
         updateProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,6 +149,17 @@ public class UserProfileFragment extends Fragment {
                 NavDirections action =
                     UserProfileFragmentDirections
                         .actionUserProfileFragmentToWorkoutList();
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
+
+        openEquipmentButton = v.findViewById(R.id.userProfileButtonEquipment);
+        openEquipmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavDirections action =
+                    UserProfileFragmentDirections
+                        .actionUserProfileFragmentToEquipmentList();
                 Navigation.findNavController(v).navigate(action);
             }
         });
