@@ -406,6 +406,20 @@
         android:layout_height="3dp"
         android:background="#033a06"/>
 
+    android:textColor="@android:color/primary_text_light"
+    <Button
+        android:id="@+id/postButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Post"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/post_round_button"
+        android:textAllCaps="true" />
+
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="match_parent"

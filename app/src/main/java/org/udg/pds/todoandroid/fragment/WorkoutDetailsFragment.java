@@ -52,8 +52,13 @@ public class WorkoutDetailsFragment extends Fragment {
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    private TextView popupWarning, popupQuestion;
     private Button cancel, delete;
+
+    //Coses relatives al dialeg del post
+    private AlertDialog dialogPost;
+    private Button cancelPostButton, postButton, choosImageButton;
+    private ImageView postImage;
+    private EditText postDescription;
 
     public WorkoutDetailsFragment() {
         // Required empty public constructor
@@ -101,13 +106,52 @@ public class WorkoutDetailsFragment extends Fragment {
                 handleDelete();
             }
         });
+        Button postButton;
+        postButton = v.findViewById(R.id.postButton);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { handlePost(); }
+        });
         return v;
     }
+
+    private void handlePost() {
+        createNewPostDialog();
+    }
+
+    private void createNewPostDialog() {
+        dialogBuilder = new AlertDialog.Builder(getActivity());
+        final View view = getLayoutInflater().inflate(R.layout.post_dialog, null);
+        cancelPostButton = (Button)view.findViewById(R.id.cancelButton);
+        postButton = (Button)view.findViewById(R.id.postButton);
+        postDescription = (EditText)view.findViewById(R.id.description);
+        postImage = (ImageView) view.findViewById(R.id.image);
+        postImage.setImageResource(R.drawable.ic_menu_camera);
+
+        dialogBuilder.setView(view);
+        dialogPost = dialogBuilder.create();
+        dialogPost.show();
+
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Aqui fer la crida a la api del post
+
+            }
+        });
+
+
+        cancelPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogPost.dismiss();
+            }
+        });
+    }
+
     public void createNewDeleteDialog() {
         dialogBuilder = new AlertDialog.Builder(getActivity());
         final View view = getLayoutInflater().inflate(R.layout.delete_popup, null);
-        popupWarning = (TextView)view.findViewById(R.id.warningText);
-        popupQuestion = (TextView)view.findViewById(R.id.questionText);
         cancel = (Button)view.findViewById(R.id.cancelButton);
         delete = (Button)view.findViewById(R.id.deleteButton);
 
@@ -152,32 +196,7 @@ public class WorkoutDetailsFragment extends Fragment {
     }
 
     private void handleDelete() {
-
         createNewDeleteDialog();
-        /*
-        //Questa crida s'haura de fer en el popup (quan es confirmi el delete)
-        Call<String> call = mTodoService.deleteWorkout(id.toString());
-
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    Log.i(TAG, "onResponse: " + response.body());
-
-                } else {
-                    Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error deleting the Workout", Toast.LENGTH_LONG).show();
-                }
-                NavDirections action =
-                    WorkoutDetailsFragmentDirections.actionWorkoutDetailsFragmentToActionWorkoutList();
-                Navigation.findNavController(getView()).navigate(action);
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error making call to delete the Workout", Toast.LENGTH_LONG).show();
-            }
-        });
-        */
     }
 
     @Override
