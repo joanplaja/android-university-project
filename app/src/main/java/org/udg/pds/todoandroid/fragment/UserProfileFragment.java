@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -91,6 +92,8 @@ public class UserProfileFragment extends Fragment {
         Button openEquipmentButton, updateProfileButton, signOutButton, workoutButton;
         Button graficButton;
 
+        CardView cardFollowers, cardFollowing;
+
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
         //super.onCreate(savedInstanceState);
 
@@ -167,6 +170,41 @@ public class UserProfileFragment extends Fragment {
                 startActivity(I);
             }
         });
+
+        cardFollowers = v.findViewById(R.id.userProfileCardFollowers);
+        cardFollowers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavDirections action =
+                    UserProfileFragmentDirections
+                        .actionUserProfileFragmentToSocial("followers");
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
+
+        cardFollowing = v.findViewById(R.id.userProfileCardFollowing);
+        cardFollowing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavDirections action =
+                    UserProfileFragmentDirections
+                        .actionUserProfileFragmentToSocial("following");
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
+
+
+
+            /*setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavDirections action =
+                    UserProfileFragmentDirections
+                        .actionUserProfileFragmentToWorkoutList();
+                Navigation.findNavController(v).navigate(action);
+            }
+        }); */
+
 
         return v;
     }
