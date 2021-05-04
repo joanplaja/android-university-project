@@ -129,6 +129,7 @@ public class WorkoutDetailsFragment extends Fragment {
         postButton = (Button)view.findViewById(R.id.postButton);
         postDescription = (EditText)view.findViewById(R.id.description);
         postImage = (ImageView) view.findViewById(R.id.image);
+
         postImage.setImageResource(R.drawable.ic_menu_camera);
         postDescription = (EditText)view.findViewById(R.id.description);
 
@@ -301,7 +302,7 @@ public class WorkoutDetailsFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        postImage = getView().findViewById(R.id.image);
+        //ImageView userSelectedImage = getView().findViewById(R.id.image);
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null && requestCode == 1) {
             selectedImageUri = data.getData();
