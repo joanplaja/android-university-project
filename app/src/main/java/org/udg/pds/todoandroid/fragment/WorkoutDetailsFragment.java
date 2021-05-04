@@ -1,6 +1,8 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -59,6 +61,7 @@ public class WorkoutDetailsFragment extends Fragment {
     private Button cancelPostButton, postButton, choosImageButton;
     private ImageView postImage;
     private EditText postDescription;
+    Uri selectedImageUri = null;
 
     public WorkoutDetailsFragment() {
         // Required empty public constructor
@@ -127,10 +130,23 @@ public class WorkoutDetailsFragment extends Fragment {
         postDescription = (EditText)view.findViewById(R.id.description);
         postImage = (ImageView) view.findViewById(R.id.image);
         postImage.setImageResource(R.drawable.ic_menu_camera);
+        postDescription = (EditText)view.findViewById(R.id.description);
+
+        choosImageButton = (Button)view.findViewById(R.id.chooseImageButton);
 
         dialogBuilder.setView(view);
         dialogPost = dialogBuilder.create();
         dialogPost.show();
+
+        choosImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+            }
+        });
 
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,6 +297,16 @@ public class WorkoutDetailsFragment extends Fragment {
                 Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error making call", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        postImage = getView().findViewById(R.id.image);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null && requestCode == 1) {
+            selectedImageUri = data.getData();
+            postImage.setImageURI(selectedImageUri);
+        }
     }
 
     @Override
