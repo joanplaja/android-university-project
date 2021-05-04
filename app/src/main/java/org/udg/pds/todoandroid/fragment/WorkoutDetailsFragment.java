@@ -13,19 +13,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import org.apache.commons.io.IOUtils;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
 import org.udg.pds.todoandroid.entity.DictionaryImages;
 import org.udg.pds.todoandroid.entity.Workout;
 import org.udg.pds.todoandroid.rest.TodoApi;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,6 +74,7 @@ public class WorkoutDetailsFragment extends Fragment {
     private ImageView postImage;
     private EditText postDescription;
     Uri selectedImageUri = null;
+    String storedImageUri;
 
     public WorkoutDetailsFragment() {
         // Required empty public constructor
@@ -152,8 +165,51 @@ public class WorkoutDetailsFragment extends Fragment {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Aqui fer la crida a la api del post
+                //Primer fer la crida a la api per guarda la imatge a la base de dades i que en retorni la uri com a resposta
+                if (selectedImageUri != null) {
+                    try {
+                        InputStream is = getActivity().getContentResolver().openInputStream(selectedImageUri);
+                        String extension = "." + MimeTypeMap.getSingleton().getExtensionFromMimeType(getActivity().getContentResolver().getType(selectedImageUri));
+                        File tempFile = File.createTempFile("upload", extension, getActivity().getCacheDir());
+                        FileOutputStream outs = new FileOutputStream(tempFile);
+                        IOUtils.copy(is, outs);
+                        // create RequestBody instance from file
+                        RequestBody requestFile =
+                            RequestBody.create(
+                                MediaType.parse(getActivity().getContentResolver().getType(selectedImageUri)),
+                                tempFile
+                            );
 
+                        // MultipartBody.Part is used to send also the actual file name
+                        MultipartBody.Part body =
+                            MultipartBody.Part.createFormData("file", tempFile.getName(), requestFile);
+
+                        Call<String> call = mTodoService.uploadImage(body);
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if (response.isSuccessful()) {
+                                    //Toast.makeText(UpdateProfileActivity.this, "Image uploaded OK !!"+response.body(), Toast.LENGTH_SHORT).show();
+                                    Picasso.get().load(response.body()).fit().centerCrop().into(postImage);
+                                    storedImageUri = response.body();
+                                    Log.i(TAG, "la nova uri ja guardada es: " + storedImageUri);
+                                    //Fer les altres coses
+                                }
+                                else {
+                                    Log.i(TAG, "Ha anat malament la crida per guarda la imatge");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Toast.makeText(getActivity(), "Ha fallat la crida a la API per guardar la imatge...", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                //Aqui fer la crida a la api del post
             }
         });
 
@@ -302,7 +358,6 @@ public class WorkoutDetailsFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //ImageView userSelectedImage = getView().findViewById(R.id.image);
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null && requestCode == 1) {
             selectedImageUri = data.getData();
