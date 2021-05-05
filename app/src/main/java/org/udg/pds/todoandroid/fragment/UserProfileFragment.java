@@ -319,7 +319,8 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<List<User>> callFollowers, Response<List<User>> responseFollowers) {
                 TextView userProfileFollowers = UserProfileFragment.this.getView().findViewById(R.id.userProfileFollowersNumber);
-                userProfileFollowers.setText(String.valueOf(responseFollowers.body().size()));
+                if(responseFollowers != null)userProfileFollowers.setText(String.valueOf(responseFollowers.body().size()));
+                else userProfileFollowers.setText("0");
             }
 
             @Override

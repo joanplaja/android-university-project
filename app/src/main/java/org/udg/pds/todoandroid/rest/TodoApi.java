@@ -7,6 +7,8 @@ import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
 import org.udg.pds.todoandroid.entity.UserRegister;
+import org.udg.pds.todoandroid.entity.UserRegisterFacebook;
+import org.udg.pds.todoandroid.entity.UserSignInFacebook;
 import org.udg.pds.todoandroid.entity.UserUpdate;
 import org.udg.pds.todoandroid.entity.Workout;
 
@@ -37,6 +39,12 @@ public interface TodoApi {
 
     @POST ("users/register")
     Call<String> register(@Body UserRegister register);
+
+    @POST("/users/signInFacebook")
+    Call<User> signInFacebook(@Body UserSignInFacebook usFacebook);
+
+    @POST("/users/registerFacebook")
+    Call<String> registerFacebook(@Body UserRegisterFacebook usFacebook);
 
     @GET("/users/check")
     Call<String> check();
