@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -55,7 +56,7 @@ public class FollowingFragment extends Fragment {
         mAdapter = new SFAdapter(this.getActivity().getApplication());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        getTheFollowing();
+        //getTheFollowing();
 
     }
 
@@ -97,14 +98,22 @@ public class FollowingFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.getTheFollowing();
+    }
+
     static class UserViewHolder extends RecyclerView.ViewHolder {
         TextView username;
         View view;
+        Button unfollowButton;
 
         UserViewHolder(View itemView) {
             super(itemView);
             view = itemView;
             username = itemView.findViewById(R.id.itemUsername);
+            unfollowButton = itemView.findViewById(R.id.buttonUnfollow);
         }
     }
 
@@ -129,10 +138,41 @@ public class FollowingFragment extends Fragment {
         public void onBindViewHolder(FollowingFragment.UserViewHolder holder, final int position) {
             holder.username.setText(list.get(position).username);
 
-            holder.view.setOnClickListener(new View.OnClickListener() {
+            holder.unfollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Call<Long> call = mTodoService.getIdByUsername(list.get(position).username);
 
+                    call.enqueue(new Callback<Long>() {
+                        @Override
+                        public void onResponse(Call<Long> call, Response<Long> response) {
+                            if (response.isSuccessful()) {
+
+                                Call<String> callUser = mTodoService.unfollowUser(response.body());
+                                callUser.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> callUser, Response<String> responseUser) {
+                                        if (responseUser.isSuccessful()) {
+                                            getTheFollowing();
+                                        } else {
+                                            //
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<String> callUser, Throwable t) {
+
+                                    }
+                                });
+                            } else {
+                                //
+                            }
+                            }
+                            @Override
+                            public void onFailure(Call<Long> call, Throwable t) {
+
+                            }
+                        });
                 }
             });
 
