@@ -18,6 +18,7 @@ import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
 import org.udg.pds.todoandroid.entity.UserRegister;
+import org.udg.pds.todoandroid.entity.UserRegisterFacebook;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.util.regex.Pattern;
@@ -29,6 +30,10 @@ import retrofit2.Response;
 public class Register extends AppCompatActivity {
 
     TodoApi mTodoService;
+    Bundle extras;
+    String facebookId = null;
+    String facebookToken = null;
+    String emailIntent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +42,31 @@ public class Register extends AppCompatActivity {
 
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
 
+        EditText usernameET = Register.this.findViewById(R.id.editTextUsername);
+        EditText emailET = Register.this.findViewById(R.id.editTextEmailAddress);
+        EditText passwordET = Register.this.findViewById(R.id.editTextPassword);
+        EditText confirmPasswordET = Register.this.findViewById(R.id.editTextConfirmPassword);
+        EditText phoneET = Register.this.findViewById(R.id.editTextPhone);
+
+        TextInputLayout username = Register.this.findViewById(R.id.Username);
+        TextInputLayout email = Register.this.findViewById(R.id.Email);
+        TextInputLayout password = Register.this.findViewById(R.id.Password);
+        TextInputLayout confirmPassword = Register.this.findViewById(R.id.confirmPassword);
+        TextInputLayout phone = Register.this.findViewById(R.id.phone);
+
         Button b = findViewById(R.id.buttonRegister);
+
+        extras = getIntent().getExtras();
+        if(extras != null){
+            facebookId = extras.getString("facebookId");
+            facebookToken = extras.getString("facebookToken");
+            emailIntent = extras.getString("email");
+            emailET.setText(emailIntent);
+        }
+
         // This is teh listener that will be used when the user presses the "Register" button
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText usernameET = Register.this.findViewById(R.id.editTextUsername);
-                EditText emailET = Register.this.findViewById(R.id.editTextEmailAddress);
-                EditText passwordET = Register.this.findViewById(R.id.editTextPassword);
-                EditText confirmPasswordET = Register.this.findViewById(R.id.editTextConfirmPassword);
-                EditText phoneET = Register.this.findViewById(R.id.editTextPhone);
-
-                TextInputLayout username = Register.this.findViewById(R.id.Username);
-                TextInputLayout email = Register.this.findViewById(R.id.Email);
-                TextInputLayout password = Register.this.findViewById(R.id.Password);
-                TextInputLayout confirmPassword = Register.this.findViewById(R.id.confirmPassword);
-                TextInputLayout phone = Register.this.findViewById(R.id.phone);
 
                 username.setError(null);
                 email.setError(null);
@@ -97,36 +112,76 @@ public class Register extends AppCompatActivity {
 
     // This method is called when the "Login" button is pressed in the Login fragment
     public void register(String username, String email, String password, String phone) {
-        UserRegister ur = new UserRegister();
-        ur.username = username;
-        ur.email = email;
-        ur.password = password;
-        ur.phoneNumber = phone;
-        ur.firstName = " ";
-        ur.lastName = " ";
-        ur.age=0;
-        Call<String> call = mTodoService.register(ur);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
 
-                if (response.isSuccessful()) {
-                    Register.this.startActivity(new Intent(Register.this, NavigationActivity.class));
-                    Register.this.finish();
+        if(extras == null){
+            UserRegister ur = new UserRegister();
+            ur.username = username;
+            ur.email = email;
+            ur.password = password;
+            ur.phoneNumber = phone;
+            ur.firstName = " ";
+            ur.lastName = " ";
+            ur.age=0;
+            Call<String> call = mTodoService.register(ur);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
 
+                    if (response.isSuccessful()) {
+                        Register.this.startActivity(new Intent(Register.this, NavigationActivity.class));
+                        Register.this.finish();
+
+                    }
+                    else{
+                        TextInputLayout username = Register.this.findViewById(R.id.Username);
+                        username.setError("Username or email already registered");
+                    }
                 }
-                else{
-                    TextInputLayout username = Register.this.findViewById(R.id.Username);
-                    username.setError("Username or email already registered");
-                }
-            }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast toast = Toast.makeText(Register.this, "Error in the register", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast toast = Toast.makeText(Register.this, "Error in the register", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
+        }
+        else{
+            UserRegisterFacebook ur = new UserRegisterFacebook();
+            ur.username = username;
+            ur.email = email;
+            ur.password = password;
+            ur.phoneNumber = phone;
+            ur.firstName = " ";
+            ur.lastName = " ";
+            ur.age=0;
+            ur.facebookId = facebookId;
+            ur.facebookToken = facebookToken;
+            Call<String> call = mTodoService.registerFacebook(ur);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+
+                    if (response.isSuccessful()) {
+                        Register.this.startActivity(new Intent(Register.this, NavigationActivity.class));
+                        Register.this.finish();
+
+                    }
+                    else{
+                        TextInputLayout username = Register.this.findViewById(R.id.Username);
+                        username.setError("Username or email already registered");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast toast = Toast.makeText(Register.this, "Error in the register", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
+
+
+        }
+
     }
 
     public void onBackPressed() {
