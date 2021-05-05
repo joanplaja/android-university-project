@@ -1,6 +1,7 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
 import org.udg.pds.todoandroid.entity.DictionaryImages;
+import org.udg.pds.todoandroid.entity.IdObject;
+import org.udg.pds.todoandroid.entity.PostBody;
 import org.udg.pds.todoandroid.entity.Workout;
 import org.udg.pds.todoandroid.rest.TodoApi;
 import org.w3c.dom.Text;
@@ -74,7 +77,7 @@ public class WorkoutDetailsFragment extends Fragment {
     private ImageView postImage;
     private EditText postDescription;
     Uri selectedImageUri = null;
-    String storedImageUri;
+    String storedImageUri = "";
 
     public WorkoutDetailsFragment() {
         // Required empty public constructor
@@ -189,14 +192,13 @@ public class WorkoutDetailsFragment extends Fragment {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (response.isSuccessful()) {
-                                    //Toast.makeText(UpdateProfileActivity.this, "Image uploaded OK !!"+response.body(), Toast.LENGTH_SHORT).show();
                                     Picasso.get().load(response.body()).fit().centerCrop().into(postImage);
                                     storedImageUri = response.body();
-                                    Log.i(TAG, "la nova uri ja guardada es: " + storedImageUri);
-                                    //Fer les altres coses
+                                    makeCreatePostCall();
                                 }
                                 else {
-                                    Log.i(TAG, "Ha anat malament la crida per guarda la imatge");
+
+                                    Log.i(TAG, "Ha anat malament la crida per guarda la imatge...");
                                 }
                             }
 
@@ -209,7 +211,10 @@ public class WorkoutDetailsFragment extends Fragment {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
-                //Aqui fer la crida a la api del post
+                else {
+                    makeCreatePostCall();
+                }
+
             }
         });
 
@@ -219,6 +224,34 @@ public class WorkoutDetailsFragment extends Fragment {
             public void onClick(View v) {
                 dialogPost.dismiss();
             }
+        });
+    }
+
+    private void makeCreatePostCall() {
+        PostBody body = new PostBody();
+        body.workoutId = id;
+        body.description = postDescription.getText().toString();
+        //Log.i(TAG, "storedImageUri: " + storedImageUri);
+        body.imageUrl = storedImageUri;
+        Call<IdObject> call = mTodoService.createPost(body);
+        call.enqueue(new Callback<IdObject>() {
+            @Override
+            public void onResponse(Call<IdObject> call, Response<IdObject> response) {
+                if (response.isSuccessful()) {
+                    //Anar a la feed, on ja hauria d'apareixer el post que acabem de fer.
+                }
+                else{
+                    Toast toast = Toast.makeText(getActivity(), "Something went wrong with the API call.", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IdObject> call, Throwable t) {
+                Toast toast = Toast.makeText(getActivity(), "Something went wrong with the API call.", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
         });
     }
 
