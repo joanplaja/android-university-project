@@ -8,4 +8,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class Equipment {
     public Long id;
     public String name;
+    public String description;
+    public String imageUrl;
+    public String shopUrl;
 }
