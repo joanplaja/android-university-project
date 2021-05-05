@@ -70,6 +70,9 @@
             android:name="type"
             app:argType="string" />
         </action>
+        <action
+            android:id="@+id/action_userProfileFragment_to_objectivesFragment"
+            app:destination="@id/objectivesFragment" />
     </fragment>
     <activity
         android:id="@+id/signoutActivity"
@@ -132,6 +135,11 @@
         android:name="org.udg.pds.todoandroid.fragment.FollowingFollowersFragment"
         android:label="fragment_following_followers"
         tools:layout="@layout/fragment_following_followers"/>
+    <fragment
+        android:id="@+id/objectivesFragment"
+        android:name="org.udg.pds.todoandroid.fragment.ObjectivesFragment"
+        android:label="fragment_objectives"
+        tools:layout="@layout/fragment_objectives" />
 
 
 </navigation>
