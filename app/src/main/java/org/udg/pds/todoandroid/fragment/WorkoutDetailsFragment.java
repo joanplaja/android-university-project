@@ -1,6 +1,9 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,19 +14,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import org.apache.commons.io.IOUtils;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
 import org.udg.pds.todoandroid.entity.DictionaryImages;
+import org.udg.pds.todoandroid.entity.IdObject;
+import org.udg.pds.todoandroid.entity.PostBody;
 import org.udg.pds.todoandroid.entity.Workout;
 import org.udg.pds.todoandroid.rest.TodoApi;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,8 +69,15 @@ public class WorkoutDetailsFragment extends Fragment {
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    private TextView popupWarning, popupQuestion;
     private Button cancel, delete;
+
+    //Coses relatives al dialeg del post
+    private AlertDialog dialogPost;
+    private Button cancelPostButton, postButton, choosImageButton;
+    private ImageView postImage;
+    private EditText postDescription;
+    Uri selectedImageUri = null;
+    String storedImageUri = "";
 
     public WorkoutDetailsFragment() {
         // Required empty public constructor
@@ -101,13 +125,139 @@ public class WorkoutDetailsFragment extends Fragment {
                 handleDelete();
             }
         });
+        Button postButton;
+        postButton = v.findViewById(R.id.postButton);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { handlePost(); }
+        });
         return v;
     }
+
+    private void handlePost() {
+        createNewPostDialog();
+    }
+
+    private void createNewPostDialog() {
+        dialogBuilder = new AlertDialog.Builder(getActivity());
+        final View view = getLayoutInflater().inflate(R.layout.post_dialog, null);
+        cancelPostButton = (Button)view.findViewById(R.id.cancelButton);
+        postButton = (Button)view.findViewById(R.id.postButton);
+        postDescription = (EditText)view.findViewById(R.id.description);
+        postImage = (ImageView) view.findViewById(R.id.image);
+
+        postImage.setImageResource(R.drawable.ic_menu_camera);
+        postDescription = (EditText)view.findViewById(R.id.description);
+
+        choosImageButton = (Button)view.findViewById(R.id.chooseImageButton);
+
+        dialogBuilder.setView(view);
+        dialogPost = dialogBuilder.create();
+        dialogPost.show();
+
+        choosImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+            }
+        });
+
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Primer fer la crida a la api per guarda la imatge a la base de dades i que en retorni la uri com a resposta
+                if (selectedImageUri != null) {
+                    try {
+                        InputStream is = getActivity().getContentResolver().openInputStream(selectedImageUri);
+                        String extension = "." + MimeTypeMap.getSingleton().getExtensionFromMimeType(getActivity().getContentResolver().getType(selectedImageUri));
+                        File tempFile = File.createTempFile("upload", extension, getActivity().getCacheDir());
+                        FileOutputStream outs = new FileOutputStream(tempFile);
+                        IOUtils.copy(is, outs);
+                        // create RequestBody instance from file
+                        RequestBody requestFile =
+                            RequestBody.create(
+                                MediaType.parse(getActivity().getContentResolver().getType(selectedImageUri)),
+                                tempFile
+                            );
+
+                        // MultipartBody.Part is used to send also the actual file name
+                        MultipartBody.Part body =
+                            MultipartBody.Part.createFormData("file", tempFile.getName(), requestFile);
+
+                        Call<String> call = mTodoService.uploadImage(body);
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if (response.isSuccessful()) {
+                                    Picasso.get().load(response.body()).fit().centerCrop().into(postImage);
+                                    storedImageUri = response.body();
+                                    makeCreatePostCall();
+                                }
+                                else {
+
+                                    Log.i(TAG, "Ha anat malament la crida per guarda la imatge...");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Toast.makeText(getActivity(), "Ha fallat la crida a la API per guardar la imatge...", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    makeCreatePostCall();
+                }
+
+            }
+        });
+
+
+        cancelPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogPost.dismiss();
+            }
+        });
+    }
+
+    private void makeCreatePostCall() {
+        PostBody body = new PostBody();
+        body.workoutId = id;
+        body.description = postDescription.getText().toString();
+        //Log.i(TAG, "storedImageUri: " + storedImageUri);
+        body.imageUrl = storedImageUri;
+        Call<IdObject> call = mTodoService.createPost(body);
+        call.enqueue(new Callback<IdObject>() {
+            @Override
+            public void onResponse(Call<IdObject> call, Response<IdObject> response) {
+                if (response.isSuccessful()) {
+                    //Anar a la feed, on ja hauria d'apareixer el post que acabem de fer.
+                }
+                else{
+                    Toast toast = Toast.makeText(getActivity(), "Something went wrong with the API call.", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IdObject> call, Throwable t) {
+                Toast toast = Toast.makeText(getActivity(), "Something went wrong with the API call.", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
+        });
+    }
+
     public void createNewDeleteDialog() {
         dialogBuilder = new AlertDialog.Builder(getActivity());
         final View view = getLayoutInflater().inflate(R.layout.delete_popup, null);
-        popupWarning = (TextView)view.findViewById(R.id.warningText);
-        popupQuestion = (TextView)view.findViewById(R.id.questionText);
         cancel = (Button)view.findViewById(R.id.cancelButton);
         delete = (Button)view.findViewById(R.id.deleteButton);
 
@@ -152,32 +302,7 @@ public class WorkoutDetailsFragment extends Fragment {
     }
 
     private void handleDelete() {
-
         createNewDeleteDialog();
-        /*
-        //Questa crida s'haura de fer en el popup (quan es confirmi el delete)
-        Call<String> call = mTodoService.deleteWorkout(id.toString());
-
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    Log.i(TAG, "onResponse: " + response.body());
-
-                } else {
-                    Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error deleting the Workout", Toast.LENGTH_LONG).show();
-                }
-                NavDirections action =
-                    WorkoutDetailsFragmentDirections.actionWorkoutDetailsFragmentToActionWorkoutList();
-                Navigation.findNavController(getView()).navigate(action);
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error making call to delete the Workout", Toast.LENGTH_LONG).show();
-            }
-        });
-        */
     }
 
     @Override
@@ -262,6 +387,15 @@ public class WorkoutDetailsFragment extends Fragment {
                 Toast.makeText(WorkoutDetailsFragment.this.getContext(), "Error making call", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null && requestCode == 1) {
+            selectedImageUri = data.getData();
+            postImage.setImageURI(selectedImageUri);
+        }
     }
 
     @Override
