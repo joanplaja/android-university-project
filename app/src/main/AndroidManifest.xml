@@ -56,6 +56,7 @@
         <activity android:name=".activity.Register" />
         <activity android:name=".activity.ChooseRegisterLogin" />
         <activity android:name=".activity.SignoutActivity" />
+<!--        <activity android:name=".fragment.ObjectivesFragment"/>-->
         <activity android:name=".activity.ActivityMaps" />
         <activity android:name=".activity.UpdateProfileActivity" />
         <activity android:name=".activity.EquipmentActivity" />
