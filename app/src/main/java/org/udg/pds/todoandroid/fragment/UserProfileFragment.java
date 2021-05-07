@@ -27,6 +27,7 @@ import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.activity.GraphicActivityTabbed;
 import org.udg.pds.todoandroid.activity.NavigationActivity;
+import org.udg.pds.todoandroid.activity.ObjectivesActivityTabbed;
 import org.udg.pds.todoandroid.activity.SignoutActivity;
 import org.udg.pds.todoandroid.activity.EquipmentActivity;
 import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
@@ -171,8 +172,10 @@ public class UserProfileFragment extends Fragment {
         botoObjectius.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToObjectivesFragment();
-                Navigation.findNavController(v).navigate(action);
+//                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToObjectivesFragment();
+//                Navigation.findNavController(v).navigate(action);
+                Intent I = new Intent(getActivity(), ObjectivesActivityTabbed.class);
+                startActivity(I);
             }
         });
 

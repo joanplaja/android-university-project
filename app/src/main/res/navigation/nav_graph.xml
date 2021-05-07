@@ -147,6 +147,6 @@
         android:id="@+id/objectivesFragment"
         android:name="org.udg.pds.todoandroid.fragment.ObjectivesFragment"
         android:label="fragment_objectives"
-        tools:layout="@layout/fragment_objectives" />
+        tools:layout="@layout/fragment_objectives_list" />
 
 </navigation>
