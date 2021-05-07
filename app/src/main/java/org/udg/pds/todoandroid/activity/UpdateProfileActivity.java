@@ -49,9 +49,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
     EditText userNameET, userDescriptionET, userPhoneET;
     TextInputLayout userNameIL, userDescriptionIL, userPhoneIL;
     ImageView userImageTV;
-    Button userImageButton;
-    ImageView ivSelected;
-    ImageView ivDownloaded;
     Uri selectedImageUri = null;
     String newUserPhotoUri;
 
@@ -63,11 +60,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_profile);
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
 
-
-
-        //ivSelected = findViewById(R.id.updateProfileIvSelected);
-        //ivDownloaded = findViewById(R.id.iv_download);
-
         findViewById(R.id.updateProfileImageButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,8 +70,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
             }
         });
 
-
-        //userImageButton = findViewById(R.id.updateProfileImageButton);
         userNameET = findViewById(R.id.updateProfileName);
         userDescriptionET = findViewById(R.id.updateProfileDescription);
         userPhoneET = findViewById(R.id.updateProfilePhoneNumber);
