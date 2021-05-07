@@ -3,6 +3,7 @@ package org.udg.pds.todoandroid.rest;
 import org.udg.pds.todoandroid.entity.Equipment;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.NearRoutes;
+import org.udg.pds.todoandroid.entity.PostBody;
 import org.udg.pds.todoandroid.entity.Route;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
@@ -86,6 +87,9 @@ public interface TodoApi {
 
     @POST("/workouts/{id}/points")
     Call<String> addPoints(@Path("id") String workoutId,@Body Double[][] points);
+
+    @POST("/posts")
+    Call<IdObject> createPost(@Body PostBody post);
 
     @GET("/users")
     Call<List<User>> searchUser(@Query("search") String name);
