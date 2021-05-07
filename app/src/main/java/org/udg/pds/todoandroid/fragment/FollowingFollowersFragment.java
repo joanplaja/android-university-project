@@ -22,7 +22,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.activity.SearchActivity;
-import org.udg.pds.todoandroid.activity.ui.main.SectionsPagerAdapter;
+import org.udg.pds.todoandroid.fragment.SectionsPagerAdapter;
 
 public class FollowingFollowersFragment extends Fragment {
     // When requested, this adapter returns a DemoObjectFragment,

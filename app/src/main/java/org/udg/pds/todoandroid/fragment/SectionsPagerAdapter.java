@@ -1,4 +1,4 @@
-package org.udg.pds.todoandroid.activity.ui.main;
+package org.udg.pds.todoandroid.fragment;
 
 import android.content.Context;
 
