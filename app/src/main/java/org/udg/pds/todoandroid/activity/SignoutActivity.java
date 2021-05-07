@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 
 import org.udg.pds.todoandroid.R;
@@ -37,6 +38,7 @@ public class SignoutActivity extends AppCompatActivity implements NavigationView
         // This is teh listener that will be used when the user presses the "Login" button
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                LoginManager.getInstance().logOut();
                 SignoutActivity.this.logout();
             }
         });
