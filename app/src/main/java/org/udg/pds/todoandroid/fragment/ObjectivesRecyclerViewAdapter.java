@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.entity.DictionaryImages;
 import org.udg.pds.todoandroid.entity.Objective;
-import org.udg.pds.todoandroid.entity.Workout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class ObjectivesRecyclerViewAdapter extends RecyclerView.Adapter<Objectiv
 
     @Override
     public ObjectiveViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_objectives, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_objectives_list, parent, false);
         return new ObjectiveViewHolder(view, mOnObjectiveListener);
     }
 

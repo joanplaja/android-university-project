@@ -79,6 +79,7 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
     private static final int DEFAULT_ZOOM = 15;                             //default zoom
     Polyline polyline1;                                                     //polygon used for save lat,long points and paint the polygon on the map
     List<LatLng> list;                                                      //list for points (Latitude and Longitude)
+    List<List<Double>> listAditional;                                             //list for saving velocity, distance relative to previous point, and time relative to previous point
     int lastPointSaved = 0;                                                 //variable for tracking the last point saved on the database from the list
     Double lastLat = -1.0;                                                  //variable for saving last latitude, default -1 for checkings
     Double lastLng = -1.0;                                                  //variable for saving last latitude, default -1 for checkings
@@ -164,6 +165,7 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
         mMapView.getMapAsync(this);
 
         list = new ArrayList<LatLng>();
+        listAditional = new ArrayList<List<Double>>();
         //We define the location callback implementation
         locationCallback = new LocationCallback() {
             @Override
@@ -186,6 +188,13 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
                         lastLat = location.getLatitude();
                         lastLng = location.getLongitude();
                         lastTimeStamp = location.getTime();
+                        if(!pause){
+                            List<Double> provisional = new ArrayList<Double>();
+                            provisional.add(0.0);
+                            provisional.add(0.0);
+                            provisional.add(0.0);
+                            listAditional.add(provisional);
+                        }
                         return;
                     }
 
@@ -217,6 +226,14 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
                     //we dont care about if its paused or not to show the velocity
                     if(speed > 0.277778)tvVelocity.setText(String.format("%.2f km/h", speed*(3600/1000)));
                     else tvVelocity.setText(String.format("%.2f m/s", speed));
+
+                    if(!pause) {
+                        List<Double> provisional = new ArrayList<Double>();
+                        provisional.add((double) timeDelta);
+                        provisional.add(distanceInMeters);
+                        provisional.add(speed);
+                        listAditional.add(provisional);
+                    }
 
                     //save the actual to the last for next interation
                     lastLat = location.getLatitude();
@@ -352,6 +369,7 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
                 distance = 0.0;
                 pause = true;
                 list = new ArrayList<>();
+                listAditional = new ArrayList<List<Double>>();
                 polyline1.remove();
                 tvDistance.setText(String.format("%.2f m", distance));
                 lytStart.setVisibility(View.VISIBLE);
@@ -375,12 +393,16 @@ public class RegisterWorkoutFragment extends Fragment implements OnMapReadyCallb
                     try {
                         System.out.println("lasPointSaved:" + lastPointSaved + "  list size:" + list.size());
                         int totalPoints = list.size() - lastPointSaved;
-                        Double[][] arrayPoints = new Double[totalPoints][2];
+                        Double[][] arrayPoints = new Double[totalPoints][5];
                         int index = 0;
                         for (int i = lastPointSaved; i < list.size(); i++) {
                             LatLng pos = list.get(i);
+                            List<Double> valors = listAditional.get(i);
                             arrayPoints[index][0] = pos.latitude;
                             arrayPoints[index][1] = pos.longitude;
+                            arrayPoints[index][2] = valors.get(0);
+                            arrayPoints[index][3] = valors.get(1);
+                            arrayPoints[index][4] = valors.get(2);
                             index++;
                         }
 
