@@ -33,7 +33,7 @@
     <item
             android:id="@+id/userProfileFragment"
             android:enabled="true"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_person_24"
             android:title="@string/text_profile"
             app:showAsAction="ifRoom" />
     <item

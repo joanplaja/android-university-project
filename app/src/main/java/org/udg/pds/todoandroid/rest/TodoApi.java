@@ -126,5 +126,10 @@ public interface TodoApi {
     @GET("/equipment")
     Call<List<Equipment>> getEquipments();
 
+    @POST("/equipment")
+    Call<IdObject> addEquipment(@Body Equipment e);
+
+    @DELETE("/equipment/{eid}")
+    Call<String> deleteEquipment(@Path("eid") Long equipmentId);
 }
 

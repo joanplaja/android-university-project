@@ -7,11 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * A fragment representing a list of Items.
  */
@@ -43,9 +47,11 @@ public class EquipmentFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private static final String TAG = "Equipments: ";
 
     private EquipmentRecyclerViewAdapter equipmentRecyclerViewAdapter;
-    TodoApi mTodoService;
+    public TodoApi mTodoService;
+    Long id;
     private List<Equipment> mValues = new ArrayList<>();
     public View view;
 
@@ -74,16 +80,12 @@ public class EquipmentFragment extends Fragment {
         }
     }
 
-    public void gotoUrl(String link){
-        Uri uri = Uri.parse(link);
-        startActivity(new Intent(Intent.ACTION_VIEW, uri));
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
         view = inflater.inflate(R.layout.fragment_equipment_list, container, false);
-
+        id = getArguments().getLong("id");
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -93,7 +95,7 @@ public class EquipmentFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            equipmentRecyclerViewAdapter = new EquipmentRecyclerViewAdapter(context);
+            equipmentRecyclerViewAdapter = new EquipmentRecyclerViewAdapter(context, mTodoService);
             recyclerView.setAdapter(equipmentRecyclerViewAdapter);
         }
         return view;
@@ -102,7 +104,6 @@ public class EquipmentFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
         updateEquipments();
     }
 
@@ -130,4 +131,5 @@ public class EquipmentFragment extends Fragment {
     private void showEquipmentList(List<Equipment> equipments) {
         equipmentRecyclerViewAdapter.setEquipments(equipments);
     }
+
 }

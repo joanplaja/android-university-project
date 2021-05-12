@@ -3,6 +3,8 @@ package org.udg.pds.todoandroid.activity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import org.apache.commons.io.IOUtils;
 import org.udg.pds.todoandroid.R;
@@ -13,6 +15,7 @@ import org.udg.pds.todoandroid.entity.UserRegister;
 import org.udg.pds.todoandroid.entity.UserUpdate;
 import org.udg.pds.todoandroid.fragment.ImageFragment;
 import org.udg.pds.todoandroid.fragment.UserProfileFragment;
+import org.udg.pds.todoandroid.fragment.UserProfileFragmentDirections;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import android.content.DialogInterface;
@@ -95,6 +98,14 @@ public class UpdateProfileActivity extends AppCompatActivity {
         else
             userImageTV.setImageResource(R.drawable.profile_photo);
 
+        Button eb = findViewById(R.id.updateProfileNewEquipmentButton);
+        eb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent I = new Intent(getApplicationContext(), EquipmentCreateActivity.class);
+                startActivity(I);
+            }
+        });
 
         Button b = findViewById(R.id.updateProfileSaveButton);
         // This is the listener that will be used when the user presses the "Save" button
