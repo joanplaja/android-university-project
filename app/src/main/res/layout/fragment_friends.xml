@@ -6,15 +6,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.FriendsFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#85B668"
-        android:theme="@style/AppTheme.AppBarOverlay">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="75dp"
+            android:background="?colorPrimary"
             android:orientation="horizontal">
 
             <TextView
@@ -24,20 +20,25 @@
                 android:gravity="center|left"
                 android:minHeight="?actionBarSize"
                 android:padding="@dimen/appbar_padding"
+                android:textColor="@color/cardview_light_background"
                 android:text="Search and invite friends"
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:layout_height="match_parent">
+                android:layout_gravity="center|right"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:layout_width="wrap_content"
                     android:id="@+id/searchButton"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     app:fabSize="normal"
                     android:elevation="0dp"
+                    app:tint="@android:color/white"
+                    app:rippleColor="@color/cardview_light_background"
                     app:elevation="0dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
@@ -45,22 +46,26 @@
 
             </RelativeLayout>
 
-
         </LinearLayout>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager_friends"
+            android:layout_marginTop="75dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#85B668"
-            app:tabIndicatorColor="#0A270D"
-            app:tabTextAppearance="@style/CustomTabStyle"/>
-    </com.google.android.material.appbar.AppBarLayout>
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager_friends"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#85B668"
+                app:tabIndicatorColor="#0A270D"
+                app:tabTextAppearance="@style/CustomTabStyle"/>
 
-</FrameLayout>
+        </androidx.viewpager.widget.ViewPager>
+
+
+    </FrameLayout>
+

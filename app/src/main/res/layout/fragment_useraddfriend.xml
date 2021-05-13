@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/userAddFriendImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/running" />
+
+    <TextView
+        android:id="@+id/userAddFriendName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:textSize="15dp"
+        android:textColor="@color/common_google_signin_btn_text_light_pressed"
+        android:text="Temporal Text" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <Button
+        android:id="@+id/userAddFriendFollow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="right|center_vertical"
+        android:textSize="12dp"
+        android:backgroundTint="?colorPrimary"
+        android:textColor="@color/cardview_light_background"
+        android:textStyle="bold"
+        android:text="Follow" />
+
+</LinearLayout>
