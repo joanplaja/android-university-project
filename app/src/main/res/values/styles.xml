@@ -34,5 +34,6 @@
 
     <style name="CustomTabStyle" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/cardview_light_background</item>
     </style>
 </resources>

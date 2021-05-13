@@ -51,15 +51,15 @@ public class ChooseRegisterLogin extends AppCompatActivity {
         context = this;
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setPermissions("email");
+        loginButton.setPermissions("email,user_friends");
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // App code
-                Profile p = Profile.getCurrentProfile();
+
                 String facebookToken = AccessToken.getCurrentAccessToken().getToken();
-                String facebookId = p.getId();
+//                System.out.println("facebook id: "+loginResult.getAccessToken().getApplicationId());
+                String facebookId = loginResult.getAccessToken().getUserId();
 
                 UserSignInFacebook userSignInFacebook = new UserSignInFacebook();
                 userSignInFacebook.facebookId = facebookId;
@@ -101,6 +101,7 @@ public class ChooseRegisterLogin extends AppCompatActivity {
                                                  Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                                              }
                                          }
+
                                      });
                                  Bundle parameters = new Bundle();
                                  parameters.putString("fields", "id,name,link,email,birthday,first_name,last_name");

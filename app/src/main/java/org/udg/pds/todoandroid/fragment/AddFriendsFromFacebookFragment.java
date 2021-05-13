@@ -1,49 +1,63 @@
 package org.udg.pds.todoandroid.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.udg.pds.todoandroid.R;
+import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.activity.ChooseRegisterLogin;
+import org.udg.pds.todoandroid.activity.Register;
+import org.udg.pds.todoandroid.entity.FindFacebookFriends;
+import org.udg.pds.todoandroid.entity.User;
+import org.udg.pds.todoandroid.rest.TodoApi;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddFriendsFromFacebookFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+
 public class AddFriendsFromFacebookFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    LinearLayout loadingLyt, loggedFacebookLyt, notLoggedFacebookLyt;
+    RecyclerView recyclerView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private UserAddFriendsRecyclerViewAdapter adapter;
+
+    private List<User> candidatesFirends;
+    Context context;
+
+    TodoApi mTodoService;
 
     public AddFriendsFromFacebookFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment addFriendsFromFacebook.
-     */
-    // TODO: Rename and change types and number of parameters
     public static AddFriendsFromFacebookFragment newInstance(String param1, String param2) {
         AddFriendsFromFacebookFragment fragment = new AddFriendsFromFacebookFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +66,84 @@ public class AddFriendsFromFacebookFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        System.out.println("on Start");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_friends_from_facebook, container, false);
+
+        View rootView = inflater.inflate(R.layout.fragment_add_friends_from_facebook, container, false);
+        context = rootView.getContext();
+
+        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
+        candidatesFirends = new ArrayList<User>();
+
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.facebookFriendsRecyclerView);
+        loadingLyt =            rootView.findViewById(R.id.loadingLyt);
+        loggedFacebookLyt =     rootView.findViewById(R.id.loggedWithFacebook);
+        notLoggedFacebookLyt =  rootView.findViewById(R.id.notLoggedWithFacebook);
+
+        if(AccessToken.getCurrentAccessToken() == null){
+            loadingLyt.setVisibility(View.GONE);
+            notLoggedFacebookLyt.setVisibility(View.VISIBLE);
+
+        }
+        else{
+
+            GraphRequestAsyncTask request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
+                @Override
+                public void onCompleted(JSONArray jsonArray, GraphResponse graphResponse) {
+                    System.out.println("resposta facebook friends:"+jsonArray.toString()+"//"+graphResponse.toString());
+                    //PASSAR UN ARRAY D'IDS I QUE RETORNI UNA ARRAY D'USUARIS AMICS DE FACEBOOK ELS QUALS ESTIGUIN A LA BD I NO SIGUIN JA AMICS
+                    String facebookIds[] = new String[jsonArray.length()];
+                    for(int i=0;i<jsonArray.length();i++){
+                        try {
+                            facebookIds[i] = jsonArray.getJSONObject(i).getString("id");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    FindFacebookFriends fFF = new FindFacebookFriends();
+                    fFF.facebookIds = facebookIds;
+
+                    Call<List<User>> call = mTodoService.findFacebookFriends(fFF);
+                    call.enqueue(new Callback<List<User>>() {
+                        @Override
+                        public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+
+                            candidatesFirends = response.body();
+
+                            if(candidatesFirends.size()==0)recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                            else recyclerView.setLayoutManager(new GridLayoutManager(context,jsonArray.length()));
+
+                            System.out.println("quants:"+candidatesFirends.size());
+
+                            adapter = new UserAddFriendsRecyclerViewAdapter(context,mTodoService);
+                            recyclerView.setAdapter(adapter);
+                            adapter.setFirendsList(candidatesFirends);
+
+                            loadingLyt.setVisibility(View.GONE);
+                            loggedFacebookLyt.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<User>> call, Throwable t) {
+
+                        }
+                    });
+
+                }
+            }).executeAsync();
+        }
+
+
+        return  rootView;
     }
 }
