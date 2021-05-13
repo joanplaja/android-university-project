@@ -5,11 +5,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavDirections;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -80,9 +87,21 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //adapter = new ObjectivesRecyclerViewAdapter(this);
+            adapter = new ObjectivesRecyclerViewAdapter(this);
             recyclerView.setAdapter(adapter);
         }
+        FloatingActionButton botoObjectius = view.findViewById(R.id.addObjective);
+        botoObjectius.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment addObjectiveFragment = new AddObjectiveFragment();
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.objectivesFragment, addObjectiveFragment);
+                //ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
         return view;
     }
 
