@@ -34,13 +34,13 @@ public class ObjectivesRecyclerViewAdapter extends RecyclerView.Adapter<Objectiv
     @Override
     public ObjectiveViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_objectives_list, parent, false);
-        Button botoObectius = view.findViewById(R.id.addObjective);
-        botoObectius.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        Button botoObectius = view.findViewById(R.id.addObjective);
+//        botoObectius.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
         return new ObjectiveViewHolder(view, mOnObjectiveListener);
     }
 

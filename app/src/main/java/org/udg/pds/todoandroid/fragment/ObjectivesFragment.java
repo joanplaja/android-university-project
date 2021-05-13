@@ -1,21 +1,23 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.udg.pds.todoandroid.R;
@@ -79,9 +81,9 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
         view = inflater.inflate(R.layout.fragment_objectives_list, container, false);  //fragment_workout_list, container, false);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+        if (view.findViewById(R.id.listObjectives) instanceof RecyclerView) {
+            Context context = view.findViewById(R.id.listObjectives).getContext();
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.listObjectives);
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -90,16 +92,13 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
             adapter = new ObjectivesRecyclerViewAdapter(this);
             recyclerView.setAdapter(adapter);
         }
-        FloatingActionButton botoObjectius = view.findViewById(R.id.addObjective);
+
+        ImageButton botoObjectius = (ImageButton)view.findViewById(R.id.fab_add);
         botoObjectius.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment addObjectiveFragment = new AddObjectiveFragment();
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.objectivesFragment, addObjectiveFragment);
-                //ft.addToBackStack(null);
-                ft.commit();
+                NavDirections action = ObjectivesFragmentDirections.actionObjectivesFragmentToAddObjectiveFragment();
+                Navigation.findNavController(v).navigate(action);
             }
         });
         return view;
@@ -126,11 +125,11 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
             }
         });
     }
-
-    private void showWorkoutList(List<Objective> objectives) {
-        adapter.setObjectives(objectives);
-    }
 */
+    private void showWorkoutList(List<Objective> objectives) {
+//        adapter.setObjectives(objectives);
+    }
+
     @Override
     public void onObjectiveClick(int position) {
 //        Long id = mValues.get(position).id;

@@ -172,10 +172,10 @@ public class UserProfileFragment extends Fragment {
         botoObjectius.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToObjectivesFragment();
-//                Navigation.findNavController(v).navigate(action);
-                Intent I = new Intent(getActivity(), ObjectivesActivityTabbed.class);
-                startActivity(I);
+                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToObjectivesFragment();
+                Navigation.findNavController(v).navigate(action);
+//                Intent I = new Intent(getActivity(), ObjectivesActivityTabbed.class);
+//                startActivity(I);
             }
         });
 
