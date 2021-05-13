@@ -1,13 +1,9 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteOutOfMemoryException;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
@@ -17,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,20 +21,19 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.squareup.picasso.Picasso;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
-import org.udg.pds.todoandroid.activity.GraphicActivity;
 import org.udg.pds.todoandroid.activity.GraphicActivityTabbed;
+import org.udg.pds.todoandroid.activity.NavigationActivity;
+import org.udg.pds.todoandroid.activity.ObjectivesActivityTabbed;
 import org.udg.pds.todoandroid.activity.SignoutActivity;
 import org.udg.pds.todoandroid.activity.EquipmentActivity;
 import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +84,7 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Button openEquipmentButton, updateProfileButton, signOutButton, workoutButton;
-        Button graficButton;
+        Button graficButton, botoObjectius;
 
         CardView cardFollowers, cardFollowing;
 
@@ -104,13 +98,6 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 openSignOutActivity();
-            }
-        });
-        openEquipmentButton = v.findViewById(R.id.userProfileButtonEquipment);
-        openEquipmentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEquipmentActivity();
             }
         });
         updateProfileButton = v.findViewById(R.id.userProfileButtonUpdate);
@@ -155,9 +142,18 @@ public class UserProfileFragment extends Fragment {
         workoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToWorkoutList();
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
+
+        openEquipmentButton = v.findViewById(R.id.userProfileButtonEquipment);
+        openEquipmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 NavDirections action =
                     UserProfileFragmentDirections
-                        .actionUserProfileFragmentToWorkoutList();
+                        .actionUserProfileFragmentToEquipmentList();
                 Navigation.findNavController(v).navigate(action);
             }
         });
@@ -165,8 +161,20 @@ public class UserProfileFragment extends Fragment {
         graficButton = v.findViewById(R.id.buttonMoreStatistics);
         graficButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent I = new Intent(getActivity(), GraphicActivityTabbed.class);
+                startActivity(I);
+            }
+        });
+
+
+        botoObjectius = v.findViewById(R.id.buttonObjectives);
+        botoObjectius.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToObjectivesFragment();
+//                Navigation.findNavController(v).navigate(action);
+                Intent I = new Intent(getActivity(), ObjectivesActivityTabbed.class);
                 startActivity(I);
             }
         });

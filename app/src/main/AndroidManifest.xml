@@ -56,10 +56,12 @@
         <activity android:name=".activity.Register" />
         <activity android:name=".activity.ChooseRegisterLogin" />
         <activity android:name=".activity.SignoutActivity" />
+<!--        <activity android:name=".fragment.ObjectivesFragment"/>-->
         <activity android:name=".activity.ActivityMaps" />
         <activity android:name=".activity.UpdateProfileActivity" />
         <activity android:name=".activity.EquipmentActivity" />
         <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.ObjectivesActivityTabbed"/>
         <activity android:name=".activity.ViewProfileActivity" />
         <activity
             android:name=".activity.Login"

@@ -64,12 +64,18 @@
             android:id="@+id/action_userProfileFragment_to_workoutList"
             app:destination="@id/actionWorkoutList" />
         <action
+            android:id="@+id/action_userProfileFragment_to_equipmentList"
+            app:destination="@id/actionEquipmentList" />
+        <action
             android:id="@+id/action_userProfileFragment_to_Social"
             app:destination="@id/followingFollowersFragment" >
         <argument
             android:name="type"
             app:argType="string" />
         </action>
+        <action
+            android:id="@+id/action_userProfileFragment_to_objectivesFragment"
+            app:destination="@id/objectivesFragment" />
     </fragment>
     <activity
         android:id="@+id/signoutActivity"
@@ -132,6 +138,15 @@
         android:name="org.udg.pds.todoandroid.fragment.FollowingFollowersFragment"
         android:label="fragment_following_followers"
         tools:layout="@layout/fragment_following_followers"/>
-
+    <fragment
+        android:id="@+id/actionEquipmentList"
+        android:name="org.udg.pds.todoandroid.fragment.EquipmentFragment"
+        android:label="fragment_equipment_list"
+        tools:layout="@layout/fragment_equipment_list" />
+     <fragment
+        android:id="@+id/objectivesFragment"
+        android:name="org.udg.pds.todoandroid.fragment.ObjectivesFragment"
+        android:label="fragment_objectives"
+        tools:layout="@layout/fragment_objectives_list" />
 
 </navigation>
