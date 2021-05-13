@@ -41,6 +41,14 @@
             android:textColor="#033a06"
             android:text="Description of the item" />
 
+        <ImageView
+            android:id="@+id/icon_delete"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_baseline_delete_forever_24"
+            android:layout_gravity="right"
+            />
+
     </LinearLayout>
 
     <View

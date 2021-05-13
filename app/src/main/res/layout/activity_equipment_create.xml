@@ -15,21 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/updateProfileId"
-        tools:context=".activity.UpdateProfileActivity">
-
-        <TextView
-            android:id="@+id/textView25"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Update Your Profile"
-            android:textSize="24dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/guideline47"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        tools:context=".activity.EquipmentCreateActivity">
 
         <TextView
             android:id="@+id/textView4"
@@ -37,29 +23,28 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
-            android:text="Username"
+            android:text="Equipment Name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/updateProfileImage" />
+            app:layout_constraintTop_toBottomOf="@+id/createEquipmentImage" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/updateProfileImage"
+        <ImageView
+            android:id="@+id/createEquipmentImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="24dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline27"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline50" />
+            app:layout_constraintTop_toTopOf="@+id/guideline47" />
 
         <Button
-            android:id="@+id/updateProfileSaveButton"
+            android:id="@+id/createEquipmentSaveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="Save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/updateProfileNewEquipmentButton" />
+            app:layout_constraintStart_toStartOf="@+id/createEquipmentDescriptionIL"
+            app:layout_constraintTop_toBottomOf="@+id/createEquipmentDescriptionIL" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline27"
@@ -70,7 +55,7 @@
             app:layout_constraintGuide_percent="0.35" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline50"
+            android:id="@+id/guideline47"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -78,7 +63,7 @@
             app:layout_constraintGuide_percent="0.1" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/updateProfileNameIL"
+            android:id="@+id/createEquipmentNameIL"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -87,7 +72,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/updateProfileName"
+                android:id="@+id/createEquipmentName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
@@ -97,7 +82,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/updateProfilePhoneNumberIL"
+            android:id="@+id/createEquipmentShopUrlIL"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -106,17 +91,17 @@
             app:layout_constraintTop_toBottomOf="@+id/textView5">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/updateProfilePhoneNumber"
+                android:id="@+id/createEquipmentShopUrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:inputType="textPersonName"
-                app:layout_constraintTop_toBottomOf="@+id/updateProfileDescriptionIL" />
+                app:layout_constraintTop_toBottomOf="@+id/createEquipmentDescriptionIL" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/updateProfileDescriptionIL"
+            android:id="@+id/createEquipmentDescriptionIL"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -125,33 +110,33 @@
             app:layout_constraintTop_toBottomOf="@+id/textView6">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/updateProfileDescription"
+                android:id="@+id/createEquipmentDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:inputType="textPersonName"
-                app:layout_constraintTop_toBottomOf="@+id/updateProfileNameIL" />
+                app:layout_constraintTop_toBottomOf="@+id/createEquipmentNameIL" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/updateProfileImageButton"
+            android:id="@+id/createEquipmentImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Choose image"
             app:layout_constraintBottom_toTopOf="@+id/guideline27"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/updateProfileImage"
-            app:layout_constraintTop_toTopOf="@+id/updateProfileImage" />
+            app:layout_constraintStart_toEndOf="@+id/createEquipmentImage"
+            app:layout_constraintTop_toTopOf="@+id/createEquipmentImage" />
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Phone Number"
-            app:layout_constraintStart_toStartOf="@+id/updateProfileNameIL"
-            app:layout_constraintTop_toBottomOf="@+id/updateProfileNameIL" />
+            android:text="Shop Url"
+            app:layout_constraintStart_toStartOf="@+id/createEquipmentNameIL"
+            app:layout_constraintTop_toBottomOf="@+id/createEquipmentNameIL" />
 
         <TextView
             android:id="@+id/textView6"
@@ -159,19 +144,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Description"
-            app:layout_constraintStart_toStartOf="@+id/updateProfilePhoneNumberIL"
-            app:layout_constraintTop_toBottomOf="@+id/updateProfilePhoneNumberIL" />
+            app:layout_constraintStart_toStartOf="@+id/createEquipmentShopUrlIL"
+            app:layout_constraintTop_toBottomOf="@+id/createEquipmentShopUrlIL" />
 
-        <Button
-            android:id="@+id/updateProfileNewEquipmentButton"
+        <TextView
+            android:id="@+id/textView25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="New Equipment"
+            android:text="Create An Equipment"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/guideline47"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/updateProfileDescriptionIL" />
-
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
