@@ -37,7 +37,7 @@
             android:title="@string/text_profile"
             app:showAsAction="ifRoom" />
     <item
-            android:id="@+id/searchActivity"
+            android:id="@+id/friendsFragment"
             android:enabled="true"
             android:icon="@drawable/ic_baseline_people_outline_24"
             android:title="Friends"

@@ -1,7 +1,6 @@
-package org.udg.pds.todoandroid.activity;
+package org.udg.pds.todoandroid.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,38 +29,69 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchUserFragment extends Fragment {
+    Context context;
     TodoApi mTodoService;
+    public View rootView;
 
     RecyclerView mRecyclerView;
     private SUAdapter mAdapter;
 
+    public static SearchUserFragment newInstance(String param1, String param2) {
+        SearchUserFragment fragment = new SearchUserFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_user);
-
-        mTodoService = ((TodoApp) this.getApplication()).getAPI();
-
-        mRecyclerView = SearchActivity.this.findViewById(R.id.users_recyclerview);
-        mAdapter = new SearchActivity.SUAdapter(this.getApplication());
+    public void onStart() {
+        super.onStart();
+        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
+        mRecyclerView = getView().findViewById(R.id.users_recyclerview);
+        mAdapter = new  SUAdapter(this.getActivity().getApplication());
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+    }
 
-        Button b = findViewById(R.id.search_button);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Inflate the layout for this fragment
+        rootView = inflater.inflate(R.layout.fragment_search_user, container, false);
+        context = this.getContext();
+        Button b = rootView.findViewById(R.id.search_button);
 
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText u = SearchActivity.this.findViewById(R.id.search_username);
+                EditText u = getView().findViewById(R.id.search_username);
                 if(u.length() == 0){
                     u.setError("Username can't be empty");
                 }
                 else {
                     String query = "username:" + u.getText().toString();
-                    SearchActivity.this.executeSearch(query);
+                    executeSearch(query);
                 }
             }
         });
+        return rootView;
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //setContentView(R.layout.search_user);
+
+      /*  mTodoService = ((TodoApp) this.getApplication()).getAPI();
+
+        mRecyclerView = SearchActivity.this.findViewById(R.id.users_recyclerview);
+        mAdapter = new SearchActivity.SUAdapter(this.getApplication());
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));*/
+
+
     }
 
 
@@ -69,7 +101,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if (response.isSuccessful()) {
-                    SearchActivity.this.showUserList(response.body());
+                    showUserList(response.body());
                 }
             }
 
@@ -99,7 +131,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    class SUAdapter extends RecyclerView.Adapter<SearchActivity.UserViewHolder> {
+    class SUAdapter extends RecyclerView.Adapter<SearchUserFragment.UserViewHolder> {
 
         List<User> list = new ArrayList<>();
         Context context;
@@ -109,25 +141,28 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         @Override
-        public SearchActivity.UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public SearchUserFragment.UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_layout, parent, false);
-            SearchActivity.UserViewHolder holder = new SearchActivity.UserViewHolder(v);
+            SearchUserFragment.UserViewHolder holder = new SearchUserFragment.UserViewHolder(v);
 
             return holder;
         }
 
         @Override
-        public void onBindViewHolder(SearchActivity.UserViewHolder holder, final int position) {
+        public void onBindViewHolder(UserViewHolder holder, final int position) {
             holder.username.setText(list.get(position).username);
 
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    Intent i = new Intent(SearchActivity.this, ViewProfileActivity.class);
+                    String usrname = list.get(position).username;
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", usrname);
+                    Navigation.findNavController(view).navigate(R.id.action_SearchUserFragment_to_ViewProfileFragment, bundle);
+                  /*  Intent i = new Intent(SearchActivity.this, ViewProfileActivity.class);
                     i.putExtra("username",list.get(position).username);
                     SearchActivity.this.startActivity(i);
-                    SearchActivity.this.finish();
+                    SearchActivity.this.finish();*/
                 }
             });
 
@@ -175,5 +210,4 @@ public class SearchActivity extends AppCompatActivity {
             this.notifyItemRangeRemoved(0, size);
         }
     }
-
 }

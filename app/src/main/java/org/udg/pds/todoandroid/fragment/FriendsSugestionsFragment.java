@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.udg.pds.todoandroid.R;
-import org.udg.pds.todoandroid.activity.SearchActivity;
 
 /**
  * A simple {@link Fragment} subclass.
