@@ -3,6 +3,7 @@ package org.udg.pds.todoandroid.fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +34,13 @@ public class ObjectivesRecyclerViewAdapter extends RecyclerView.Adapter<Objectiv
     @Override
     public ObjectiveViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_objectives_list, parent, false);
+//        Button botoObectius = view.findViewById(R.id.addObjective);
+//        botoObectius.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
         return new ObjectiveViewHolder(view, mOnObjectiveListener);
     }
 
