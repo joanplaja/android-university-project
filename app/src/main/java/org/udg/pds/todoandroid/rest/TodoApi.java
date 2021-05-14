@@ -2,6 +2,7 @@ package org.udg.pds.todoandroid.rest;
 
 import org.udg.pds.todoandroid.entity.Equipment;
 import org.udg.pds.todoandroid.entity.FindFacebookFriends;
+import org.udg.pds.todoandroid.entity.FindPhoneFriends;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.NearRoutes;
 import org.udg.pds.todoandroid.entity.PostBody;
@@ -127,6 +128,8 @@ public interface TodoApi {
     @POST("/users/findFacebookFriends")
     Call  <List<User>>  findFacebookFriends(@Body FindFacebookFriends findFacebookFriends);
 
+    @POST("/users/findPhoneFriends")
+    Call  <List<User>>  findPhoneFriends(@Body FindPhoneFriends findPhoneFriends);
 
     @GET("/equipment")
     Call<List<Equipment>> getEquipments();
