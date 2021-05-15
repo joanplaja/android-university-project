@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,8 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -123,11 +126,13 @@ public class SearchUserFragment extends Fragment {
     static class UserViewHolder extends RecyclerView.ViewHolder {
         TextView username;
         View view;
+        ImageView searchProfileImage;
 
         UserViewHolder(View itemView) {
             super(itemView);
             view = itemView;
-            username = itemView.findViewById(R.id.itemUsername);
+            username = itemView.findViewById(R.id.searchUserUsername);
+            searchProfileImage = itemView.findViewById(R.id.imageViewSearchUser);
         }
     }
 
@@ -151,6 +156,12 @@ public class SearchUserFragment extends Fragment {
         @Override
         public void onBindViewHolder(UserViewHolder holder, final int position) {
             holder.username.setText(list.get(position).username);
+            if(list.get(position).imageUrl !=null) {
+                //File f = new File(response.body().imageUrl);
+                Picasso.get().load(list.get(position).imageUrl).fit().centerCrop().into(holder.searchProfileImage);
+            }
+            else
+                holder.searchProfileImage.setImageResource(R.drawable.profile_photo);
 
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -159,10 +170,6 @@ public class SearchUserFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putString("username", usrname);
                     Navigation.findNavController(view).navigate(R.id.action_SearchUserFragment_to_ViewProfileFragment, bundle);
-                  /*  Intent i = new Intent(SearchActivity.this, ViewProfileActivity.class);
-                    i.putExtra("username",list.get(position).username);
-                    SearchActivity.this.startActivity(i);
-                    SearchActivity.this.finish();*/
                 }
             });
 

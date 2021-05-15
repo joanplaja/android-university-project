@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.squareup.picasso.Picasso;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -173,6 +176,13 @@ public class ViewProfileFragment extends Fragment {
                                 viewProfileName.setText(responseUser.body().username);
                                 TextView viewProfileDescription = rootView.findViewById(R.id.viewProfileDescription);
                                 viewProfileDescription.setText(responseUser.body().description);
+                                ImageView viewProfileImage = ViewProfileFragment.this.getView().findViewById(R.id.viewProfileImage);
+                                if(responseUser.body().imageUrl!=null) {
+                                    //File f = new File(response.body().imageUrl);
+                                    Picasso.get().load(responseUser.body().imageUrl).fit().centerCrop().into(viewProfileImage);
+                                }
+                                else
+                                    viewProfileImage.setImageResource(R.drawable.profile_photo);
                             } else {
                                 //Toast.makeText(ViewProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
                             }
