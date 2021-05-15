@@ -3,6 +3,7 @@ package org.udg.pds.todoandroid.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,13 +16,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import org.udg.pds.todoandroid.R;
-import org.udg.pds.todoandroid.activity.SearchActivity;
+
 import org.udg.pds.todoandroid.fragment.SectionsPagerAdapter;
 
 public class FollowingFollowersFragment extends Fragment {
@@ -52,7 +54,26 @@ public class FollowingFollowersFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
+        //setRetainInstance(false);
+        setRetainInstance(true);
+        Log.v("Oncreatexd","On create de FollFoll");
 
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+      /*  Fragment fragment = (this.getChildFragmentManager().findFragmentById(R.id.tabsFollowingFollowers));
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.remove(fragment);
+        ft.commit();*/
+        Log.v("Ondestvxd","On destv de FollFoll");
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.v("Onresumexd","On resume de FollFoll");
     }
 
     private void setUpTabs(View rootView,String selectedTab){
@@ -70,6 +91,7 @@ public class FollowingFollowersFragment extends Fragment {
         if(selectedTab.equals("following"))
             tabs.getTabAt(1).select();
 
+        Log.v("setupxd","Setup de FollFoll");
     }
 
     @Override
@@ -83,6 +105,7 @@ public class FollowingFollowersFragment extends Fragment {
         selectedTab = getArguments().getString("type");
 
         setUpTabs(rootView,selectedTab);
+        Log.v("Oncreatevxd","On createv de FollFoll");
 
         return rootView;
     }

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -19,7 +21,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.activity.GraphicActivityTabbed;
-import org.udg.pds.todoandroid.activity.SearchActivity;
 import org.udg.pds.todoandroid.fragment.SectionsPagerAdapter;
 
 public class FriendsFragment extends Fragment {
@@ -76,8 +77,10 @@ public class FriendsFragment extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent I = new Intent(getActivity(), SearchActivity.class);
-                startActivity(I);
+                NavDirections action = FriendsFragmentDirections.actionFriendsFragmentToSearchUserFragment();
+                Navigation.findNavController(v).navigate(action);
+                /*Intent I = new Intent(getActivity(), SearchActivity.class);
+                startActivity(I);*/
             }
         });
 
@@ -103,9 +106,11 @@ public class FriendsFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.searchfriend) {
-            Intent I = new Intent(getActivity(), SearchActivity.class);
+           /* NavDirections action = FriendsFragmentDirections.actionFriendsFragmentToSearchUserFragment();
+            Navigation.findNavController(v).navigate(action);*/
+           /* Intent I = new Intent(getActivity(), SearchActivity.class);
             startActivity(I);
-            return true;
+            return true;*/
         }
 
         return super.onOptionsItemSelected(item);

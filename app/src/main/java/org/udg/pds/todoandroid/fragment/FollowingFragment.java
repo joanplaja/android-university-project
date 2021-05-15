@@ -3,6 +3,7 @@ package org.udg.pds.todoandroid.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
-import org.udg.pds.todoandroid.activity.SearchActivity;
+
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
@@ -29,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FollowingFragment extends Fragment {
+public class FollowingFragment extends Fragment{
 
     Context context;
     private SFAdapter mAdapter;
@@ -48,6 +49,16 @@ public class FollowingFragment extends Fragment {
         return fragment;
     }
 
+   /* public void update() {
+        getTheFollowing();
+    }*/
+
+    public void onCreate(Bundle savedInstance){
+        super.onCreate(savedInstance);
+        setRetainInstance(false);
+        Log.v("Oncreatexd","On create de ing");
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -56,7 +67,8 @@ public class FollowingFragment extends Fragment {
         mAdapter = new SFAdapter(this.getActivity().getApplication());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        //getTheFollowing();
+        Log.v("Onstartxd","On start de ing");
+        getTheFollowing();
 
     }
 
@@ -69,7 +81,8 @@ public class FollowingFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_friends_list, container, false);
         setHasOptionsMenu(true);
         context = this.getContext();
-
+        Log.v("Oncreatevxd","On createv de ing");
+        //this.getTheFollowing();
         return rootView;
     }
 
@@ -97,11 +110,18 @@ public class FollowingFragment extends Fragment {
             mAdapter.add(u);
         }
     }
-
+/*
     @Override
     public void onResume() {
         super.onResume();
-        this.getTheFollowing();
+        Log.v("Onresumexd","On resume de ing");
+        //this.getTheFollowing();
+    }*/
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        Log.v("Ondestvxd","On destv de ing");
     }
 
     static class UserViewHolder extends RecyclerView.ViewHolder {

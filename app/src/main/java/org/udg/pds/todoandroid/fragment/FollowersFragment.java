@@ -3,6 +3,7 @@ package org.udg.pds.todoandroid.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
-import org.udg.pds.todoandroid.activity.SearchActivity;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
@@ -48,6 +48,13 @@ public class FollowersFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstance){
+        super.onCreate(savedInstance);
+        setRetainInstance(false);
+        Log.v("Oncreatexd","On create de ers");
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
@@ -56,7 +63,7 @@ public class FollowersFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         getTheFollowers();
-
+        Log.v("Onstartxd","On start de ers");
     }
 
 
@@ -68,7 +75,7 @@ public class FollowersFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_friends_list, container, false);
         setHasOptionsMenu(true);
         context = this.getContext();
-
+        Log.v("Oncreatevxd","On createv de ers");
         return rootView;
     }
 
