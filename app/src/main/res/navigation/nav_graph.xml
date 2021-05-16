@@ -174,4 +174,10 @@
         android:label="fragment_add_objective"
         tools:layout="@layout/fragment_add_objective" />
 
+    <fragment
+        android:id="@+id/actionPostList"
+        android:name="org.udg.pds.todoandroid.fragment.PostFragment"
+        android:label="fragment_post_list"
+        tools:layout="@layout/fragment_post_list" />
+
 </navigation>
