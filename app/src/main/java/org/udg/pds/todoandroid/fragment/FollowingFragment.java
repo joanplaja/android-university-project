@@ -1,7 +1,6 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,12 +9,14 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -128,12 +129,14 @@ public class FollowingFragment extends Fragment{
         TextView username;
         View view;
         Button unfollowButton;
+        ImageView followingProfileImage;
 
         UserViewHolder(View itemView) {
             super(itemView);
             view = itemView;
             username = itemView.findViewById(R.id.itemUsername);
             unfollowButton = itemView.findViewById(R.id.buttonUnfollow);
+            followingProfileImage = itemView.findViewById(R.id.imageViewFollowing);
         }
     }
 
@@ -157,6 +160,11 @@ public class FollowingFragment extends Fragment{
         @Override
         public void onBindViewHolder(FollowingFragment.UserViewHolder holder, final int position) {
             holder.username.setText(list.get(position).username);
+            if(list.get(position).imageUrl !=null) {
+                Picasso.get().load(list.get(position).imageUrl).fit().centerCrop().into(holder.followingProfileImage);
+            }
+            else
+                holder.followingProfileImage.setImageResource(R.drawable.profile_photo);
 
             holder.unfollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override

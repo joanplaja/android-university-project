@@ -12,11 +12,11 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/imageView4"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewFollowing"
             android:layout_width="74dp"
             android:layout_height="44dp"
-            app:srcCompat="@drawable/profile_photo" />
+            android:src="@drawable/profile_photo" />
 
         <TextView
             android:id="@+id/itemUsername"

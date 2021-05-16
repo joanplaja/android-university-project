@@ -1,7 +1,6 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -107,11 +108,13 @@ public class FollowersFragment extends Fragment {
     static class UserViewHolder extends RecyclerView.ViewHolder {
         TextView username;
         View view;
+        ImageView followerProfileImage;
 
         UserViewHolder(View itemView) {
             super(itemView);
             view = itemView;
             username = itemView.findViewById(R.id.itemUsername);
+            followerProfileImage = itemView.findViewById(R.id.imageViewFollower);
         }
     }
 
@@ -135,6 +138,11 @@ public class FollowersFragment extends Fragment {
         @Override
         public void onBindViewHolder(FollowersFragment.UserViewHolder holder, final int position) {
             holder.username.setText(list.get(position).username);
+            if(list.get(position).imageUrl !=null) {
+                Picasso.get().load(list.get(position).imageUrl).fit().centerCrop().into(holder.followerProfileImage);
+            }
+            else
+                holder.followerProfileImage.setImageResource(R.drawable.profile_photo);
 
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
