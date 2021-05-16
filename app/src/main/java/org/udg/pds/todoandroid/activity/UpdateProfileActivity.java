@@ -107,6 +107,25 @@ public class UpdateProfileActivity extends AppCompatActivity {
             }
         });
 
+        Button pb = findViewById(R.id.updateProfileChangePrivacyButton);
+        pb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call <String> callPriv = mTodoService.changePrivacy();
+                callPriv.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Toast.makeText(UpdateProfileActivity.this, "Succsessfully changed the privacy", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast.makeText(UpdateProfileActivity.this, "Error changing privacy", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
         Button b = findViewById(R.id.updateProfileSaveButton);
         // This is the listener that will be used when the user presses the "Save" button
         b.setOnClickListener(new View.OnClickListener(){

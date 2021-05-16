@@ -2,6 +2,7 @@ package org.udg.pds.todoandroid.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -219,6 +220,12 @@ public class ViewProfileFragment extends Fragment {
                                         Picasso.get().load(responseUser.body().imageUrl).fit().centerCrop().into(viewProfileImage);
                                     } else
                                         viewProfileImage.setImageResource(R.drawable.profile_photo);
+                                    if(responseUser.body().privacy == true){
+                                        Log.v("viewPro", String.valueOf(responseUser.body().privacy));
+                                        TextView viewProfilePrivacyText = rootView.findViewById(R.id.viewProfileDescription);
+                                        viewProfileDescription.setText("This profile is private");
+                                    }
+
                                 } else {
                                     //Toast.makeText(ViewProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
                                 }

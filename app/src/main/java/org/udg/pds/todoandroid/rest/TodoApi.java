@@ -139,5 +139,8 @@ public interface TodoApi {
 
     @DELETE("/equipment/{eid}")
     Call<String> deleteEquipment(@Path("eid") Long equipmentId);
+
+    @GET("/users/private")
+    Call <String> changePrivacy();
 }
 
