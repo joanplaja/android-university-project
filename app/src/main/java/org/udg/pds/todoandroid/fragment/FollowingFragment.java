@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +37,7 @@ public class FollowingFragment extends Fragment{
     Context context;
     private SFAdapter mAdapter;
     TodoApi mTodoService;
+    View rootView;
 
     RecyclerView mRecyclerView;
 
@@ -79,7 +81,7 @@ public class FollowingFragment extends Fragment{
                              Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_friends_list, container, false);
+        rootView = inflater.inflate(R.layout.fragment_friends_list, container, false);
         setHasOptionsMenu(true);
         context = this.getContext();
         Log.v("Oncreatevxd","On createv de ing");
@@ -165,6 +167,16 @@ public class FollowingFragment extends Fragment{
             }
             else
                 holder.followingProfileImage.setImageResource(R.drawable.profile_photo);
+
+            holder.view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String usrname = list.get(position).username;
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", usrname);
+                    Navigation.findNavController(rootView).navigate(R.id.action_FollowingFollowersFragment_to_ViewProfileFragment, bundle);
+                }
+            });
 
             holder.unfollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override

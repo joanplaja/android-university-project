@@ -30,22 +30,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FollowersFragment extends Fragment {
-
+public class ViewFollFragment extends Fragment {
     Context context;
     private SFAdapter mAdapter;
     TodoApi mTodoService;
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private String mParam1;
+    private Long mParam2;
     View rootView;
 
     RecyclerView mRecyclerView;
 
-    public FollowersFragment(){
+    public ViewFollFragment(){
 
     }
 
-    public static FollowersFragment newInstance(String param1, String param2) {
-        FollowersFragment fragment = new FollowersFragment();
+    public ViewFollFragment(String param1,Long param2){
+        mParam1 = param1;
+        mParam2 = param2;
+    }
+
+    public static ViewFollFragment newInstance(String param1, Long param2) {
+        ViewFollFragment fragment = new ViewFollFragment();
         Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putLong(ARG_PARAM2,param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,8 +63,6 @@ public class FollowersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        setRetainInstance(false);
-        Log.v("Oncreatexd","On create de ers");
     }
 
     @Override
@@ -65,10 +73,12 @@ public class FollowersFragment extends Fragment {
         mAdapter = new SFAdapter(this.getActivity().getApplication());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        getTheFollowers();
-        Log.v("Onstartxd","On start de ers");
+        Log.v("ALVIEWFOLLXD", String.valueOf(mParam2));
+        if(mParam1.equals("ers"))
+            getTheFollowers(mParam2);
+        else
+            getTheFollowing(mParam2);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,12 +88,31 @@ public class FollowersFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_friends_list, container, false);
         setHasOptionsMenu(true);
         context = this.getContext();
-        Log.v("Oncreatevxd","On createv de ers");
         return rootView;
     }
 
-    public void getTheFollowers() {
-        Call<List<User>> call = mTodoService.getOwnFollowers();
+    public void getTheFollowers(Long id) {
+        //Log.v("Ongettheers", String.valueOf(mParam2));
+        Call<List<User>> call = mTodoService.getFollowers(mParam2);
+        call.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful()) {
+                    showUserList(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+
+            }
+
+        });
+    }
+
+    public void getTheFollowing(Long id) {
+        Log.v("Ongettheing", String.valueOf(mParam2));
+        Call<List<User>> call = mTodoService.getFollowing(Long.valueOf(mParam2));
         call.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
@@ -120,7 +149,7 @@ public class FollowersFragment extends Fragment {
         }
     }
 
-    class SFAdapter extends RecyclerView.Adapter<FollowersFragment.UserViewHolder> {
+    class SFAdapter extends RecyclerView.Adapter<ViewFollFragment.UserViewHolder> {
 
         List<User> list = new ArrayList<>();
         Context context;
@@ -130,15 +159,15 @@ public class FollowersFragment extends Fragment {
         }
 
         @Override
-        public FollowersFragment.UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewFollFragment.UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.follower_layout, parent, false);
-            FollowersFragment.UserViewHolder holder = new FollowersFragment.UserViewHolder(v);
+            ViewFollFragment.UserViewHolder holder = new ViewFollFragment.UserViewHolder(v);
 
             return holder;
         }
 
         @Override
-        public void onBindViewHolder(FollowersFragment.UserViewHolder holder, final int position) {
+        public void onBindViewHolder(ViewFollFragment.UserViewHolder holder, final int position) {
             holder.username.setText(list.get(position).username);
             if(list.get(position).imageUrl !=null) {
                 Picasso.get().load(list.get(position).imageUrl).fit().centerCrop().into(holder.followerProfileImage);
@@ -149,12 +178,20 @@ public class FollowersFragment extends Fragment {
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String usrname = list.get(position).username;
-                    Bundle bundle = new Bundle();
-                    bundle.putString("username", usrname);
-                    Navigation.findNavController(rootView).navigate(R.id.action_FollowingFollowersFragment_to_ViewProfileFragment, bundle);
+                    holder.view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String usrname = list.get(position).username;
+                            Bundle bundle = new Bundle();
+                            bundle.putString("username", usrname);
+                            Navigation.findNavController(rootView).navigate(R.id.action_ViewFollowingFollowersFragment_to_ViewProfileFragment, bundle);
+                        }
+                    });
+
                 }
             });
+
+
             animate(holder);
         }
 
@@ -198,4 +235,6 @@ public class FollowersFragment extends Fragment {
             this.notifyItemRangeRemoved(0, size);
         }
     }
+
+
 }
