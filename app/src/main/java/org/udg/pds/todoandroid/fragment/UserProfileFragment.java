@@ -174,8 +174,6 @@ public class UserProfileFragment extends Fragment {
             public void onClick(View v) {
                 NavDirections action = UserProfileFragmentDirections.actionUserProfileFragmentToObjectivesFragment();
                 Navigation.findNavController(v).navigate(action);
-//                Intent I = new Intent(getActivity(), ObjectivesActivityTabbed.class);
-//                startActivity(I);
             }
         });
 
