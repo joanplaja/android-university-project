@@ -104,9 +104,7 @@ public class PostFragment extends Fragment {
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful()) {
                     mValues = response.body();
-                    Log.i(TAG, "onResponse: " + mValues.get(0).description);
-                    PostFragment.this.showPostList(mValues);
-                    //
+                    showPostList(mValues);
                 } else {
                     Toast.makeText(PostFragment.this.getContext(), "Error reading Posts", Toast.LENGTH_LONG).show();
                 }
