@@ -5,6 +5,7 @@ import org.udg.pds.todoandroid.entity.FindFacebookFriends;
 import org.udg.pds.todoandroid.entity.FindPhoneFriends;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.NearRoutes;
+import org.udg.pds.todoandroid.entity.Objective;
 import org.udg.pds.todoandroid.entity.PostBody;
 import org.udg.pds.todoandroid.entity.Route;
 import org.udg.pds.todoandroid.entity.Task;
@@ -139,5 +140,8 @@ public interface TodoApi {
 
     @DELETE("/equipment/{eid}")
     Call<String> deleteEquipment(@Path("eid") Long equipmentId);
+
+    @GET("/objectives")
+    Call<List<Objective>> getObjectives();
 }
 
