@@ -5,6 +5,7 @@ import org.udg.pds.todoandroid.entity.FindFacebookFriends;
 import org.udg.pds.todoandroid.entity.FindPhoneFriends;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.NearRoutes;
+import org.udg.pds.todoandroid.entity.Post;
 import org.udg.pds.todoandroid.entity.Objective;
 import org.udg.pds.todoandroid.entity.PostBody;
 import org.udg.pds.todoandroid.entity.Route;
@@ -93,6 +94,9 @@ public interface TodoApi {
 
     @POST("/posts")
     Call<IdObject> createPost(@Body PostBody post);
+
+    @GET("/posts")
+    Call<List<Post>> getPosts();
 
     @GET("/users")
     Call<List<User>> searchUser(@Query("search") String name);

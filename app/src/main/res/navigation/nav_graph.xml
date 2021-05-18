@@ -149,6 +149,9 @@
         <action
             android:id="@+id/action_workoutDetailsFragment_to_actionWorkoutList"
             app:destination="@id/actionWorkoutList" />
+        <action
+            android:id="@+id/action_workoutDetailsFragment_to_actionPostList"
+            app:destination="@id/actionPostList" />
     </fragment>
     <fragment
         android:id="@+id/followingFollowersFragment"
@@ -200,5 +203,11 @@
         android:name="org.udg.pds.todoandroid.fragment.FollowersFragment"
         android:label="fragment_followers"
         tools:layout="@layout/fragment_friends_list" />
+
+    <fragment
+        android:id="@+id/actionPostList"
+        android:name="org.udg.pds.todoandroid.fragment.PostFragment"
+        android:label="fragment_post_list"
+        tools:layout="@layout/fragment_post_list" />
 
 </navigation>

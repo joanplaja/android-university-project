@@ -215,6 +215,11 @@ public class WorkoutDetailsFragment extends Fragment {
                     makeCreatePostCall();
                 }
 
+                NavDirections action =
+                    WorkoutDetailsFragmentDirections.actionWorkoutDetailsFragmentToActionWorkoutList();
+                Navigation.findNavController(getView()).navigate(action);
+                dialogPost.dismiss();
+
             }
         });
 
@@ -231,14 +236,12 @@ public class WorkoutDetailsFragment extends Fragment {
         PostBody body = new PostBody();
         body.workoutId = id;
         body.description = postDescription.getText().toString();
-        //Log.i(TAG, "storedImageUri: " + storedImageUri);
         body.imageUrl = storedImageUri;
         Call<IdObject> call = mTodoService.createPost(body);
         call.enqueue(new Callback<IdObject>() {
             @Override
             public void onResponse(Call<IdObject> call, Response<IdObject> response) {
                 if (response.isSuccessful()) {
-                    //Anar a la feed, on ja hauria d'apareixer el post que acabem de fer.
                 }
                 else{
                     Toast toast = Toast.makeText(getActivity(), "Something went wrong with the API call.", Toast.LENGTH_SHORT);
