@@ -2,16 +2,21 @@ package org.udg.pds.todoandroid.fragment;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.entity.DictionaryImages;
+import org.udg.pds.todoandroid.entity.Point;
 import org.udg.pds.todoandroid.entity.Post;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,27 +43,54 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     @Override
     public void onBindViewHolder(final PostViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+
         holder.mUsernameView.setText(holder.mItem.workout.user.username);
+
         holder.mDescriptionView.setText(holder.mItem.description);
-        //mImageView
-        //mAvatarView
+
+        //Recupero la uri de la imatge
+        String imageUri = holder.mItem.imageUrl;
+        if (imageUri != "") {
+            Picasso.get().load(imageUri).fit().centerCrop().into(holder.mImageView);
+        }
+
+        //Recupero la uri de l'avatar
+        String avatarUri = holder.mItem.workout.user.imageUrl;
+        if (avatarUri != null) {
+            Picasso.get().load(avatarUri).fit().centerCrop().into(holder.mAvatarView);
+        }
+
+        //Recupero la icona del tipus de workout
         Integer icon = dictionaryImages.images.get(holder.mItem.workout.type);
         holder.mWorkoutIconView.setImageResource(icon);
+
         holder.mWorkoutTypeView.setText(holder.mItem.workout.type);
 
-        //TODO: fer el calcul de la distancia
-        double distance = 20.0;
-        String textDistance = "Distance: " + distance;
+        DecimalFormat df = new DecimalFormat("#.00");
+
+        //Fem el calcul de la distancia
+        double distance = 0.0;
+        for (Point p : holder.mItem.workout.route.points) {
+            distance = distance + p.distanceDiff;
+        }
+        String textDistance = "Distance: " + df.format(distance) + " km";
         holder.mDistanceView.setText(textDistance);
 
-        //TODO: fer el calcul del temps
-        double time = 20.0;
-        String textTime = "Time: " + time;
+        //Fem el calcul del temps
+        double time = 0.0;
+        for (Point p : holder.mItem.workout.route.points) {
+            time = time + p.timeDiff;
+        }
+        String textTime = "Time: " + df.format(time) + " min";
         holder.mTimeView.setText(textTime);
 
-        //TODO: fer el calcul del l'average pace
-        double averagePace = 15.34;
-        String textAveragePace = "Avg. Pace: " + averagePace;
+        //Fem el calcul del averagePace
+        double averagePace = 0.0;
+        for (Point p : holder.mItem.workout.route.points) {
+            averagePace = averagePace + p.velocity;
+        }
+        averagePace = averagePace / holder.mItem.workout.route.points.size();
+        String textAveragePace = "Avg. Pace: " + df.format(averagePace) + " min/km";
         holder.mAveragePaceView.setText(textAveragePace);
     }
 

@@ -148,6 +148,9 @@
         <action
             android:id="@+id/action_workoutDetailsFragment_to_actionWorkoutList"
             app:destination="@id/actionWorkoutList" />
+        <action
+            android:id="@+id/action_workoutDetailsFragment_to_actionPostList"
+            app:destination="@id/actionPostList" />
     </fragment>
     <fragment
         android:id="@+id/followingFollowersFragment"
