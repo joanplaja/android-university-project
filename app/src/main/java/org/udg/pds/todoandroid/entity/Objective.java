@@ -8,5 +8,5 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class Objective {
     public Long id;
     public String type;
-    public String goal;
+    public double goal;
 }

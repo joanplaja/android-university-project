@@ -24,14 +24,14 @@
 
 
         <TextView
-            android:id="@+id/type"
+            android:id="@+id/goal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:padding="12dp"
             android:text="Temporal Text"
             android:textColor="#033a06"
-            android:textSize="18dp"
-            android:padding="7dp"
+            android:textSize="22sp"
             android:textStyle="bold|italic" />
 
     </LinearLayout>
