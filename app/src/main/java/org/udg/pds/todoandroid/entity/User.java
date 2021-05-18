@@ -15,4 +15,5 @@ public class User {
     public Integer phoneNumber;
     public String description;
     public String imageUrl;
+    public Boolean privacy;
 }

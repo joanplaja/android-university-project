@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,10 +24,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.Objective;
+import org.udg.pds.todoandroid.entity.Workout;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerViewAdapter.OnObjectiveListener {
 
@@ -62,7 +68,7 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
     public void onStart() {
         super.onStart();
         mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
-        //updateObjectives();
+        updateObjectives();
     }
 
     @Override
@@ -104,30 +110,28 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
         return view;
     }
 
-    /*private void updateObjectives() {
+    private void updateObjectives() {
         Call<List<Objective>> call = mTodoService.getObjectives();
 
-        call.enqueue(new Callback<List<Workout>>() {
+        call.enqueue(new Callback<List<Objective>>() {
             @Override
-            public void onResponse(Call<List<Workout>> call, Response<List<Workout>> response) {
+            public void onResponse(Call<List<Objective>> call, Response<List<Objective>> response) {
                 if (response.isSuccessful()) {
                     mValues = response.body();
-                    WorkoutFragment.this.showWorkoutList(mValues);
-                    //
+                    ObjectivesFragment.this.showObjectivesList(mValues);
                 } else {
-                    Toast.makeText(WorkoutFragment.this.getContext(), "Error reading Workouts", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ObjectivesFragment.this.getContext(), "Error reading objectives", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Workout>> call, Throwable t) {
-                Toast.makeText(WorkoutFragment.this.getContext(), "Error making call", Toast.LENGTH_LONG).show();
+            public void onFailure(Call<List<Objective>> call, Throwable t) {
+                Toast.makeText(ObjectivesFragment.this.getContext(), "Error making call", Toast.LENGTH_LONG).show();
             }
         });
     }
-*/
-    private void showWorkoutList(List<Objective> objectives) {
-//        adapter.setObjectives(objectives);
+    private void showObjectivesList(List<Objective> objectives) {
+           adapter.setObjectives(objectives);
     }
 
     @Override

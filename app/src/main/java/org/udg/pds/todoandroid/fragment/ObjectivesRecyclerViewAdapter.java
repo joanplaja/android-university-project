@@ -3,16 +3,15 @@ package org.udg.pds.todoandroid.fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.udg.pds.todoandroid.R;
-import org.udg.pds.todoandroid.entity.DictionaryImages;
 import org.udg.pds.todoandroid.entity.Objective;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class ObjectivesRecyclerViewAdapter extends RecyclerView.Adapter<Objectiv
 
     private List<Objective> mValues = new ArrayList<>();
     private OnObjectiveListener mOnObjectiveListener;
-    private DictionaryImages dictionaryImages = new DictionaryImages();
+    //private DictionaryImages dictionaryImages = new DictionaryImages();
 
     public ObjectivesRecyclerViewAdapter(ObjectivesRecyclerViewAdapter.OnObjectiveListener onObjectiveListener) {
         this.mOnObjectiveListener = onObjectiveListener;
@@ -33,7 +32,7 @@ public class ObjectivesRecyclerViewAdapter extends RecyclerView.Adapter<Objectiv
 
     @Override
     public ObjectiveViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_objectives_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_objective, parent, false);
 //        Button botoObectius = view.findViewById(R.id.addObjective);
 //        botoObectius.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -48,8 +47,20 @@ public class ObjectivesRecyclerViewAdapter extends RecyclerView.Adapter<Objectiv
     public void onBindViewHolder(final ObjectivesRecyclerViewAdapter.ObjectiveViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mId.setText(mValues.get(position).id.toString());
-        holder.mType.setText(mValues.get(position).type.toUpperCase());
-        String type = mValues.get(position).type;
+        String objectiveType = mValues.get(position).type;
+        String type = null;
+        if(objectiveType.equals("duration"))
+            type = "minutes";
+        else if(objectiveType.equals("distance"))
+            type = "metres";
+        else if(objectiveType.equals("workouts"))
+            type = "workouts";
+
+        DecimalFormat df = new DecimalFormat("###.#");
+        double objectiveGoal = mValues.get(position).goal;
+        String goal = df.format(objectiveGoal);
+        holder.mType.setText(goal + "  " + type);
+
         //holder.mIcon.setImageResource(dictionaryImages.images.get(type));
     }
 
@@ -58,10 +69,10 @@ public class ObjectivesRecyclerViewAdapter extends RecyclerView.Adapter<Objectiv
         return mValues.size();
     }
 
-    /*public void setObjectives(List<Objective> objectives) {
+    public void setObjectives(List<Objective> objectives) {
         mValues = objectives;
         notifyDataSetChanged();
-    }*/
+    }
 
     public class ObjectiveViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
@@ -75,7 +86,7 @@ public class ObjectivesRecyclerViewAdapter extends RecyclerView.Adapter<Objectiv
             super(view);
             mView = view;
             mId = (TextView) view.findViewById(R.id.id);
-            mType = (TextView) view.findViewById(R.id.type);
+            mType = (TextView) view.findViewById(R.id.goal);
             mIcon = (ImageView) view.findViewById(R.id.icon);
             this.onObjectiveListener = onObjectiveListener;
 
