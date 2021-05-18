@@ -10,7 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.squareup.picasso.Picasso;
 
@@ -116,6 +119,28 @@ public class ViewProfileFragment extends Fragment {
                         });
                     }
                 });
+                CardView cardFollowers, cardFollowing;
+                cardFollowers = rootView.findViewById(R.id.viewProfileCardFollowers);
+                cardFollowers.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        NavDirections action =
+                            ViewProfileFragmentDirections
+                                .actionViewProfileFragmentToSocial("followers",uId);
+                        Navigation.findNavController(v).navigate(action);
+                    }
+                });
+
+                cardFollowing = rootView.findViewById(R.id.viewProfileCardFollowing);
+                cardFollowing.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        NavDirections action =
+                            ViewProfileFragmentDirections
+                                .actionViewProfileFragmentToSocial("following",uId);
+                        Navigation.findNavController(v).navigate(action);
+                    }
+                });
             }
 
             @Override
@@ -159,105 +184,123 @@ public class ViewProfileFragment extends Fragment {
     public void loadProfile(String usernameArg,View rootView,final GetCallbacks getCallbacks) {
         //android todoApi (retrofit) -> Spring controller (retorna resposta http) -> onResponse i la processem.
         //response.body() es tipo user
-
-        Call<Long> call = mTodoService.getIdByUsername(usernameArg);
-
-        call.enqueue(new Callback<Long>() {
+        Call <User> callMe = mTodoService.getUserMe();
+        callMe.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<Long> call, Response<Long> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(Call<User> callMe, Response<User> response) {
 
-                    Call<User> callUser = mTodoService.getUser(response.body());
-                    callUser.enqueue(new Callback<User>() {
-                        @Override
-                        public void onResponse(Call<User> callUser, Response<User> responseUser) {
-                            if (responseUser.isSuccessful()) {
-                                TextView viewProfileName = rootView.findViewById(R.id.viewProfileName);
-                                viewProfileName.setText(responseUser.body().username);
-                                TextView viewProfileDescription = rootView.findViewById(R.id.viewProfileDescription);
-                                viewProfileDescription.setText(responseUser.body().description);
-                                ImageView viewProfileImage = ViewProfileFragment.this.getView().findViewById(R.id.viewProfileImage);
-                                if(responseUser.body().imageUrl!=null) {
-                                    //File f = new File(response.body().imageUrl);
-                                    Picasso.get().load(responseUser.body().imageUrl).fit().centerCrop().into(viewProfileImage);
+            if(usernameArg.equals(response.body().username)){
+                NavDirections action =
+                    ViewProfileFragmentDirections
+                        .actionViewProfileFragmentToUserProfileFragment();
+                Navigation.findNavController(rootView).navigate(action);
+            }
+        else {
+
+            Call<Long> call = mTodoService.getIdByUsername(usernameArg);
+
+            call.enqueue(new Callback<Long>() {
+                @Override
+                public void onResponse(Call<Long> call, Response<Long> response) {
+                    if (response.isSuccessful()) {
+
+                        Call<User> callUser = mTodoService.getUser(response.body());
+                        callUser.enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> callUser, Response<User> responseUser) {
+                                if (responseUser.isSuccessful()) {
+                                    TextView viewProfileName = rootView.findViewById(R.id.viewProfileName);
+                                    viewProfileName.setText(responseUser.body().username);
+                                    TextView viewProfileDescription = rootView.findViewById(R.id.viewProfileDescription);
+                                    viewProfileDescription.setText(responseUser.body().description);
+                                    ImageView viewProfileImage = ViewProfileFragment.this.getView().findViewById(R.id.viewProfileImage);
+                                    if (responseUser.body().imageUrl != null) {
+                                        //File f = new File(response.body().imageUrl);
+                                        Picasso.get().load(responseUser.body().imageUrl).fit().centerCrop().into(viewProfileImage);
+                                    } else
+                                        viewProfileImage.setImageResource(R.drawable.profile_photo);
+                                } else {
+                                    //Toast.makeText(ViewProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
                                 }
-                                else
-                                    viewProfileImage.setImageResource(R.drawable.profile_photo);
-                            } else {
-                                //Toast.makeText(ViewProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<User> callUser, Throwable t) {
+                            @Override
+                            public void onFailure(Call<User> callUser, Throwable t) {
 
-                        }
-                    });
+                            }
+                        });
 
-                    Call<List<User>> callFollowing = mTodoService.getFollowing(response.body());
-                    callFollowing.enqueue(new Callback<List<User>>() {
-                        @Override
-                        public void onResponse(Call<List<User>> callFollowing, Response<List<User>> responseFollowing) {
-                            TextView viewProfileFollowing = rootView.findViewById(R.id.viewProfileFollowingNumber);
-                            viewProfileFollowing.setText(String.valueOf(responseFollowing.body().size()));
-                        }
+                        Call<List<User>> callFollowing = mTodoService.getFollowing(response.body());
+                        callFollowing.enqueue(new Callback<List<User>>() {
+                            @Override
+                            public void onResponse(Call<List<User>> callFollowing, Response<List<User>> responseFollowing) {
+                                TextView viewProfileFollowing = rootView.findViewById(R.id.viewProfileFollowingNumber);
+                                viewProfileFollowing.setText(String.valueOf(responseFollowing.body().size()));
+                            }
 
-                        @Override
-                        public void onFailure(Call<List<User>> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<List<User>> call, Throwable t) {
 
-                        }
-                    });
+                            }
+                        });
 
-                    Call <User> callGetMe = mTodoService.getUserMe();
-                    callGetMe.enqueue(new Callback<User>() {
-                        @Override
-                        public void onResponse(Call<User> callGetMe, Response<User> responseGetMe) {
-                            Call<List<User>> callFollowers = mTodoService.getFollowers(response.body());
-                            callFollowers.enqueue(new Callback<List<User>>() {
-                                @Override
-                                public void onResponse(Call<List<User>> callFollowers, Response<List<User>> responseFollowers) {
-                                    TextView viewProfileFollowers = rootView.findViewById(R.id.viewProfileFollowersNumber);
-                                    viewProfileFollowers.setText(String.valueOf(responseFollowers.body().size()));
-                                    boolean found =false;
-                                    int i =0;
-                                    while(!found && i<responseFollowers.body().size()){
-                                        if(responseFollowers.body().get(i).username.equals(responseGetMe.body().username))
-                                            found = true;
-                                        i++;
+                        Call<User> callGetMe = mTodoService.getUserMe();
+                        callGetMe.enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> callGetMe, Response<User> responseGetMe) {
+                                Call<List<User>> callFollowers = mTodoService.getFollowers(response.body());
+                                callFollowers.enqueue(new Callback<List<User>>() {
+                                    @Override
+                                    public void onResponse(Call<List<User>> callFollowers, Response<List<User>> responseFollowers) {
+                                        TextView viewProfileFollowers = rootView.findViewById(R.id.viewProfileFollowersNumber);
+                                        viewProfileFollowers.setText(String.valueOf(responseFollowers.body().size()));
+                                        boolean found = false;
+                                        int i = 0;
+                                        while (!found && i < responseFollowers.body().size()) {
+                                            if (responseFollowers.body().get(i).username.equals(responseGetMe.body().username))
+                                                found = true;
+                                            i++;
+                                        }
+                                        if (found) {
+                                            getCallbacks.onSuccess(response.body(), true);
+                                        } else {
+                                            getCallbacks.onSuccess(response.body(), false);
+                                        }
+
                                     }
-                                    if (found){
-                                        getCallbacks.onSuccess(response.body(),true);
+
+                                    @Override
+                                    public void onFailure(Call<List<User>> call, Throwable t) {
+
                                     }
-                                    else{
-                                        getCallbacks.onSuccess(response.body(),false);
-                                    }
+                                });
+                            }
 
-                                }
+                            @Override
+                            public void onFailure(Call<User> callGetMe, Throwable t) {
 
-                                @Override
-                                public void onFailure(Call<List<User>> call, Throwable t) {
-
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onFailure(Call<User> callGetMe, Throwable t) {
-
-                        }
-                    });
+                            }
+                        });
 
 
-
-                } else {
-                    //Toast.makeText(ViewProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
+                    } else {
+                        //Toast.makeText(ViewProfileFragment.this.getContext(), "Error reading tasks", Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
 
+                @Override
+                public void onFailure(Call<Long> call, Throwable t) {
+
+                }
+            });
+        }
+            }
             @Override
-            public void onFailure(Call<Long> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
 
             }
+
+
         });
 
     }

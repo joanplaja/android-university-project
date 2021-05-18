@@ -105,24 +105,25 @@
         </action>
     </fragment>
 
-
-<!--    <activity-->
-<!--        android:id="@+id/searchActivity"-->
-<!--        android:name="org.udg.pds.todoandroid.activity.SearchActivity"-->
-<!--        android:label="search"-->
-<!--        tools:layout="@layout/search_user" />-->
-<!--    <action-->
-<!--        android:id="@+id/action_SearchActivity_to_viewProfileActivity"-->
-<!--        app:destination="@id/ViewProfileActivity" />-->
-<!--        <argument-->
-<!--             android:name="username"-->
-<!--             app:argType="string" />-->
-
     <fragment
     android:id="@+id/ViewProfileFragment"
     android:name="org.udg.pds.todoandroid.fragment.ViewProfileFragment"
     android:label="fragment_view_profile"
-    tools:layout="@layout/fragment_view_profile" />
+    tools:layout="@layout/fragment_view_profile">
+    <action
+        android:id="@+id/action_ViewProfileFragment_to_Social"
+        app:destination="@id/ViewFollowingFollowersFragment" >
+        <argument
+            android:name="type"
+            app:argType="string" />
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </action>
+        <action
+            android:id="@+id/action_ViewProfileFragment_to_UserProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/actionWorkoutList"
@@ -153,7 +154,15 @@
         android:id="@+id/followingFollowersFragment"
         android:name="org.udg.pds.todoandroid.fragment.FollowingFollowersFragment"
         android:label="fragment_following_followers"
-        tools:layout="@layout/fragment_following_followers"/>
+        tools:layout="@layout/fragment_following_followers">
+    <action
+        android:id="@+id/action_FollowingFollowersFragment_to_ViewProfileFragment"
+        app:destination="@id/ViewProfileFragment" >
+    <argument
+        android:name="username"
+        app:argType="string" />
+    </action>
+    </fragment>
     <fragment
         android:id="@+id/actionEquipmentList"
         android:name="org.udg.pds.todoandroid.fragment.EquipmentFragment"
@@ -173,5 +182,23 @@
         android:name="org.udg.pds.todoandroid.fragment.AddObjectiveFragment"
         android:label="fragment_add_objective"
         tools:layout="@layout/fragment_add_objective" />
+    <fragment
+        android:id="@+id/ViewFollowingFollowersFragment"
+        android:name="org.udg.pds.todoandroid.fragment.ViewFollowingFollowersFragment"
+        android:label="fragment_following_followers"
+        tools:layout="@layout/fragment_following_followers">
+        <action
+            android:id="@+id/action_ViewFollowingFollowersFragment_to_ViewProfileFragment"
+            app:destination="@id/ViewProfileFragment" >
+            <argument
+                android:name="username"
+                app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/FollowersFragment"
+        android:name="org.udg.pds.todoandroid.fragment.FollowersFragment"
+        android:label="fragment_followers"
+        tools:layout="@layout/fragment_friends_list" />
 
 </navigation>
