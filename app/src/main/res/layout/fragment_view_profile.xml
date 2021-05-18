@@ -138,6 +138,16 @@
             app:layout_constraintStart_toStartOf="@+id/viewProfileCardFollowers"
             app:layout_constraintTop_toBottomOf="@+id/viewProfileCardFollowers" />
 
+        <TextView
+            android:id="@+id/viewProfilePrivacyText"
+            android:layout_width="86dp"
+            android:layout_height="29dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            app:layout_constraintHorizontal_bias="0.414"
+            app:layout_constraintStart_toStartOf="@+id/viewProfileDescription"
+            app:layout_constraintTop_toBottomOf="@+id/viewProfileDescription" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"
             android:layout_width="wrap_content"
@@ -166,8 +176,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="465dp" />
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
