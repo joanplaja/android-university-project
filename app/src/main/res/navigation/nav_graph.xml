@@ -175,16 +175,7 @@
         android:id="@+id/objectivesFragment"
         android:name="org.udg.pds.todoandroid.fragment.ObjectivesFragment"
         android:label="fragment_objectives"
-        tools:layout="@layout/fragment_objectives_list" >
-         <action
-             android:id="@+id/action_objectivesFragment_to_addObjectiveFragment"
-             app:destination="@id/addObjectiveFragment" />
-     </fragment>
-    <fragment
-        android:id="@+id/addObjectiveFragment"
-        android:name="org.udg.pds.todoandroid.fragment.AddObjectiveFragment"
-        android:label="fragment_add_objective"
-        tools:layout="@layout/fragment_add_objective" />
+        tools:layout="@layout/fragment_objectives_list" />
     <fragment
         android:id="@+id/ViewFollowingFollowersFragment"
         android:name="org.udg.pds.todoandroid.fragment.ViewFollowingFollowersFragment"

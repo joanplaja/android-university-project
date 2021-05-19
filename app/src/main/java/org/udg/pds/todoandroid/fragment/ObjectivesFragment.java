@@ -1,6 +1,7 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +24,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.activity.GraphicActivityTabbed;
+import org.udg.pds.todoandroid.activity.ObjectiveCreateActivity;
 import org.udg.pds.todoandroid.entity.Objective;
 import org.udg.pds.todoandroid.entity.Workout;
 import org.udg.pds.todoandroid.rest.TodoApi;
@@ -103,8 +106,8 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
         botoObjectius.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavDirections action = ObjectivesFragmentDirections.actionObjectivesFragmentToAddObjectiveFragment();
-                Navigation.findNavController(v).navigate(action);
+                Intent I = new Intent(getActivity(), ObjectiveCreateActivity.class);
+                startActivity(I);
             }
         });
         return view;
