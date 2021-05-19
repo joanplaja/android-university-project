@@ -69,7 +69,6 @@
         <activity android:name=".activity.ActivityMaps" />
         <activity android:name=".activity.UpdateProfileActivity" />
         <activity android:name=".activity.EquipmentActivity" />
-        <activity android:name=".activity.ObjectivesActivityTabbed"/>
         <activity android:name=".activity.ObjectiveCreateActivity"/>
         <activity
             android:name=".activity.Login"

@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/phone"
+        android:id="@+id/goal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -56,7 +56,7 @@
         <!--        app:passwordToggleEnabled="true">-->
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextPhone"
+            android:id="@+id/editTextGoal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Goal"
@@ -72,6 +72,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline47"
         app:layout_constraintStart_toStartOf="@+id/guideline50" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Units\n\n  · Duration: minutes\n  · Distance: metres"
+        app:layout_constraintEnd_toEndOf="@+id/goal"
+        app:layout_constraintStart_toStartOf="@+id/guideline50"
+        app:layout_constraintTop_toBottomOf="@+id/goal" />
 
     <!--    <androidx.fragment.app.FragmentContainerView-->
 <!--        android:id="@+id/fragment_container_view"-->
