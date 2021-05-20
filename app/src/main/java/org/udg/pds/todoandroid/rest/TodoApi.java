@@ -151,5 +151,8 @@ public interface TodoApi {
     @GET("/objectives")
     Call<List<Objective>> getObjectives();
 
+    @POST("/objectives")
+    Call<IdObject> addObjective(@Body Objective o);
+
 }
 
