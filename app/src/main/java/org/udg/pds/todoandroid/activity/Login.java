@@ -8,9 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.installations.FirebaseInstallations;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -35,13 +39,27 @@ import retrofit2.Response;
 // then a RESTResponder_RF is called to check the authentication
 public class Login extends AppCompatActivity {
 
+    private static final String TAG = "";
     TodoApi mTodoService;
+    private String deviceId;
+
+    public void getDeviceId() {
+        FirebaseInstallations.getInstance().getId()
+            .addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (task.isSuccessful()) {
+                        deviceId = task.getResult();
+                    }
+                }
+            });
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
+        getDeviceId();
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
 
         Button b = findViewById(R.id.login_button);
@@ -79,6 +97,7 @@ public class Login extends AppCompatActivity {
         UserLogin ul = new UserLogin();
         ul.username = username;
         ul.password = password;
+        ul.deviceId = deviceId;
         Call<User> call = mTodoService.login(ul);
         call.enqueue(new Callback<User>() {
             @Override

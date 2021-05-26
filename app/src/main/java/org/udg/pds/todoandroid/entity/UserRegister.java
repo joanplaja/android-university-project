@@ -8,4 +8,5 @@ public class UserRegister {
     public String firstName;
     public String lastName;
     public Integer age;
+    public String deviceId;
 }
