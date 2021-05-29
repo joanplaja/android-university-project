@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,27 +47,17 @@ public class ChooseRegisterLogin extends AppCompatActivity {
     TodoApi mTodoService;
     Context context;
     private String deviceId;
+    private String TAG;
 
-    public void getDeviceId() {
-        FirebaseInstallations.getInstance().getId()
-            .addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    if (task.isSuccessful()) {
-                        deviceId = task.getResult();
-                    }
-                }
-            });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDeviceId();
         setContentView(R.layout.activity_choose_register_login);
 
         callbackManager = CallbackManager.Factory.create();
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
+        deviceId = ((TodoApp) this.getApplication()).getToken();
         context = this;
 
         loginButton = (LoginButton) findViewById(R.id.login_button);

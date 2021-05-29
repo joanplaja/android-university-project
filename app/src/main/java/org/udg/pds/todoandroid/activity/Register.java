@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -39,26 +41,16 @@ public class Register extends AppCompatActivity {
     String facebookToken = null;
     String emailIntent = null;
     public String deviceId;
+    private String TAG;
 
-    public void getDeviceId() {
-        FirebaseInstallations.getInstance().getId()
-            .addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    if (task.isSuccessful()) {
-                        deviceId = task.getResult();
-                    }
-                }
-            });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.register);
         super.onCreate(savedInstanceState);
-        getDeviceId();
 
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
+        deviceId = ((TodoApp) this.getApplication()).getToken();
 
         EditText usernameET = Register.this.findViewById(R.id.editTextUsername);
         EditText emailET = Register.this.findViewById(R.id.editTextEmailAddress);

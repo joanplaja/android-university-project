@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -43,24 +44,13 @@ public class Login extends AppCompatActivity {
     TodoApi mTodoService;
     private String deviceId;
 
-    public void getDeviceId() {
-        FirebaseInstallations.getInstance().getId()
-            .addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    if (task.isSuccessful()) {
-                        deviceId = task.getResult();
-                    }
-                }
-            });
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        getDeviceId();
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
+        deviceId = ((TodoApp) this.getApplication()).getToken();
 
         Button b = findViewById(R.id.login_button);
         // This is teh listener that will be used when the user presses the "Login" button
