@@ -65,34 +65,6 @@ public class MessagingService extends FirebaseMessagingService {
 
         //sendNotification(remoteMessage);
     }
-    /*
-    private void sendNotification(RemoteMessage remoteMessage) {
-        //Intent intent = new Intent(this, MainActivity.class);
-        //PendingIntent pendingIntent =PendingIntent.getActivity(this, m,intent,PendingIntent.FLAG_ONE_SHOT);
-        String channelId = "Follow Notifications";
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder;
-        notificationBuilder =
-            new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.logoavarst)
-                .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setContentText(remoteMessage.getNotification().getBody())
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri);
-        //.setContentIntent(pendingIntent);
-        NotificationManager notificationManager =
-            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
-        notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
-    }
-    */
 
     @Override
     public void onNewToken(@NonNull String s) {
