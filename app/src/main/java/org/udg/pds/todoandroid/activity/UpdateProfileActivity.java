@@ -107,6 +107,28 @@ public class UpdateProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        TextView pt = findViewById(R.id.textViewPrivacy);
+        Call<User> callUser = mTodoService.getUserMe();
+        callUser.enqueue(new Callback<User>() {
+             @Override
+             public void onResponse(Call<User> call, Response<User> response) {
+                 if(response.body().privacy == true){
+                     pt.setText("private");
+                 }
+                 else{
+                     pt.setText("public");
+                 }
+             }
+
+             @Override
+             public void onFailure(Call<User> call, Throwable t) {
+
+             }
+         });
+
+
+
         Button pb = findViewById(R.id.updateProfileChangePrivacyButton);
         pb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +138,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         Toast.makeText(UpdateProfileActivity.this, "Succsessfully changed the privacy", Toast.LENGTH_SHORT).show();
+                        if(pt.getText().equals("private")){
+                            pt.setText("public");
+                        }
+                        else{
+                            pt.setText("private");
+                        }
                     }
 
                     @Override
