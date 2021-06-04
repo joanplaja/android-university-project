@@ -1,18 +1,23 @@
 package org.udg.pds.todoandroid.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -52,6 +57,8 @@ public class AddFriendsFromFacebookFragment extends Fragment {
 
     TodoApi mTodoService;
 
+    private BroadcastReceiver mMessageReceiver;
+
     public AddFriendsFromFacebookFragment() {
     }
 
@@ -65,11 +72,40 @@ public class AddFriendsFromFacebookFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         System.out.println("onCreate facebook");
         if (getArguments() != null) {
         }
+
+        mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String title = intent.getExtras().getString("title");
+                String body = intent.getExtras().getString("body");
+
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast_personalizado,
+                    (ViewGroup) getActivity().findViewById(R.id.custom_toast_container));
+
+                TextView messageToast = (TextView) layout.findViewById(R.id.text);
+
+                String text = title + body;
+
+                messageToast.setText(text);
+
+                Toast toast = new Toast(getActivity());
+
+                toast.setGravity(Gravity.TOP, 0, 0);
+
+                toast.setDuration(Toast.LENGTH_LONG);
+
+                toast.setView(layout);
+
+                toast.show();
+            }
+        };
     }
 
     @Override
@@ -82,6 +118,17 @@ public class AddFriendsFromFacebookFragment extends Fragment {
     public void onResume() {
         super.onResume();
         System.out.println("on resume facebook");
+        System.out.println("on Start");
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((mMessageReceiver),
+            new IntentFilter("Notification Data")
+        );
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMessageReceiver);
     }
 
     @Override
