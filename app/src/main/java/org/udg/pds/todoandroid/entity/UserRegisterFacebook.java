@@ -10,4 +10,5 @@ public class UserRegisterFacebook {
     public Integer age;
     public String facebookId;
     public String facebookToken;
+    public String deviceId;
 }

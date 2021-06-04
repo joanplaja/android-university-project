@@ -1,14 +1,20 @@
 package org.udg.pds.todoandroid.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +36,7 @@ import org.udg.pds.todoandroid.activity.NavigationActivity;
 //import org.udg.pds.todoandroid.activity.ObjectivesActivityTabbed;
 import org.udg.pds.todoandroid.activity.SignoutActivity;
 import org.udg.pds.todoandroid.activity.EquipmentActivity;
+import org.udg.pds.todoandroid.activity.SplashScreen;
 import org.udg.pds.todoandroid.activity.UpdateProfileActivity;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
@@ -58,6 +65,8 @@ public class UserProfileFragment extends Fragment {
     private String mParam2;
     private TodoApi mTodoService;
 
+    private BroadcastReceiver mMessageReceiver;
+
     public UserProfileFragment() {
         // Required empty public constructor
     }
@@ -79,6 +88,54 @@ public class UserProfileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+         mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String title = intent.getExtras().getString("title");
+                String body = intent.getExtras().getString("body");
+
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast_personalizado,
+                    (ViewGroup) getActivity().findViewById(R.id.custom_toast_container));
+
+                TextView messageToast = (TextView) layout.findViewById(R.id.text);
+
+                String text = title + body;
+
+                messageToast.setText(text);
+
+                Toast toast = new Toast(getActivity());
+
+                toast.setGravity(Gravity.TOP, 0, 0);
+
+                toast.setDuration(Toast.LENGTH_LONG);
+
+                toast.setView(layout);
+
+                toast.show();
+            }
+        };
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((mMessageReceiver),
+            new IntentFilter("Notification Data")
+        );
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMessageReceiver);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -263,11 +320,7 @@ public class UserProfileFragment extends Fragment {
         startActivity(intent);
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
-    }
+
     public void loadProfile() {
         //android todoApi (retrofit) -> Spring controller (retorna resposta http) -> onResponse i la processem.
         Call<User> call = mTodoService.getUserMe();

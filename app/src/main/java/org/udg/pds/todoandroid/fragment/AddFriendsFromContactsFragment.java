@@ -1,7 +1,10 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,16 +12,20 @@ import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -49,6 +56,8 @@ public class AddFriendsFromContactsFragment extends Fragment {
 
     TodoApi mTodoService;
 
+    private BroadcastReceiver mMessageReceiver;
+
     public AddFriendsFromContactsFragment() {
 
     }
@@ -65,6 +74,48 @@ public class AddFriendsFromContactsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+
+        mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String title = intent.getExtras().getString("title");
+                String body = intent.getExtras().getString("body");
+
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast_personalizado,
+                    (ViewGroup) getActivity().findViewById(R.id.custom_toast_container));
+
+                TextView messageToast = (TextView) layout.findViewById(R.id.text);
+
+                String text = title + body;
+
+                messageToast.setText(text);
+
+                Toast toast = new Toast(getActivity());
+
+                toast.setGravity(Gravity.TOP, 0, 0);
+
+                toast.setDuration(Toast.LENGTH_LONG);
+
+                toast.setView(layout);
+
+                toast.show();
+            }
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((mMessageReceiver),
+            new IntentFilter("Notification Data")
+        );
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMessageReceiver);
     }
 
     @Override
