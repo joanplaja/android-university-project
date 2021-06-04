@@ -136,7 +136,7 @@ public class PostFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            postRecyclerViewAdapter = new PostRecyclerViewAdapter();
+            postRecyclerViewAdapter = new PostRecyclerViewAdapter(this.getActivity());
             recyclerView.setAdapter(postRecyclerViewAdapter);
         }
         return view;
