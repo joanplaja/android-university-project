@@ -45,6 +45,7 @@ public class FollowersFragment extends Fragment {
 
     RecyclerView mRecyclerView;
 
+
     private BroadcastReceiver mMessageReceiver;
 
     public FollowersFragment(){
@@ -61,7 +62,8 @@ public class FollowersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        setRetainInstance(false);
+        //setRetainInstance(false);
+        setRetainInstance(true);
         Log.v("Oncreatexd","On create de ers");
 
         mMessageReceiver = new BroadcastReceiver() {
