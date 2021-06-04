@@ -64,8 +64,6 @@ public class ObjectiveCreateActivity extends AppCompatActivity implements Object
             public void onClick(View v) {
                 double goal = Double.parseDouble(goalEt.getText().toString());
                 String objectiveTypeString = objectiveType.getText().toString().toLowerCase();
-                System.out.println("eeeeeeeee: " + defaultTextButton);
-                System.out.println("rrererere: " + objectiveTypeString);
                 if(!objectiveTypeString.equals(defaultTextButton)) {
                     createObjective(objectiveTypeString, goal);
                 }
