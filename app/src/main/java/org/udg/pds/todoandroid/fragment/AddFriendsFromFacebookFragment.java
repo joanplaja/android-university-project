@@ -71,7 +71,11 @@ public class AddFriendsFromFacebookFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        System.out.println("onCreate facebook");
         if (getArguments() != null) {
         }
 
@@ -107,6 +111,13 @@ public class AddFriendsFromFacebookFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        System.out.println("on Start facebook");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("on resume facebook");
         System.out.println("on Start");
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver((mMessageReceiver),
@@ -123,7 +134,7 @@ public class AddFriendsFromFacebookFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        System.out.println("onCreated add friends from facebook");
         View rootView = inflater.inflate(R.layout.fragment_add_friends_from_facebook, container, false);
         context = rootView.getContext();
 
