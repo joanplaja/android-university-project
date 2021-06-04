@@ -154,5 +154,10 @@ public interface TodoApi {
     @POST("/objectives")
     Call<IdObject> addObjective(@Body Objective o);
 
+    @POST("/posts/like/{id}")
+    Call <String>  likePost(@Path("id" )Long  id);
+
+    @GET("/posts/likes/{id}")
+    Call <List<User>> getLikes(@Path("id")Long id);
 }
 
