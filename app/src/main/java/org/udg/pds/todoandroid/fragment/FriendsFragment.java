@@ -29,6 +29,10 @@ public class FriendsFragment extends Fragment {
 
     FloatingActionButton search;
 
+    FriendsSugestionsFragment friendsSugestionsFragment;
+    AddFriendsFromFacebookFragment addFriendsFromFacebookFragment;
+    AddFriendsFromContactsFragment addFriendsFromContactsFragment;
+
     public FriendsFragment() {
     }
 
@@ -42,6 +46,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
         }
@@ -50,12 +55,14 @@ public class FriendsFragment extends Fragment {
 
     private void setUpTabs(View rootView){
 
-        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getParentFragmentManager());
-        adapter.addFragment(new FriendsSugestionsFragment(), "Sugestions");
-        adapter.addFragment(new AddFriendsFromFacebookFragment(), "Facebook");
-        adapter.addFragment(new AddFriendsFromContactsFragment(), "Contacts");
+        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getChildFragmentManager());
+        adapter.addFragment(friendsSugestionsFragment, "Sugestions");
+        adapter.addFragment(addFriendsFromFacebookFragment, "Facebook");
+        adapter.addFragment(addFriendsFromContactsFragment, "Contacts");
         ViewPager viewPager = rootView.findViewById(R.id.view_pager_friends);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
+        System.out.println("count:"+viewPager.getChildCount());
         TabLayout tabs = rootView.findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         tabs.getTabAt(0).setIcon(R.drawable.ic_baseline_person_24);
@@ -67,7 +74,13 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        friendsSugestionsFragment = new FriendsSugestionsFragment();
+        addFriendsFromContactsFragment = new AddFriendsFromContactsFragment();
+        addFriendsFromFacebookFragment =  new AddFriendsFromFacebookFragment();
+
         // Inflate the layout for this fragment
+        System.out.println("onCreated Friends Fragment");
         View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
         setHasOptionsMenu(true);
         context = this.getContext();

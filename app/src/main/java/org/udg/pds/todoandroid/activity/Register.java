@@ -1,17 +1,23 @@
 package org.udg.pds.todoandroid.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -34,6 +40,9 @@ public class Register extends AppCompatActivity {
     String facebookId = null;
     String facebookToken = null;
     String emailIntent = null;
+    public String deviceId;
+    private String TAG;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
+        deviceId = ((TodoApp) this.getApplication()).getToken();
 
         EditText usernameET = Register.this.findViewById(R.id.editTextUsername);
         EditText emailET = Register.this.findViewById(R.id.editTextEmailAddress);
@@ -122,6 +132,7 @@ public class Register extends AppCompatActivity {
             ur.firstName = " ";
             ur.lastName = " ";
             ur.age=0;
+            ur.deviceId = deviceId;
             Call<String> call = mTodoService.register(ur);
             call.enqueue(new Callback<String>() {
                 @Override
@@ -156,6 +167,7 @@ public class Register extends AppCompatActivity {
             ur.age=0;
             ur.facebookId = facebookId;
             ur.facebookToken = facebookToken;
+            ur.deviceId = deviceId;
             Call<String> call = mTodoService.registerFacebook(ur);
             call.enqueue(new Callback<String>() {
                 @Override

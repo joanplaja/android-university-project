@@ -3,6 +3,7 @@ package org.udg.pds.todoandroid.activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -10,6 +11,12 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.location.Location;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -64,6 +72,21 @@ public class ActivityMaps extends AppCompatActivity implements OnMapReadyCallbac
     LocationCallback locationCallback;                                  //variable per definir la funcio callback de la ubicacio
     LocationRequest locationRequest;                                    //variable per definir parametres de crides de localitzacio
 
+    private BroadcastReceiver mMessageReceiver;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(getParent()).registerReceiver((mMessageReceiver),
+            new IntentFilter("Notification Data")
+        );
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getParent()).unregisterReceiver(mMessageReceiver);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +123,34 @@ public class ActivityMaps extends AppCompatActivity implements OnMapReadyCallbac
                     list.add(ubi);
                     polyline1.setPoints(list);
                 }
+            }
+        };
+
+        mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String title = intent.getExtras().getString("title");
+                String body = intent.getExtras().getString("body");
+
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast_personalizado,
+                    (ViewGroup) findViewById(R.id.custom_toast_container));
+
+                TextView messageToast = (TextView) layout.findViewById(R.id.text);
+
+                String text = title + body;
+
+                messageToast.setText(text);
+
+                Toast toast = new Toast(getParent());
+
+                toast.setGravity(Gravity.TOP, 0, 0);
+
+                toast.setDuration(Toast.LENGTH_LONG);
+
+                toast.setView(layout);
+
+                toast.show();
             }
         };
 

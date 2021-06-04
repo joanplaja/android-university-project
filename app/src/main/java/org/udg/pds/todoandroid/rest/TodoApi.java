@@ -52,8 +52,8 @@ public interface TodoApi {
     @POST("/users/registerFacebook")
     Call<String> registerFacebook(@Body UserRegisterFacebook usFacebook);
 
-    @GET("/users/check")
-    Call<String> check();
+    @GET("/users/check/{token}")
+    Call<String> check(@Path("token") String token);
 
     @POST("/tasks")
     Call<IdObject> addTask(@Body Task task);
@@ -159,5 +159,9 @@ public interface TodoApi {
 
     @GET("/posts/likes/{id}")
     Call <List<User>> getLikes(@Path("id")Long id);
+
+    @POST("/notifications/update-token")
+    Call<String> updateToken(@Body String token);
+
 }
 

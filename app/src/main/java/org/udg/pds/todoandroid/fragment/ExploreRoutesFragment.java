@@ -1,5 +1,6 @@
 package org.udg.pds.todoandroid.fragment;
 
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +73,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -108,6 +111,8 @@ public class ExploreRoutesFragment extends Fragment implements OnMapReadyCallbac
 
     Context context;
 
+    private BroadcastReceiver mMessageReceiver;
+
     private static final String TAG = "FRAGMENT EXPLORE ROUTES";
 
     private GoogleMap map;
@@ -142,11 +147,53 @@ public class ExploreRoutesFragment extends Fragment implements OnMapReadyCallbac
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((mMessageReceiver),
+            new IntentFilter("Notification Data")
+        );
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMessageReceiver);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 
         }
+
+        mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String title = intent.getExtras().getString("title");
+                String body = intent.getExtras().getString("body");
+
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast_personalizado,
+                    (ViewGroup) getActivity().findViewById(R.id.custom_toast_container));
+
+                TextView messageToast = (TextView) layout.findViewById(R.id.text);
+
+                String text = title + body;
+
+                messageToast.setText(text);
+
+                Toast toast = new Toast(getActivity());
+
+                toast.setGravity(Gravity.TOP, 0, 0);
+
+                toast.setDuration(Toast.LENGTH_LONG);
+
+                toast.setView(layout);
+
+                toast.show();
+            }
+        };
     }
 
     @Override
