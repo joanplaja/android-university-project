@@ -33,6 +33,10 @@ public class FollowingFollowersFragment extends Fragment {
     private String mParam1;
     private String selectedTab;
     Context context;
+    View rootView;
+
+    FollowingFragment followingFragment;
+    FollowersFragment followersFragment;
 
     public FollowingFollowersFragment(){
 
@@ -54,8 +58,8 @@ public class FollowingFollowersFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
-        //setRetainInstance(false);
-        setRetainInstance(true);
+        setRetainInstance(false);
+        //setRetainInstance(true);
         Log.v("Oncreatexd","On create de FollFoll");
 
     }
@@ -73,15 +77,24 @@ public class FollowingFollowersFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+        //View rootView = inflater.inflate(R.layout.fragment_following_followers, container, false);
+        setHasOptionsMenu(true);
+        context = this.getContext();
+        followersFragment = new FollowersFragment();
+        followingFragment = new FollowingFragment();
+
+        selectedTab = getArguments().getString("type");
+
+        setUpTabs(rootView,selectedTab);
         Log.v("Onresumexd","On resume de FollFoll");
     }
 
     private void setUpTabs(View rootView,String selectedTab){
 
-        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getParentFragmentManager());
-        adapter.addFragment(new FollowersFragment(), "Followers");
-        adapter.addFragment(new FollowingFragment(), "Following");
-
+        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getChildFragmentManager());
+        adapter.addFragment(followersFragment, "Followers");
+        adapter.addFragment(followingFragment, "Following");
+        Log.v("setupxd","En principi nous fragmentsxd");
         ViewPager viewPager = rootView.findViewById(R.id.view_pager_following_followers);
         viewPager.setAdapter(adapter);
         TabLayout tabs = rootView.findViewById(R.id.tabsFollowingFollowers);
@@ -89,7 +102,7 @@ public class FollowingFollowersFragment extends Fragment {
         tabs.getTabAt(0).setText("Followers");
         tabs.getTabAt(1).setText("Following");
         if(selectedTab.equals("following"))
-            tabs.getTabAt(1).select();
+            //tabs.getTabAt(1).select();
 
         Log.v("setupxd","Setup de FollFoll");
     }
@@ -98,13 +111,15 @@ public class FollowingFollowersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_following_followers, container, false);
-        setHasOptionsMenu(true);
+        rootView = inflater.inflate(R.layout.fragment_following_followers, container, false);
+      /*  setHasOptionsMenu(true);
         context = this.getContext();
+        followersFragment = new FollowersFragment();
+        followingFragment = new FollowingFragment();
 
         selectedTab = getArguments().getString("type");
 
-        setUpTabs(rootView,selectedTab);
+        setUpTabs(rootView,selectedTab);*/
         Log.v("Oncreatevxd","On createv de FollFoll");
 
         return rootView;

@@ -58,7 +58,8 @@ public class FollowingFragment extends Fragment{
 
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        setRetainInstance(false);
+       // setRetainInstance(false);
+        setRetainInstance(true);
         Log.v("Oncreatexd","On create de ing");
     }
 
@@ -71,7 +72,7 @@ public class FollowingFragment extends Fragment{
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         Log.v("Onstartxd","On start de ing");
-        getTheFollowing();
+        //getTheFollowing();
 
     }
 
@@ -113,13 +114,13 @@ public class FollowingFragment extends Fragment{
             mAdapter.add(u);
         }
     }
-/*
+
     @Override
     public void onResume() {
         super.onResume();
         Log.v("Onresumexd","On resume de ing");
-        //this.getTheFollowing();
-    }*/
+        this.getTheFollowing();
+    }
 
     @Override
     public void onDestroyView(){
