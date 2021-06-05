@@ -36,6 +36,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     private List<Post> mValues = new ArrayList<>();
     DictionaryImages dictionaryImages = new DictionaryImages();
 
+
     public PostRecyclerViewAdapter(List<Post> items) {
         mValues = items;
     }
@@ -54,6 +55,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
     @Override
     public void onBindViewHolder(final PostViewHolder holder, int position) {
+
         holder.mItem = mValues.get(position);
 
         holder.mUsernameView.setText(holder.mItem.workout.user.username);
@@ -115,14 +117,14 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     @Override
                     public void onResponse(Call<List<User>> callLike, Response<List<User>> responseLikes) {
                         holder.mLikes.setText(String.valueOf(responseLikes.body().size()));
-                        boolean found = false;
+                        holder.mLiked = false;
                         int i = 0;
-                        while (!found && i < responseLikes.body().size()) {
+                        while (!holder.mLiked && i < responseLikes.body().size()) {
                             if (responseLikes.body().get(i).username.equals(responseGetMe.body().username))
-                                found = true;
+                                holder.mLiked = true;
                             i++;
                         }
-                        if (found) {
+                        if (holder.mLiked) {
                             holder.mLikeButton.setBackgroundColor(0xFF85B668);
                         }
                     }
@@ -146,21 +148,42 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.mLikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call <String> call = mTodoService.likePost(holder.mItem.id);
-                call.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        holder.mLikeButton.setBackgroundColor(0xFF85B668);
-                        Integer nLikes = Integer.valueOf(holder.mLikes.getText().toString());
-                        nLikes = nLikes+1;
-                        holder.mLikes.setText(String.valueOf(nLikes));
-                    }
+                if(!holder.mLiked){
+                    Call <String> call = mTodoService.likePost(holder.mItem.id);
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            holder.mLikeButton.setBackgroundColor(0xFF85B668);
+                            Integer nLikes = Integer.valueOf(holder.mLikes.getText().toString());
+                            nLikes = nLikes+1;
+                            holder.mLikes.setText(String.valueOf(nLikes));
+                            holder.mLiked=true;
+                        }
 
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
 
-                    }
-                });
+                        }
+                    });
+                }
+                else if (holder.mLiked){
+                    Call <String> call = mTodoService.removeLikePost(holder.mItem.id);
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            holder.mLikeButton.setBackgroundColor(0xFFCCCACA);
+                            Integer nLikes = Integer.valueOf(holder.mLikes.getText().toString());
+                            nLikes = nLikes-1;
+                            holder.mLikes.setText(String.valueOf(nLikes));
+                            holder.mLiked=false;
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+
+                        }
+                    });
+                }
 
             }
         });
@@ -192,10 +215,12 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         public final TextView mLikes;
         public final Button mLikeButton;
         public Post mItem;
+        public boolean mLiked;
 
         public PostViewHolder(View view) {
             super(view);
             mView = view;
+            mLiked = false;
             mUsernameView = (TextView) view.findViewById(R.id.username);
             mAvatarView = (ImageView) view.findViewById(R.id.avatar);
             mDescriptionView = (TextView) view.findViewById(R.id.description);
