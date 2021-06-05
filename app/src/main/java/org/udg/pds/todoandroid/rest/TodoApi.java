@@ -151,6 +151,9 @@ public interface TodoApi {
     @GET("/objectives")
     Call<List<Objective>> getObjectives();
 
+    @DELETE("/objectives/{oid}")
+    Call<String> deleteObjective(@Path("oid") Long objectiveId);
+
     @POST("/objectives")
     Call<IdObject> addObjective(@Body Objective o);
 

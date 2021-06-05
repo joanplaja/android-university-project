@@ -175,7 +175,14 @@
         android:id="@+id/objectivesFragment"
         android:name="org.udg.pds.todoandroid.fragment.ObjectivesFragment"
         android:label="fragment_objectives"
-        tools:layout="@layout/fragment_objectives_list" />
+        tools:layout="@layout/fragment_objectives_list" >
+         <action
+             android:id="@+id/action_objectivesFragment_to_objectiveDetailsFragment"
+             app:destination="@id/objectiveDetailsFragment" />
+         <action
+             android:id="@+id/action_objectivesFragment_to_userProfileFragment"
+             app:destination="@id/userProfileFragment" />
+     </fragment>
     <fragment
         android:id="@+id/ViewFollowingFollowersFragment"
         android:name="org.udg.pds.todoandroid.fragment.ViewFollowingFollowersFragment"
@@ -200,5 +207,13 @@
         android:name="org.udg.pds.todoandroid.fragment.PostFragment"
         android:label="fragment_post_list"
         tools:layout="@layout/fragment_post_list" />
+    <fragment
+        android:id="@+id/objectiveDetailsFragment"
+        android:name="org.udg.pds.todoandroid.fragment.ObjectiveDetailsFragment"
+        android:label="ObjectiveDetailsFragment" >
+        <action
+            android:id="@+id/action_objectiveDetailsFragment_to_objectivesFragment"
+            app:destination="@id/objectivesFragment" />
+    </fragment>
 
 </navigation>

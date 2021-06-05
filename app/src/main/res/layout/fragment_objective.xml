@@ -34,6 +34,15 @@
             android:textSize="22sp"
             android:textStyle="bold|italic" />
 
+        <ImageView
+            android:id="@+id/deleteObjectiveButton"
+            android:layout_width="38dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="#00000000"
+            android:fitsSystemWindows="true"
+            android:src="@drawable/ic_baseline_delete_forever_24" />
+
     </LinearLayout>
 
     <View

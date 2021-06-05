@@ -98,7 +98,7 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            adapter = new ObjectivesRecyclerViewAdapter(this);
+            adapter = new ObjectivesRecyclerViewAdapter(this, mTodoService);
             recyclerView.setAdapter(adapter);
         }
 
@@ -110,6 +110,7 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
                 startActivity(I);
             }
         });
+
         return view;
     }
 
@@ -134,14 +135,16 @@ public class ObjectivesFragment extends Fragment implements ObjectivesRecyclerVi
         });
     }
     private void showObjectivesList(List<Objective> objectives) {
-           adapter.setObjectives(objectives);
+        adapter.setObjectives(objectives);
+    }
+
+    public void onBackPressed(){
+        NavDirections action =
+            ObjectivesFragmentDirections.actionObjectivesFragmentToUserProfileFragment();
+        Navigation.findNavController(getView()).navigate(action);
     }
 
     @Override
     public void onObjectiveClick(int position) {
-//        Long id = mValues.get(position).id;
-//        Bundle bundle = new Bundle();
-//        bundle.putLong("id", id);
-//        Navigation.findNavController(view).navigate(R.id.action_actionWorkoutList_to_workoutDetailsFragment, bundle);
     }
 }
