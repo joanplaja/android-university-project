@@ -1,6 +1,7 @@
 package org.udg.pds.todoandroid.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -79,7 +80,7 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-
+        mTodoService = ((TodoApp) this.getActivity().getApplication()).getAPI();
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -89,7 +90,7 @@ public class PostFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            postRecyclerViewAdapter = new PostRecyclerViewAdapter();
+            postRecyclerViewAdapter = new PostRecyclerViewAdapter(PostFragment.this.getContext(), mTodoService);
             recyclerView.setAdapter(postRecyclerViewAdapter);
         }
         return view;

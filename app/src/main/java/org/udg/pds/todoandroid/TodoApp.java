@@ -8,6 +8,7 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
+import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
 import org.udg.pds.todoandroid.util.Global;
 
@@ -26,7 +27,7 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
 public class TodoApp extends Application {
 
     TodoApi mTodoService;
-
+    User mUser;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -61,5 +62,7 @@ public class TodoApp extends Application {
         return mTodoService;
     }
 
+    public User getUser() { return mUser; }
 
+    public void setUser(User user) { mUser = user; }
 }

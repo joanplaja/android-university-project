@@ -98,16 +98,8 @@ public class EquipmentRecyclerViewAdapter extends RecyclerView.Adapter<Equipment
             @Override
             public void onClick(View v) {
                 onDeleteClick(mValues.get(position).id, position);
-                /*
-                if(onEquipmentListener != null){
-                    if(position != RecyclerView.NO_POSITION){
-
-                    }
-                }*/
             }
         });
-        //String description = mValues.get(position).description;
-        //holder.mContentView.setText(mValues.get(position).content);
     }
 
     public void onDeleteClick(Long id, int position){

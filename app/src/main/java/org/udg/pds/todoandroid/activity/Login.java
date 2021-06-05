@@ -1,6 +1,8 @@
 package org.udg.pds.todoandroid.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +18,7 @@ import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
+import org.udg.pds.todoandroid.fragment.PostFragment;
 import org.udg.pds.todoandroid.rest.TodoApi;
 import org.w3c.dom.Text;
 
@@ -36,6 +39,7 @@ import retrofit2.Response;
 public class Login extends AppCompatActivity {
 
     TodoApi mTodoService;
+    EditText campUsuari;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,11 +47,13 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.login);
 
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
+        campUsuari = (EditText) findViewById(R.id.editTextUsernameLogin);
 
         Button b = findViewById(R.id.login_button);
         // This is teh listener that will be used when the user presses the "Login" button
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                guardarPreferencies();
 //                EditText u = Login.this.findViewById(R.id.login_username);
 //                EditText p = Login.this.findViewById(R.id.login_password);
 
@@ -69,6 +75,7 @@ public class Login extends AppCompatActivity {
                 else {
                     Login.this.checkCredentials(u.getText().toString(), p.getText().toString());
                 }
+                //cargarPreferencies();
             }
         });
 
@@ -105,5 +112,14 @@ public class Login extends AppCompatActivity {
         Intent intent = new Intent(this, ChooseRegisterLogin.class);
         startActivity(intent);
         Login.this.finish();
+
     }
+
+
+    private void guardarPreferencies(){
+        SharedPreferences.Editor editor = getSharedPreferences("credencials", MODE_PRIVATE).edit();
+        editor.putString("name", campUsuari.getText().toString());
+        editor.apply();
+    }
+
 }
