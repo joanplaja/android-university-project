@@ -1,14 +1,18 @@
 package org.udg.pds.todoandroid.rest;
 
+import org.udg.pds.todoandroid.entity.Chat;
+import org.udg.pds.todoandroid.entity.CreateChat;
 import org.udg.pds.todoandroid.entity.Equipment;
 import org.udg.pds.todoandroid.entity.FindFacebookFriends;
 import org.udg.pds.todoandroid.entity.FindPhoneFriends;
 import org.udg.pds.todoandroid.entity.IdObject;
+import org.udg.pds.todoandroid.entity.Message;
 import org.udg.pds.todoandroid.entity.NearRoutes;
 import org.udg.pds.todoandroid.entity.Post;
 import org.udg.pds.todoandroid.entity.Objective;
 import org.udg.pds.todoandroid.entity.PostBody;
 import org.udg.pds.todoandroid.entity.Route;
+import org.udg.pds.todoandroid.entity.SendMessage;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
@@ -52,8 +56,8 @@ public interface TodoApi {
     @POST("/users/registerFacebook")
     Call<String> registerFacebook(@Body UserRegisterFacebook usFacebook);
 
-    @GET("/users/check")
-    Call<String> check();
+    @GET("/users/check/{token}")
+    Call<String> check(@Path("token") String token);
 
     @POST("/tasks")
     Call<IdObject> addTask(@Body Task task);
@@ -154,8 +158,39 @@ public interface TodoApi {
     @GET("/objectives")
     Call<List<Objective>> getObjectives();
 
+    @DELETE("/objectives/{oid}")
+    Call<String> deleteObjective(@Path("oid") Long objectiveId);
+
     @POST("/objectives")
     Call<IdObject> addObjective(@Body Objective o);
+
+    @POST("/posts/like/{id}")
+    Call <String>  likePost(@Path("id" )Long  id);
+
+    @GET("/posts/likes/{id}")
+    Call <List<User>> getLikes(@Path("id")Long id);
+
+    @POST("/notifications/update-token")
+    Call<String> updateToken(@Body String token);
+
+    @DELETE("/posts/removelike/{id}")
+    Call <String>  removeLikePost(@Path("id" )Long  id);
+
+    @GET("/chats")
+    Call<List<Chat>> getChats();
+
+    @POST("/chats")
+    Call<Long> createChat(@Body CreateChat chat);
+
+    @GET("/chats/{id}/messages")
+    Call<List<Message>> getMessages(@Path("id") Long chatId);
+
+
+    @POST("/chats/{id}/messages")
+    Call<Message> sendMessage(@Path("id") Long chatId,@Body SendMessage message);
+
+    @GET("/users/searchUsersWithoutChat")
+    Call<List<User>> searchUsersWithoutChat(@Query("search") String name);
 
 }
 

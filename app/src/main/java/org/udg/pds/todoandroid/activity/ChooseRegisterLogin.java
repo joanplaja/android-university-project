@@ -1,10 +1,12 @@
 package org.udg.pds.todoandroid.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,7 +20,11 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +46,9 @@ public class ChooseRegisterLogin extends AppCompatActivity {
     LoginButton loginButton;
     TodoApi mTodoService;
     Context context;
+    private String deviceId;
+    private String TAG;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +57,7 @@ public class ChooseRegisterLogin extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
+        deviceId = ((TodoApp) this.getApplication()).getToken();
         context = this;
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -64,7 +74,7 @@ public class ChooseRegisterLogin extends AppCompatActivity {
                 UserSignInFacebook userSignInFacebook = new UserSignInFacebook();
                 userSignInFacebook.facebookId = facebookId;
                 userSignInFacebook.facebookToken = facebookToken;
-
+                userSignInFacebook.deviceId = deviceId;
                 Call<User> call = mTodoService.signInFacebook(userSignInFacebook);
                 call.enqueue(new Callback<User>() {
                  @Override

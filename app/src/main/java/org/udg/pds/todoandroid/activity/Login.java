@@ -10,9 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -40,14 +45,16 @@ public class Login extends AppCompatActivity {
 
     TodoApi mTodoService;
     EditText campUsuari;
+    private String deviceId;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
         campUsuari = (EditText) findViewById(R.id.editTextUsernameLogin);
+        deviceId = ((TodoApp) this.getApplication()).getToken();
 
         Button b = findViewById(R.id.login_button);
         // This is teh listener that will be used when the user presses the "Login" button
@@ -75,7 +82,6 @@ public class Login extends AppCompatActivity {
                 else {
                     Login.this.checkCredentials(u.getText().toString(), p.getText().toString());
                 }
-                //cargarPreferencies();
             }
         });
 
@@ -86,6 +92,7 @@ public class Login extends AppCompatActivity {
         UserLogin ul = new UserLogin();
         ul.username = username;
         ul.password = password;
+        ul.deviceId = deviceId;
         Call<User> call = mTodoService.login(ul);
         call.enqueue(new Callback<User>() {
             @Override
@@ -112,7 +119,6 @@ public class Login extends AppCompatActivity {
         Intent intent = new Intent(this, ChooseRegisterLogin.class);
         startActivity(intent);
         Login.this.finish();
-
     }
 
 

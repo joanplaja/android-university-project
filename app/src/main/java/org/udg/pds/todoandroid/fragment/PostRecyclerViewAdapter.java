@@ -1,6 +1,8 @@
 package org.udg.pds.todoandroid.fragment;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.udg.pds.todoandroid.R;
+import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.activity.Login;
 import org.udg.pds.todoandroid.entity.DictionaryImages;
@@ -37,12 +41,16 @@ import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerViewAdapter.PostViewHolder> {
 
+    TodoApi mTodoService;
     private Context context;
     private List<Post> mValues = new ArrayList<>();
     DictionaryImages dictionaryImages = new DictionaryImages();
-    TodoApi mTodoService;
 
     public PostRecyclerViewAdapter(List<Post> items) {
         mValues = items;
@@ -53,15 +61,16 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         mTodoService = todoService;
     }
 
+    public PostRecyclerViewAdapter(FragmentActivity c) {
+        mTodoService = ((TodoApp) c.getApplication()).getAPI();
+    }
+
     @Override
     public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.fragment_post, parent, false);
         return new PostViewHolder(view);
     }
-
-
 
     @Override
     public void onBindViewHolder(final PostViewHolder holder, int position) {
@@ -115,6 +124,89 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         averagePace = averagePace / holder.mItem.workout.route.points.size();
         String textAveragePace = "Avg. Pace: " + df.format(averagePace) + " min/km";
         holder.mAveragePaceView.setText(textAveragePace);
+
+
+        Call<User> callGetMe = mTodoService.getUserMe();
+        callGetMe.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> callGetMe, Response<User> responseGetMe) {
+                Call<List<User>> callLikes = mTodoService.getLikes(holder.mItem.id);
+                callLikes.enqueue(new Callback<List<User>>() {
+                    @Override
+                    public void onResponse(Call<List<User>> callLike, Response<List<User>> responseLikes) {
+                        holder.mLikes.setText(String.valueOf(responseLikes.body().size()));
+                        holder.mLiked = false;
+                        int i = 0;
+                        while (!holder.mLiked && i < responseLikes.body().size()) {
+                            if (responseLikes.body().get(i).username.equals(responseGetMe.body().username))
+                                holder.mLiked = true;
+                            i++;
+                        }
+                        if (holder.mLiked) {
+                            holder.mLikeButton.setBackgroundColor(0xFF85B668);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<User>> callLikes, Throwable t) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<User> callGetMe, Throwable t) {
+
+            }
+        });
+
+
+
+
+        holder.mLikeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!holder.mLiked){
+                    Call <String> call = mTodoService.likePost(holder.mItem.id);
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            holder.mLikeButton.setBackgroundColor(0xFF85B668);
+                            Integer nLikes = Integer.valueOf(holder.mLikes.getText().toString());
+                            nLikes = nLikes+1;
+                            holder.mLikes.setText(String.valueOf(nLikes));
+                            holder.mLiked=true;
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+
+                        }
+                    });
+                }
+                else if (holder.mLiked){
+                    Call <String> call = mTodoService.removeLikePost(holder.mItem.id);
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            holder.mLikeButton.setBackgroundColor(0xFFCCCACA);
+                            Integer nLikes = Integer.valueOf(holder.mLikes.getText().toString());
+                            nLikes = nLikes-1;
+                            holder.mLikes.setText(String.valueOf(nLikes));
+                            holder.mLiked=false;
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+
+                        }
+                    });
+                }
+
+            }
+        });
+
+
         String nomUserLogin = cargarPreferencies();
 
         if ( nomUserLogin.equals(holder.mItem.workout.user.username) )
@@ -185,12 +277,16 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         public final TextView mTimeView;
         public final TextView mAveragePaceView;
         public final ImageView mImageView;
+        public final TextView mLikes;
+        public final Button mLikeButton;
         public ImageView mDelete;
         public Post mItem;
+        public boolean mLiked;
 
         public PostViewHolder(View view) {
             super(view);
             mView = view;
+            mLiked = false;
             mUsernameView = (TextView) view.findViewById(R.id.username);
             mAvatarView = (ImageView) view.findViewById(R.id.avatar);
             mDescriptionView = (TextView) view.findViewById(R.id.description);
@@ -201,6 +297,8 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             mTimeView = (TextView) view.findViewById(R.id.time);
             mAveragePaceView = (TextView) view.findViewById(R.id.averagePace);
             mDelete = (ImageView) view.findViewById(R.id.icon_delete);
+            mLikes = (TextView) view.findViewById(R.id.textViewNLikes);
+            mLikeButton = (Button) view.findViewById(R.id.buttonLike);
         }
 
         @Override

@@ -27,6 +27,8 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
 public class TodoApp extends Application {
 
     TodoApi mTodoService;
+    String mToken;
+
     User mUser;
     @Override
     public void onCreate() {
@@ -61,6 +63,10 @@ public class TodoApp extends Application {
     public TodoApi getAPI() {
         return mTodoService;
     }
+
+    public String getToken() { return mToken; }
+
+    public void setToken(String token) { mToken = token; }
 
     public User getUser() { return mUser; }
 

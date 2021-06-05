@@ -21,7 +21,7 @@
                 android:minHeight="?actionBarSize"
                 android:padding="@dimen/appbar_padding"
                 android:textColor="@color/cardview_light_background"
-                android:text="Search and invite friends"
+                android:text="Chat and find friends"
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
 
             <RelativeLayout
@@ -30,6 +30,20 @@
                 android:layout_gravity="center|right"
                 android:gravity="center_vertical"
                 android:layout_height="wrap_content">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:id="@+id/chatListButton"
+                    android:layout_height="wrap_content"
+                    app:fabSize="normal"
+                    android:elevation="0dp"
+                    app:tint="@android:color/white"
+                    app:rippleColor="@color/cardview_light_background"
+                    app:elevation="0dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="50dp"
+                    android:src="@drawable/ic_baseline_chat_24" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:layout_width="wrap_content"

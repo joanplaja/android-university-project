@@ -42,4 +42,12 @@
             android:icon="@drawable/ic_baseline_people_outline_24"
             android:title="Friends"
             app:showAsAction="ifRoom"/>
+
+<!--    <item-->
+<!--        android:id="@+id/chatFragment"-->
+<!--        android:enabled="true"-->
+<!--        android:icon="@drawable/ic_baseline_chat_24"-->
+<!--        android:title="Chats"-->
+<!--        app:showAsAction="ifRoom"/>-->
+
 </menu>
