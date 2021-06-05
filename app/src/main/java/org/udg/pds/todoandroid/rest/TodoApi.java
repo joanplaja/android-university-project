@@ -166,5 +166,8 @@ public interface TodoApi {
     @POST("/notifications/update-token")
     Call<String> updateToken(@Body String token);
 
+    @DELETE("/posts/removelike/{id}")
+    Call <String>  removeLikePost(@Path("id" )Long  id);
+
 }
 
