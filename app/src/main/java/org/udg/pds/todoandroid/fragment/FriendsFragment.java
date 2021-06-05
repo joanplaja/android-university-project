@@ -28,6 +28,7 @@ public class FriendsFragment extends Fragment {
     Context context;
 
     FloatingActionButton search;
+    FloatingActionButton chat;
 
     FriendsSugestionsFragment friendsSugestionsFragment;
     AddFriendsFromFacebookFragment addFriendsFromFacebookFragment;
@@ -86,14 +87,21 @@ public class FriendsFragment extends Fragment {
         context = this.getContext();
 
         search = (FloatingActionButton) rootView.findViewById(R.id.searchButton);
+        chat = (FloatingActionButton) rootView.findViewById(R.id.chatListButton);
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavDirections action = FriendsFragmentDirections.actionFriendsFragmentToSearchUserFragment();
                 Navigation.findNavController(v).navigate(action);
-                /*Intent I = new Intent(getActivity(), SearchActivity.class);
-                startActivity(I);*/
+            }
+        });
+
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavDirections action = FriendsFragmentDirections.actionFriendsFragmentToChatActivity();
+                Navigation.findNavController(v).navigate(action);
             }
         });
 

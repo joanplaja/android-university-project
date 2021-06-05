@@ -60,6 +60,16 @@ public class MessagingService extends FirebaseMessagingService {
         Intent intent = new Intent("Notification Data");
         intent.putExtra("title", remoteMessage.getNotification().getTitle());
         intent.putExtra("body", remoteMessage.getNotification().getBody());
+        String type = remoteMessage.getData().get("type");
+        intent.putExtra("type",type);
+        System.out.println("type service message:"+type);
+        if(type.equals("message")){
+            intent.putExtra("userId",remoteMessage.getData().get("userId"));
+            String img = remoteMessage.getData().get("img");
+            if(img.equals(""))img = null;
+            intent.putExtra("img",img);
+            intent.putExtra("messageId",remoteMessage.getData().get("messageId"));
+        }
 
         broadcaster.sendBroadcast(intent);
 
