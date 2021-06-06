@@ -1,5 +1,6 @@
 package org.udg.pds.todoandroid.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,11 +28,30 @@ public class SplashScreen extends AppCompatActivity {
 
     private String token;
 
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_splash_screen);
+
+        context = this.getApplicationContext();
+
+        FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    token = task.getResult();
+                    ((TodoApp) context).setToken(token);
+                }
+            });
+
     }
 
     @Override
@@ -52,7 +72,7 @@ public class SplashScreen extends AppCompatActivity {
 
                     // Get new FCM registration token
                     token = task.getResult();
-
+                    ((TodoApp) context).setToken(token);
 
                     //Ara que ja s'ha resolt la crida asincrona del token, fem el check.
                     Call<String> call = todoApi.check(token);
@@ -93,8 +113,5 @@ public class SplashScreen extends AppCompatActivity {
 
             }
         });
-
-
-        ((TodoApp) this.getApplication()).setToken(token);
     }
 }
