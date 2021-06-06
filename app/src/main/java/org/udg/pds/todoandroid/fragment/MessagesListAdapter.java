@@ -95,11 +95,11 @@ public class MessagesListAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
-            messageText.setText(message.text);
+            messageText.setText(message.participantName);
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(message.date.toString());
-            nameText.setText(message.participantName);
+            nameText.setText(message.text);
 
             // Insert the profile image from the URL into the ImageView.
             if(message.participantImageUrl!=null) Picasso.get().load(message.participantImageUrl).into(profileImage);

@@ -20,10 +20,12 @@ import com.squareup.picasso.Picasso;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.entity.Chat;
+import org.udg.pds.todoandroid.entity.Participant;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecyclerViewAdapter.ChatListViewHolder> {
@@ -47,7 +49,13 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
     @Override
     public void onBindViewHolder(@NonNull ChatListViewHolder holder, int position) {
         holder.mItem = chatList.get(position);
-        holder.mName.setText("Chat with id:"+holder.mItem.chatId);
+        Participant p = null;
+        Iterator<Participant> it = holder.mItem.participants.iterator();
+        while (it.hasNext()) {
+            p = it.next();
+        }
+
+        holder.mName.setText(p.user.username);
         //proviosnalment
         Picasso.get().load("https://joyonlineschool.com/static/emptyuserphoto.png").into(holder.mUserImage);
 
