@@ -14,6 +14,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import retrofit2.Call;
@@ -22,6 +23,7 @@ import retrofit2.Response;
 
 
 public class SplashScreen extends AppCompatActivity {
+    private User user;
 
     private String token;
 
@@ -75,6 +77,23 @@ public class SplashScreen extends AppCompatActivity {
                     });
                 }
             });
+
+        Call<User> callUser = todoApi.getUserMe();
+        callUser.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> callUser, Response<User> response) {
+
+                if (response.isSuccessful()) {
+                    ((TodoApp) SplashScreen.this.getApplication()).setUser(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> callUser, Throwable t) {
+
+            }
+        });
+
 
         ((TodoApp) this.getApplication()).setToken(token);
     }

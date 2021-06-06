@@ -102,6 +102,9 @@ public interface TodoApi {
     @GET("/posts")
     Call<List<Post>> getPosts();
 
+    @DELETE("/posts/{pid}")
+    Call<String> deletePost(@Path("pid") String postId);
+
     @GET("/users")
     Call<List<User>> searchUser(@Query("search") String name);
 

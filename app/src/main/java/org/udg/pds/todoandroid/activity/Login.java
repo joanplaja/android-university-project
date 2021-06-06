@@ -1,6 +1,8 @@
 package org.udg.pds.todoandroid.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,7 @@ import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.User;
 import org.udg.pds.todoandroid.entity.UserLogin;
+import org.udg.pds.todoandroid.fragment.PostFragment;
 import org.udg.pds.todoandroid.rest.TodoApi;
 import org.w3c.dom.Text;
 
@@ -40,8 +43,8 @@ import retrofit2.Response;
 // then a RESTResponder_RF is called to check the authentication
 public class Login extends AppCompatActivity {
 
-    private static final String TAG = "";
     TodoApi mTodoService;
+    EditText campUsuari;
     private String deviceId;
 
 
@@ -50,12 +53,14 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         mTodoService = ((TodoApp) this.getApplication()).getAPI();
+        campUsuari = (EditText) findViewById(R.id.editTextUsernameLogin);
         deviceId = ((TodoApp) this.getApplication()).getToken();
 
         Button b = findViewById(R.id.login_button);
         // This is teh listener that will be used when the user presses the "Login" button
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                guardarPreferencies();
 //                EditText u = Login.this.findViewById(R.id.login_username);
 //                EditText p = Login.this.findViewById(R.id.login_password);
 
@@ -115,4 +120,12 @@ public class Login extends AppCompatActivity {
         startActivity(intent);
         Login.this.finish();
     }
+
+
+    private void guardarPreferencies(){
+        SharedPreferences.Editor editor = getSharedPreferences("credencials", MODE_PRIVATE).edit();
+        editor.putString("name", campUsuari.getText().toString());
+        editor.apply();
+    }
+
 }
